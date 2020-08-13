@@ -19,7 +19,7 @@ class Cuenta(models.Model):
     )
     total_extra = fields.Monetary(
         compute='_total_extra',
-        store=True,
+        #store=True,
         string="Total Extra",
     )
     cost_extra = fields.Monetary(
@@ -34,7 +34,7 @@ class Cuenta(models.Model):
     hours_extra = fields.Float(
         compute='_hours_extra',
         string="Hours Extra ",
-        store=True,
+        #store=True,
     )
     hours_sat = fields.Float(
 

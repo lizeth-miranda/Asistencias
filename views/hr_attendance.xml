@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="hr_attendance_view_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.view.form.inherited.cuenta</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree" />
+        <field name="arch" type="xml">
+            <data>
+                <field name="employee_id" position="after">
+                    <field name="department" />
+                    <field name="account_ids" domain="[('users', '=', uid)]" />
+                    <field name="cost_day" />
+                    <field name="timesheet_cost" class="oe_inline" />
+                    <field name="currency_id" invisible="1" />
+                </field>
+                <field name="worked_hours" position="after">
+                    <!-- <field name="total" /> -->
+                    <!-- <field name="mitad" /> -->
+                    <!-- <field name="hours_sat" widget="float_time" /> -->
+                    <!-- <field name="day" /> -->
+                    <!-- <field name="total_hours" widget="float_time" /> -->
+                    <!-- <field name="hours_extra" widget="float_time" /> -->
+                    <!-- <field name="hours" widget="float_time" /> -->
+                    <!-- <field name="total_extra" /> -->
+                    <field name="cost_total" string="Cost Total" />
+                </field>
+                <field name="check_out" position="after">
+                    <!-- <field name="Date" /> -->
+                </field>
+            </data>
+        </field>
+    </record>
+
+</odoo>

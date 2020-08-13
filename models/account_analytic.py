@@ -19,7 +19,7 @@ class Cuenta(models.Model):
     )
     total_extra = fields.Monetary(
         compute='_total_extra',
-        #store=True,
+        store=True,
         string="Total Extra",
     )
     cost_extra = fields.Monetary(
@@ -34,7 +34,7 @@ class Cuenta(models.Model):
     hours_extra = fields.Float(
         compute='_hours_extra',
         string="Hours Extra ",
-        #store=True,
+        store=True,
     )
     hours_sat = fields.Float(
 
@@ -43,6 +43,7 @@ class Cuenta(models.Model):
 
     )
 
+    @api.depends('hours')
     def _mitad(self):
         for record in self:
             if record.day == 5:
@@ -50,6 +51,7 @@ class Cuenta(models.Model):
             else:
                 record.mitad = record.hours / 2
 
+    @api.depends('work_hours')
     def _hours_extra(self):
         for record in self:
             if record.day != 5 and record.work_hours > record.hours:
@@ -68,3 +70,4 @@ class Cuenta(models.Model):
     def _total_extra(self):
         for record in self:
             record.total_extra = record.hours_extra * record.cost_extra
+

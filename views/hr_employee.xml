@@ -8,7 +8,11 @@
             <field name="tz" position="after">
                 <field name="hours" widget="float_time" />
             </field>
+            <field name="resource_calendar_id" position="before">
+                <field name="normal" string="Horario normal" />
+            </field>
             <field name="user_id" position="after">
+                <field name="salary" widget="monetary" />
                 <field name="cost_day" widget="monetary" />
                 <field name="cost_extra" />
                 <field name="cost_default" />

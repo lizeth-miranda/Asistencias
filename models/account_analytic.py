@@ -42,6 +42,9 @@ class Cuenta(models.Model):
     day = fields.Integer(
 
     )
+    normal = fields.Boolean(
+
+    )
 
     @api.depends('hours')
     def _mitad(self):
@@ -57,8 +60,11 @@ class Cuenta(models.Model):
             if record.day != 5 and record.work_hours > record.hours:
                 record.hours_extra = (record.work_hours - record.hours)//1
 
-            elif record.day == 5 and record.work_hours >= record.hours_sat:
+            elif record.day == 5 and record.normal == True and record.work_hours >= record.hours_sat:
                 record.hours_extra = (record.work_hours - record.hours_sat)//1
+
+            elif record.day == 5 and record.normal == False:
+                record.hours_extra = record.work_hours
 
             elif record.work_hours < record.mitad:
                 record.hours_extra = False

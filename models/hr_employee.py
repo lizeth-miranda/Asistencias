@@ -6,6 +6,11 @@ from odoo import fields, models, api
 class Costos(models.Model):
     _inherit = 'hr.employee'
 
+    salary = fields.Monetary(
+        required=True,
+        string="Salary",
+    )
+
     cost_day = fields.Monetary(
         required=True,
         help="Cost per Day",
@@ -32,3 +37,8 @@ class Costos(models.Model):
         required=True,
         string="Saturday Hours",
     )
+    normal = fields.Boolean(
+        required=True,
+        String="Horario normal",
+    )
+

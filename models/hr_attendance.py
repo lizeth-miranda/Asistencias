@@ -54,6 +54,20 @@ class Cuenta(models.Model):
     hours_sat = fields.Float(
         related="employee_id.hours",
     )
+    normal = fields.Boolean(
+        related="employee_id.normal"
+    )
+    mitad = fields.Float(
+        compute="_mitad"
+    )
+
+    @api.depends('hours')
+    def _mitad(self):
+        for record in self:
+            if record.day == 5:
+                record.mitad = record.hours_sat/2
+            else:
+                record.mitad = record.hours / 2
 
     @api.depends('check_in')
     def _day(self):
@@ -68,11 +82,20 @@ class Cuenta(models.Model):
     @ api.depends('timesheet_cost', 'check_out')
     def _cost_total(self):
         for record in self:
-            if record.day == 5:
+            if record.day == 5 and record.normal == False:
                 record.cost_total = record.cost_extra * record.worked_hours
-            else:
-                record.cost_total = (
-                    record.timesheet_cost * record.worked_hours)
+
+            elif record.day == 5 and record.normal == True:
+                record.cost_total = record.timesheet_cost * record.hours_sat
+
+            elif record.day != 5 and record.worked_hours >= record.hours:
+                record.cost_total = record.timesheet_cost * record.hours
+
+            elif record.day != 5 and record.worked_hours > record.mitad:
+                record.cost_total = record.timesheet_cost * record.mitad
+
+            elif record.day != 5 and record.worked_hours < record.mitad:
+                record.cost_total = record.timesheet_cost * record.mitad
 
     # create a new line, as none existed before
     @api.constrains('check_in.weekday()')
@@ -87,6 +110,7 @@ class Cuenta(models.Model):
                 ('hours_sat', '=', self.hours_sat),
                 ('day', '=', self.day),
                 ('hours', '=', self.hours),
+                ('normal', '=', self.normal),
                 ('account_id', '=', self.account_ids.id),
                 ('amount', '=', self.cost_total),
             ])
@@ -103,6 +127,7 @@ class Cuenta(models.Model):
                     'hours_sat': self.hours_sat,
                     'day': self.day,
                     'hours': self.hours,
+                    'normal': self.normal,
                     'account_id': self.account_ids.id,
                     'amount': self.cost_total,
                 })
@@ -124,3 +149,4 @@ class Cuenta(models.Model):
                         'empl_name': attendance.employee_id.name,
                         'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(no_check_out_attendances.check_in))),
                     })
+

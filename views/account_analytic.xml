@@ -12,6 +12,7 @@
                 <field name="category" />
             </field>
             <field name="account_id" position="after">
+                <field name="normal" />
                 <field name="work_hours" widget="float_time" />
                 <field name="hours_extra" widget="float_time" />
                 <!-- <field name="mitad" widget="float_time" />

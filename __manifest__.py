@@ -11,6 +11,8 @@
         'hr_attendance',
         'hr_timesheet',
         'hr_holidays',
+        'sale_management',
+        'purchase',
     ],
     'data': [
         # security
@@ -24,6 +26,7 @@
         'views/account_analytic.xml',
         'views/account_analytic_account.xml',
         'views/res_user.xml',
+        'views/nomina.xml',
 
     ],
 }

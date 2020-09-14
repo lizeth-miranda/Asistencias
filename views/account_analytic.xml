@@ -8,20 +8,11 @@
         <field name="inherit_id" ref="analytic.view_account_analytic_line_tree" />
         <field name="arch" type="xml">
             <field name="name" position="after">
+                <field name="motivo" />
                 <field name="department" />
                 <field name="category" />
             </field>
-            <field name="account_id" position="after">
-                <field name="normal" />
-                <field name="work_hours" widget="float_time" />
-                <field name="hours_extra" widget="float_time" />
-                <!-- <field name="mitad" widget="float_time" />
-                <field name="hours" widget="float_time" />
-                <field name="hours_sat" widget="float_time" />
-                <field name="day" /> -->
-                <field name="cost_extra" />
-                <field name="total_extra" widget="monetary" />
-            </field>
+            <field name="account_id" position="after"></field>
         </field>
     </record>
 
@@ -42,8 +33,9 @@
         <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_search" />
         <field name="arch" type="xml">
             <group position="inside">
+                <filter string="Description" name="name" context="{'group_by': 'name'}" />
                 <filter name="by_category" string="category" context="{'group_by': 'category'}" />
-                <!-- <filter name="by_department" string="department" context="{'group_by': 'Department'}" /> -->
+                <filter string="Department" name="department" context="{'group_by': 'department'}" />
             </group>
         </field>
     </record>

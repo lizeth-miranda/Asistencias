@@ -24,7 +24,8 @@ class Cuenta(models.Model):
     @api.depends('number_of_days')
     def _cost_default(self):
         for record in self:
-            record.cost_default = record.cost_day * record.number_of_days
+            record.cost_default = (
+                record.cost_day * record.number_of_days) * -1
 
     def action_approve(self):
         res = super(Cuenta, self).action_approve()

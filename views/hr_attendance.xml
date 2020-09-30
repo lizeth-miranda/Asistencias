@@ -18,13 +18,15 @@
                 <field name="timesheet_cost" class="oe_inline" optional="show" />
                 <field name="cost_extra" optional="show" />
             </field>
+            <field name="timesheet_cost" position="after">
+                <field name="hours" widget="float_time" />
+            </field>
             <field name="worked_hours" position="after">
                 <!-- <field name="total" /> -->
                 <!-- <field name="mitad" /> -->
                 <!-- <field name="hours_sat" widget="float_time" /> -->
-                <field name="total_hours" widget="float_time" />
+                <!-- <field name="total_hours" widget="float_time" /> -->
                 <field name="hours_extra" widget="float_time" />
-                <field name="hours" widget="float_time" />
                 <field name="total_extra" sum="Total extra" />
                 <field name="cost_total" string="Cost Total" sum="Costo Total" />
             </field>

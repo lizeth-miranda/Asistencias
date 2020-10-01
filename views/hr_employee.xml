@@ -5,11 +5,9 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
-            <field name="resource_calendar_id" position="before">
-                <field name="normal" string="Horario normal" />
-            </field>
             <field name="tz" position="after">
                 <field name="hours" widget="float_time" />
+                <field name="normal" />
             </field>
             <field name="user_id" position="after">
                 <field name="salary" widget="monetary" />

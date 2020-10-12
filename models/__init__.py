@@ -6,5 +6,4 @@ from . import account_analytic
 from . import resource_calendar
 from . import account_analytic_account
 from . import res_user
-from . import purchase_order_line
 from . import nomina

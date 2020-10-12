@@ -16,8 +16,6 @@
     ],
     'data': [
         # security
-        'security/groups.xml',
-        'security/ir.model.access.csv',
         # data
         # demo
         # reports

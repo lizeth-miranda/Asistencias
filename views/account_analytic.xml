@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="motivo" />
-                <field name="department" string="Departamento"/>
+                <field name="department" string="Employee Department" />
                 <field name="category" string="Product Category" />
             </field>
             <field name="account_id" position="after"></field>

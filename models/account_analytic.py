@@ -8,7 +8,6 @@ class Cuenta(models.Model):
 
     category = fields.Char(
         related='product_id.categ_id.name',
-        string="Category",
         store=True,
     )
     department = fields.Char(

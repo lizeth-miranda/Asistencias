@@ -7,5 +7,5 @@ class Cuenta(models.Model):
     _inherit = 'sale.order'
 
     analytic_account_id = fields.Many2one(
-        required=True,
+        required=False,
     )

@@ -6,25 +6,17 @@
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
             <field name="tz" position="after">
-                <field name="hours" widget="float_time" />
-                <field name="normal" />
+                <field name="hours" widget="float_time" required="1" />
+                <field name="normal" required="1" />
             </field>
             <field name="user_id" position="after">
-                <field name="salary" widget="monetary" />
-                <field name="cost_day" widget="monetary" />
-                <field name="cost_extra" />
-                <field name="cost_default" />
+                <field name="salary" widget="monetary" required="1" />
+                <field name="cost_day" widget="monetary" required="1" />
+                <field name="cost_extra" required="1" />
+                <field name="cost_default" required="1" />
             </field>
         </field>
     </record>
 
-    <record id="hr_employee_view_tree" model="ir.ui.view">
-        <field name="name">hr.empoyee.view.tree.inherited</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_tree" />
-        <field name="arch" type="xml">
-            <field name="parent_id" position="after"></field>
-        </field>
-    </record>
 
 </odoo>

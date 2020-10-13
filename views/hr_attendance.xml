@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
             <field name="employee_id" position="after">
                 <field name="department" />
-                <field name="account_ids" domain="[('users', '=', uid)]" />
+                <field name="account_ids" domain="[('users', '=', uid)]" required="1"/>
                 <!-- <field name="normal" /> -->
                 <field name="currency_id" invisible="1" />
             </field>

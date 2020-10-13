@@ -13,7 +13,6 @@ class Cuenta(models.Model):
     account_ids = fields.Many2one(
         comodel_name='account.analytic.account',
         string="Project",
-        required=True,
     )
     cost_day = fields.Monetary(
         related='employee_id.cost_day',

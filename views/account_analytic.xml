@@ -10,7 +10,7 @@
             <field name="name" position="after">
                 <field name="motivo" />
                 <field name="job_pos" string="Job Position" optional="show" />
-                <field name="category" string="Product Category" />
+                <field name="cate" string="Product Category" />
             </field>
             <field name="account_id" position="after"></field>
         </field>
@@ -22,7 +22,7 @@
         <field name="inherit_id" ref="analytic.view_account_analytic_line_form" />
         <field name="arch" type="xml">
             <field name="product_uom_id" position="after">
-                <field name="category" />
+                <field name="cate" />
             </field>
         </field>
     </record>
@@ -34,7 +34,7 @@
         <field name="arch" type="xml">
             <group position="inside">
                 <filter string="Description" name="name" context="{'group_by': 'name'}" />
-                <filter name="by_category" string="category" context="{'group_by': 'category'}" />
+                <filter name="by_cate" string="category" context="{'group_by': 'cate'}" />
                 <filter string="Job Position" name="job_pos" context="{'group_by': 'job_pos'}" />
             </group>
         </field>

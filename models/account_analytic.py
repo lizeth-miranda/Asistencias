@@ -10,7 +10,7 @@ class Cuenta(models.Model):
         related='product_id.categ_id.name',
         store=True,
     )
-    department = fields.Char(
+    job_pos = fields.Char(
         store=True,
     )
 

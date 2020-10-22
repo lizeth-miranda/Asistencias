@@ -6,6 +6,7 @@ from odoo.exceptions import ValidationError, UserError
 
 class Nomina(models.Model):
     _name = "nomina.line"
+    _description = 'Registro de Nomina'
 
     employee_id = fields.Many2one(
         comodel_name='hr.employee',

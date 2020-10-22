@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class Cuenta(models.Model):
     _inherit = 'account.analytic.line'
 
-    category = fields.Char(
+    cate = fields.Char(
         related='product_id.categ_id.name',
         store=True,
     )

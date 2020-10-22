@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="nomina_group" model="res.groups">
+        <field name="name">nomina / Manager</field>
+    </record>
+</odoo>

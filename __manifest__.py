@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.13',
+    'version': '13.14',
     'author': 'Demsa',
     'website': '',
     'depends': [
@@ -30,6 +30,7 @@
         'views/account_analytic_account.xml',
         'views/res_user.xml',
         'views/nomina.xml',
+        'views/account_move.xml',
 
     ],
 }

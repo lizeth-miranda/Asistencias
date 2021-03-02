@@ -22,9 +22,9 @@ class Cuenta(models.Model):
     currency_id = fields.Many2one(
         related='employee_id.currency_id',
     )
-    depa = fields.Char(
+    pues_tra = fields.Char(
         related="employee_id.department_id.name",
-        string="Departamento",
+        string="Puesto de Trabajo",
     )
 
     @api.depends('number_of_days')

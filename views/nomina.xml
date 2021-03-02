@@ -6,17 +6,17 @@
         <field name="arch" type="xml">
             <tree string="Tree Name">
                 <field name="employee_id" />
-                <field name="normal" optional="show" />
+                <field name="normal" optional="hide" />
                 <field name="department" />
                 <field name="project" />
                 <field name="check_in" />
                 <field name="check_out" />
                 <field name="worked_hours" widget="float_time" />
-                <!-- <field name="hours" /> -->
-                <field name="cost_day" widget="Monetary" optional="show" />
-                <field name="cost_hour" optional="show" />
-                <field name="extra_cost" optional="show" />
-                <field name="hours_extra" widget="float_time" />
+                <field name="hours" widget="float_time" />
+                <field name="cost_day" widget="Monetary" optional="hide" />
+                <field name="cost_hour" optional="hide" />
+                <field name="extra_cost" optional="hide" />
+                <field name="hours_extra" widget="float_time" sum="hours_extra" />
                 <field name="total_extra" sum="Total extra" />
                 <field name="cost_total" sum="Costo Total" />
                 <field name="currency_id" invisible="1" />
@@ -33,6 +33,7 @@
                     <group>
                         <field name="employee_id" />
                         <field name="normal" />
+                        <field name="hours" widget="float_time" />
                         <field name="department" />
                         <field name="cost_day" widget="Monetary" />
                         <field name="cost_hour" />
@@ -60,9 +61,9 @@
                 <separator />
                 <filter string="Check In" name="check_in_filter" date="check_in" default_period="last_month" />
                 <group expand="0" string="Group By">
-                    <filter string="Employee" name="employee" context="{'group_by': 'employee_id'}" />
-                    <filter string="Check In" name="groupby_name" context="{'group_by': 'check_in'}" />
-                    <filter string="Check Out" name="groupby_check_out" context="{'group_by': 'check_out'}" />
+                    <filter string="Empleado" name="employee" context="{'group_by': 'employee_id'}" />
+                    <filter string="Hora Entrada" name="groupby_name" context="{'group_by': 'check_in'}" />
+                    <filter string="Hora Salida" name="groupby_check_out" context="{'group_by': 'check_out'}" />
                 </group>
             </search>
         </field>

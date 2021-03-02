@@ -9,14 +9,14 @@
         <field name="arch" type="xml">
             <field name="employee_id" position="after">
                 <field name="department" />
-                <field name="account_ids" domain="[('users', '=', uid)]" required="1"/>
+                <field name="account_ids" domain="[('users', '=', uid)]" required="1" />
                 <!-- <field name="normal" /> -->
                 <field name="currency_id" invisible="1" />
             </field>
             <field name="check_out" position="after">
-                <field name="cost_day" optional="show" />
-                <field name="timesheet_cost" class="oe_inline" optional="show" />
-                <field name="cost_extra" optional="show" />
+                <field name="cost_day" optional="hide" />
+                <field name="timesheet_cost" class="oe_inline" optional="hide" />
+                <field name="cost_extra" optional="hide" />
             </field>
             <field name="timesheet_cost" position="after">
                 <field name="hours" widget="float_time" />
@@ -25,10 +25,10 @@
                 <!-- <field name="total" /> -->
                 <!-- <field name="mitad" /> -->
                 <!-- <field name="hours_sat" widget="float_time" /> -->
-                <!-- <field name="total_hours" widget="float_time" /> -->
+                <field name="total_hours" widget="float_time" />
                 <field name="hours_extra" widget="float_time" />
                 <field name="total_extra" sum="Total extra" />
-                <field name="cost_total" string="Cost Total" sum="Costo Total" />
+                <field name="cost_total" string="Costo Total" sum="Costo Total" />
             </field>
 
             <field name="check_out" position="after">
@@ -39,3 +39,4 @@
     </record>
 
 </odoo>
+

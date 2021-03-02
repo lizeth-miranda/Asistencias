@@ -7,21 +7,24 @@ class Costos(models.Model):
     _inherit = 'hr.employee'
 
     salary = fields.Monetary(
-        string="Salary",
+        string="Salario",
     )
 
     cost_day = fields.Monetary(
-        help="Cost per Day",
+        help="Costo/Día",
+        string="Costo/Día",
     )
 
     timesheet_cost = fields.Monetary(
-        'Timesheet Cost',
+        'Costo por Hora'
     )
     cost_extra = fields.Monetary(
-        help="extra cost ",
+        help="Costo Extra ",
+        string="Costo Extra",
     )
     cost_default = fields.Monetary(
         help="cost per absence",
+        string="Costo/Falta",
     )
     currency_id = fields.Many2one(
         comodel_name='res.currency',
@@ -30,7 +33,7 @@ class Costos(models.Model):
     #     related="last_attendance_id.total_hours"
     # )
     hours = fields.Float(
-        string="Saturday Hours",
+        string="Horas Sábado",
     )
     normal = fields.Boolean(
         String="Horario normal",

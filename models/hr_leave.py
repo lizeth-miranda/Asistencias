@@ -13,12 +13,18 @@ class Cuenta(models.Model):
     )
     cost_day = fields.Monetary(
         related='employee_id.cost_day',
+        string="Cost day",
     )
     cost_default = fields.Monetary(
         compute='_cost_default',
+        string="Costo/Falta",
     )
     currency_id = fields.Many2one(
         related='employee_id.currency_id',
+    )
+    depa = fields.Char(
+        related="employee_id.department_id.name",
+        string="Departamento",
     )
 
     @api.depends('number_of_days')
@@ -32,8 +38,9 @@ class Cuenta(models.Model):
         self.env['account.analytic.line'].create({
             'date': self.request_date_from,
             'name': self.employee_id.name,
-            'department': self.holiday_status_id.display_name,
+            'job_pos': self.depa,
             'account_id': self.account_ids.id,
             'amount': self.cost_default,
         })
         return res
+

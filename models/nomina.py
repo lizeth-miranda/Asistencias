@@ -23,10 +23,10 @@ class Nomina(models.Model):
         readonly=True,
     )
     check_in = fields.Datetime(
-        string="Hora Entrada",
+        string="Entrada",
     )
     check_out = fields.Datetime(
-        string="Hora Salida",
+        string="Salida",
     )
     worked_hours = fields.Float(
         string="Horas Trabajadas",
@@ -158,3 +158,4 @@ class Nomina(models.Model):
                     'account_id': self.project.id,
                     'amount': self.cost_total,
                 })
+

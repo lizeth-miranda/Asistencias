@@ -9,8 +9,8 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="motivo" />
-                <field name="job_pos" string="Job Position" optional="show" />
-                <field name="cate" string="Product Category" />
+                <field name="job_pos" string="Puesto de Trabajo" optional="show" />
+                <field name="cate" string="Categoria" />
             </field>
             <field name="account_id" position="after"></field>
         </field>
@@ -33,10 +33,11 @@
         <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_search" />
         <field name="arch" type="xml">
             <group position="inside">
-                <filter string="Description" name="name" context="{'group_by': 'name'}" />
-                <filter name="by_cate" string="category" context="{'group_by': 'cate'}" />
-                <filter string="Job Position" name="job_pos" context="{'group_by': 'job_pos'}" />
+                <filter string="Descripción" name="name" context="{'group_by': 'name'}" />
+                <filter name="by_cate" string="categoria" context="{'group_by': 'cate'}" />
+                <filter string="Puesto de Trabajo" name="job_pos" context="{'group_by': 'job_pos'}" />
             </group>
         </field>
     </record>
 </odoo>
+

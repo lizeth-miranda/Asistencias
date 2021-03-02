@@ -11,6 +11,7 @@
                 <field name="account_ids" domain="[('users', '=', uid)]" />
             </field>
             <field name="name" position="after">
+                <field name="depa" />
                 <field name="cost_day" readonly="1" widget="monetary" />
                 <field name="cost_default" readonly="1" widget="monetary" />
                 <field name="currency_id" invisible="1" />

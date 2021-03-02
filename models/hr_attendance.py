@@ -36,7 +36,7 @@ class Cuenta(models.Model):
     )
     hours_extra = fields.Float(
         compute='_hours_extra',
-        string="Horas Extra ",
+        string="Horas Extras",
         store=True,
     )
 

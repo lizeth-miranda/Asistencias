@@ -12,18 +12,19 @@ class Cuenta(models.Model):
 
     account_ids = fields.Many2one(
         comodel_name='account.analytic.account',
-        string="Project",
+        string="Proyecto",
     )
     cost_day = fields.Monetary(
         related='employee_id.cost_day',
+        string="Costo/Día",
     )
     timesheet_cost = fields.Monetary(
         related='employee_id.timesheet_cost',
-        string="Cost Hour",
+        string="Costo/Hora",
     )
     cost_extra = fields.Monetary(
         related='employee_id.cost_extra',
-        string="Extra Cost",
+        string="Costo Extra",
     )
     currency_id = fields.Many2one(
         related='employee_id.currency_id',
@@ -31,10 +32,11 @@ class Cuenta(models.Model):
     cost_total = fields.Monetary(
         compute='_cost_total',
         store=True,
+        string="Costo Total"
     )
     hours_extra = fields.Float(
         compute='_hours_extra',
-        string="Hours Extra ",
+        string="Horas Extra ",
         store=True,
     )
 
@@ -43,10 +45,12 @@ class Cuenta(models.Model):
     )
     hours = fields.Float(
         related="employee_id.resource_calendar_id.attendance_ids.hours",
+        string="Horas Laborales",
     )
 
     department = fields.Char(
         related="employee_id.department_id.name",
+        string="Departamento",
     )
     Date = fields.Date(
         compute='_Date',
@@ -70,6 +74,7 @@ class Cuenta(models.Model):
     total_hours = fields.Float(
         compute='_total_hours',
         # store=True,
+        string="Horas Totales"
     )
 
     total_extra = fields.Monetary(
@@ -116,13 +121,13 @@ class Cuenta(models.Model):
     @api.depends('total_hours')
     def _hours_extra(self):
         for attendance in self:
-            if attendance.total_hours > attendance.hours:
+            if attendance.total_hours >= attendance.hours:
                 attendance.hours_extra = (
-                    attendance.total_hours-attendance.hours)//1
+                    attendance.total_hours-attendance.hours)
 
             elif attendance.normal == True and attendance.day == 5 and attendance.total_hours > attendance.hours_sat:
                 attendance.hours_extra = (
-                    attendance.total_hours - attendance.hours_sat) // 1
+                    attendance.total_hours - attendance.hours_sat)
 
             elif attendance.normal == False and attendance.day == 5:
                 attendance.hours_extra = attendance.worked_hours
@@ -167,7 +172,7 @@ class Cuenta(models.Model):
                 ('id', '!=', attendance.id),
             ], order='check_in desc', limit=1)
             if last_attendance_before_check_in and last_attendance_before_check_in.check_out and last_attendance_before_check_in.check_out > attendance.check_in:
-                raise exceptions.ValidationError(_("Cannot create new attendance record for %(empl_name)s, the employee was already checked in on %(datetime)s") % {
+                raise exceptions.ValidationError(_("No se puede crear una nueva asistencia para el registro %(empl_name)s, el empleado ya esta registrado en %(datetime)s") % {
                     'empl_name': attendance.employee_id.name,
                     'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in))),
                 })
@@ -189,7 +194,7 @@ class Cuenta(models.Model):
                 ('extra_cost', '=', self.cost_extra),
                 ('hours_extra', '=', self.hours_extra),
                 ('total_extra', '=', self.total_extra),
-                #('cost_total', '=', self.cost_total),
+                ('cost_total', '=', self.cost_total),
                 ('normal', '=', self.normal),
             ])
             if record.nomina_line > 0:
@@ -208,7 +213,7 @@ class Cuenta(models.Model):
                     'extra_cost': self.cost_extra,
                     'hours_extra': self.hours_extra,
                     'total_extra': self.total_extra,
-                    # 'cost_total': self.cost_total,
+                    'cost_total': self.cost_total,
                     'normal': self.normal,
                 })
     # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
@@ -229,4 +234,3 @@ class Cuenta(models.Model):
                         'empl_name': attendance.employee_id.name,
                         'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(no_check_out_attendances.check_in))),
                     })
-

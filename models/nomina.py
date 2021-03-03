@@ -144,7 +144,7 @@ class Nomina(models.Model):
     @api.constrains('check_in.weekday()')
     def account_line(self):
         for record in self:
-            record.state = 'confirm'
+            
             record.account_line = self.env['account.analytic.line'].search_count([
                 ('date', '=', self.nomina_date),
                 ('name', '=', self.employee_id.name),
@@ -163,5 +163,5 @@ class Nomina(models.Model):
                     'account_id': self.project.id,
                     'amount': self.cost_total,
                 })
-
+            record.state = 'confirm'
 

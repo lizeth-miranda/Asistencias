@@ -142,7 +142,7 @@ class Nomina(models.Model):
      # create a new line, as none existed before
 
     @api.constrains('check_in.weekday()')
-    def account_line(self):
+    def acco_line(self):
         for record in self:
             
             record.account_line = self.env['account.analytic.line'].search_count([

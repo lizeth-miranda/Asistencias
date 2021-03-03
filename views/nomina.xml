@@ -4,7 +4,7 @@
         <field name="name">nomina.view.tree</field>
         <field name="model">nomina.line</field>
         <field name="arch" type="xml">
-            <tree string="Tree Name">
+            <tree string="Tree Name" decoration-danger="state =='draft'" decoration-success="state == 'confirm'">
                 <field name="employee_id" />
                 <field name="normal" optional="hide" />
                 <field name="department" />
@@ -12,7 +12,7 @@
                 <field name="check_in" />
                 <field name="check_out" />
                 <field name="worked_hours" widget="float_time" />
-                <field name="hours" widget="float_time" />
+                <field name="hours" widget="float_time" optional="hide" />
                 <field name="cost_day" widget="Monetary" optional="hide" />
                 <field name="cost_hour" optional="hide" />
                 <field name="extra_cost" optional="hide" />
@@ -20,6 +20,7 @@
                 <field name="total_extra" sum="Total extra" />
                 <field name="cost_total" sum="Costo Total" />
                 <field name="currency_id" invisible="1" />
+                <field name="state" />
             </tree>
         </field>
     </record>
@@ -29,6 +30,10 @@
         <field name="model">nomina.line</field>
         <field name="arch" type="xml">
             <form string="Nomina">
+                <header>
+                    <button name="account_line" type="object" states="draft" class="oe_highlight" string="Confirmar Nómina" />
+                    <field name="state" widget="statusbar" readonly="1" />
+                </header>
                 <sheet>
                     <group>
                         <field name="employee_id" />

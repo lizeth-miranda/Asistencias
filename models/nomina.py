@@ -141,7 +141,7 @@ class Nomina(models.Model):
 
      # create a new line, as none existed before
 
-    @api.constrains('check_in.weekday()')
+    @api.constrains('nomina_date', 'employee_id')
     def acco_line(self):
         for record in self:
             

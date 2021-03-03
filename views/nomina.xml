@@ -31,7 +31,7 @@
         <field name="arch" type="xml">
             <form string="Nomina">
                 <header>
-                    <button name="account_line" type="object" states="draft" class="oe_highlight" string="Confirmar Nómina" />
+                    <button name="acc_line" type="object" states="draft" class="oe_highlight" string="Confirmar Nómina" />
                     <field name="state" widget="statusbar" readonly="1" />
                 </header>
                 <sheet>

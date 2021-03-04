@@ -85,7 +85,7 @@ class Nomina(models.Model):
         store=True,
     )
     nomina_date = fields.Date(
-        default=fields.Date.context_today
+        default=fields.Date.context_today,
     )
     # total_hours = fields.Float(
     #     compute='_total_hours',
@@ -94,7 +94,7 @@ class Nomina(models.Model):
     state = fields.Selection([
         ('draft', 'Borrador'),
         ('confirm', 'Confirmado'),
-    ], string='Status', readonly=True, default='draft')
+    ], string='Status', readonly=True, default='draft',)
 
     @api.depends('check_in')
     def _day(self):
@@ -144,7 +144,7 @@ class Nomina(models.Model):
     @api.constrains('nomina_date', 'employee_id')
     def acco_line(self):
         for record in self:
-            
+            record.state = 'confirm'
             record.account_line = self.env['account.analytic.line'].search_count([
                 ('date', '=', self.nomina_date),
                 ('name', '=', self.employee_id.name),
@@ -163,5 +163,5 @@ class Nomina(models.Model):
                     'account_id': self.project.id,
                     'amount': self.cost_total,
                 })
-            record.state = 'confirm'
+            
 

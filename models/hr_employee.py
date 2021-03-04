@@ -3,7 +3,7 @@
 from odoo import fields, models, api
 
 
-class Costos(models.Model):
+class empl(models.Model):
     _inherit = 'hr.employee'
 
     salary = fields.Monetary(

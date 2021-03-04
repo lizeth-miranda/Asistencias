@@ -96,6 +96,12 @@ class Nomina(models.Model):
         ('draft', 'Borrador'),
         ('confirm', 'Confirmado'),
     ], string='Status', readonly=True, default='draft',)
+    
+    responsible_id = fields.Many2one(
+        comodel_name='res.users',
+        ondelete='set null',
+        index=True,
+    )
 
     @api.depends('check_in')
     def _day(self):

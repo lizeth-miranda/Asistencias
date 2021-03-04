@@ -132,18 +132,18 @@ class hr_atten(models.Model):
             elif attendance.normal == False and attendance.day == 5:
                 attendance.hours_extra = attendance.worked_hours
 
-    @ api.depends('check_in', 'check_out')
+    @api.depends('check_in', 'check_out')
     def _hours_whitout_extra(self):
         for record in self:
             if record.hours_extra > 0:
                 record.hours_whitout_extra = record.worked_hours - record.hours_extra
 
-    @ api.depends('hours_extra', 'cost_extra')
+    @api.depends('hours_extra', 'cost_extra')
     def _total_extra(self):
         for record in self:
             record.total_extra = record.hours_extra * record.cost_extra
 
-    @ api.depends('check_in', 'check_out')
+    @api.depends('check_in', 'check_out')
     def _cost_total(self):
         for record in self:
             if record.hours_extra == 0:
@@ -162,7 +162,7 @@ class hr_atten(models.Model):
                 total1 = record.timesheet_cost * record.hours_sat
                 record.cost_total = (total1 + record.total_extra) * -1
 
-    @ api.constrains('check_in')
+    @api.constrains('check_in')
     def _take(self):
         for attendance in self:
             # we take the latest attendance before our check_in time and check it doesn't overlap with ours
@@ -218,7 +218,7 @@ class hr_atten(models.Model):
                 })
     # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
 
-    @ api.constrains('check_in', 'check_out', 'employee_id')
+    @api.constrains('check_in', 'check_out', 'employee_id')
     def _check_validity(self):
 
         for attendance in self:

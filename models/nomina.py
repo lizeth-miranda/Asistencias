@@ -2,6 +2,7 @@
 # instruccion para hacer importaciones desde odoo
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
+from datetime import date, timedelta
 
 
 class Nomina(models.Model):
@@ -141,7 +142,7 @@ class Nomina(models.Model):
 
      # create a new line, as none existed before
 
-    @api.constrains('nomina_date', 'employee_id')
+    @api.constrains('check_in.weekday()')
     def acco_line(self):
         for record in self:
             record.state = 'confirm'

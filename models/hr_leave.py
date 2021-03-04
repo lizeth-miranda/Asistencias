@@ -3,7 +3,7 @@
 from odoo import api, fields, models
 
 
-class Cuenta(models.Model):
+class hr_lea(models.Model):
     _inherit = 'hr.leave'
 
     account_ids = fields.Many2one(
@@ -34,7 +34,7 @@ class Cuenta(models.Model):
                 record.cost_day * record.number_of_days) * -1
 
     def action_approve(self):
-        res = super(Cuenta, self).action_approve()
+        res = super(hr_lea, self).action_approve()
         self.env['account.analytic.line'].create({
             'date': self.request_date_from,
             'name': self.employee_id.name,

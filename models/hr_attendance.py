@@ -7,7 +7,7 @@ import time
 import pytz
 
 
-class Cuenta(models.Model):
+class hr_atten(models.Model):
     _inherit = 'hr.attendance'
 
     account_ids = fields.Many2one(

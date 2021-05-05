@@ -1,0 +1,97 @@
+<odoo>
+
+    <report id="nomina_semanal_report" model="nomina.wizard" string="Nomina Semanal Report" report_type="qweb-pdf" name="costoempleado.nomina_report" menu="False" />
+    <template id="nomina_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page" style="font-size:18px">
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            <h3>Reporte Nómina Semanal</h3>
+                            <h4>
+                                <span style="font-size: 18px;">
+                                    <strong>De:</strong>
+                                    <t t-esc="date_start" />
+                                    <strong>Hasta:</strong>
+                                    <t t-esc="date_end" />
+                                </span>
+                                <!-- De:
+                                <t t-esc="date_start"></t>
+                                Hasta:
+                                <t t-esc="date_end"></t> -->
+                            </h4>
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Trabajador</th>
+                                        <th scope="col">Departamento</th>
+                                        <th scope="col">Obra</th>
+                                        <th scope="col">Cuenta Depósito</th>
+                                        <th scope="col">CLABE Interbancaria</th>
+                                        <th scope="col">Banco</th>
+                                        <th scope="col">Sueldo Semanal</th>
+                                        <th scope="col">Hrs Extras</th>
+                                        <th scope="col">Sueldo Final</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="nominaRecords" t-as="record">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="record['employee_id'][1]" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="record['department']" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="record['project'][1]" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="record['account']" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="record['cla']" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="record['bank']" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(record['suel_semanal']).replace('.', ',')" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="record['horas_extras_sem']" t-options='{"widget": "float_time"}' />
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(record['sueldo_final_sem']).replace('.', ',')" t-esc-options='{
+                                                    "widget": "monetary",
+                                                    "display_currency": "record.currency_id" }' />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+
+        <!-- <div class="footer o_standard_footer" style="border-top: 1px solid black;">
+            <div class="row text-center">
+                <div class="col col-12 text-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">Page:</li>
+                        <li class="list-inline-item">
+                            <span class="page" />
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">
+                            <span class="topage" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+    </template>
+
+</odoo>

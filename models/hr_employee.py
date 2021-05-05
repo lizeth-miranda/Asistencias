@@ -39,7 +39,7 @@ class empl(models.Model):
     # total_hours = fields.Float(
     #     related="last_attendance_id.total_hours"
     # )
-    horas_lab = fields.Float(string="Horas laborales", required=True)
+    horas_lab = fields.Float(string="Horas laborales",)
     hours = fields.Float(
         string="Horas Sábado",
     )

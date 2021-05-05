@@ -254,10 +254,11 @@ class Nomina(models.Model):
     def _hours_extra(self):
         for record in self:
             if record.worked_hours >= record.hours:
-                record.hours_extra = record.worked_hours-record.hours//1
+                record.hours_extra = (record.worked_hours-record.hours) // 1
 
-            elif record.worked_hours >= record.hours_sat:
-                record.hours_extra = record.worked_hours-record.hours_sat//1
+            elif record.day == 5 and record.worked_hours >= record.hours_sat:
+                record.hours_extra = (
+                    record.worked_hours-record.hours_sat) // 1
 
     @ api.depends('hours_extra')
     def _total_extra(self):

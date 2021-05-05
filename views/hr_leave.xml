@@ -7,14 +7,14 @@
         <field name="arch" type="xml">
 
 
-            <field name="holiday_status_id" position="after">
-                <field name="account_ids" domain="[('users', '=', uid)]" />
-            </field>
             <field name="name" position="after">
+                <field name="account_ids" domain="[('users', '=', uid)]" />
+                <field name="num_emp" />
                 <field name="pues_tra" />
-                <field name="cost_day" readonly="1" widget="monetary" />
-                <field name="cost_default" readonly="1" widget="monetary" />
+                <field name="cost_day" invisible="1" readonly="1" widget="monetary" />
+                <!-- <field name="cost_default" invisible="0" readonly="1" widget="monetary" /> -->
                 <field name="currency_id" invisible="1" />
+                <field name="leavee" invisible="1" />
             </field>
         </field>
     </record>

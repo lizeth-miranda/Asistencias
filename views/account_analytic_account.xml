@@ -9,6 +9,7 @@
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
                 <field name="users" />
+                <field name="users2" />
             </field>
         </field>
     </record>
@@ -20,6 +21,7 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="users" />
+                <field name="users2" />
             </field>
         </field>
     </record>

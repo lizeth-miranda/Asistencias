@@ -11,3 +11,8 @@ class Account(models.Model):
         ondelete='cascade',
         string="Residente",
     )
+    users2 = fields.Many2one(
+        comodel_name="res.users",
+        ondelete='cascade',
+        string="Residente2",
+    )

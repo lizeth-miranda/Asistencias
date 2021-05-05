@@ -22,8 +22,8 @@ class hr_atten(models.Model):
         string="Check Out", default=fields.Datetime.now,)
     fecha = fields.Date(string="Fecha",
                         required=True, default=fields.Date.today)
-    hora_in = fields.Float(string="Entrada", required=True,)
-    hora_out = fields.Float(string="Salida", required=True,)
+    hora_in = fields.Float(string="Entrada",)
+    hora_out = fields.Float(string="Salida",)
 
     codigo_empleado = fields.Char(
         related="employee_id.cod_emp",

@@ -5,18 +5,28 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
-            <field name="tz" position="after">
-                <field name="hours" widget="float_time" required="1" />
-                <field name="normal" required="1" />
-            </field>
-            <field name="user_id" position="after">
-                <field name="salary" widget="monetary" required="1" />
-                <field name="cost_day" widget="monetary" required="1" />
-                <field name="cost_extra" required="1" />
-                <field name="cost_default" required="1" />
-            </field>
+
+            <notebook>
+                <page string=" Horas Laborales Y costos">
+                    <group string="Costos">
+                        <field name="salary" widget="monetary" required="1" />
+                        <field name="timesheet_cost" />
+                        <field name="cost_day" widget="monetary" required="1" />
+                        <field name="costo_dayCS" required="1" />
+                        <field name="cost_extra" required="1" />
+                        <field name="cost_default" required="1" />
+                    </group>
+                    <group string="Horas Laborales">
+                        <field name="horas_lab" widget="float_time" />
+                        <field name="hours" widget="float_time" required="1" />
+                    </group>
+                    <group string="Cuenta Bancaria">
+                        <field name="cuenta" />
+                        <field name="clabe" />
+                        <field name="banco" />
+                    </group>
+                </page>
+            </notebook>
         </field>
     </record>
-
-
 </odoo>

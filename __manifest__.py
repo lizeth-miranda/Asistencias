@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.30',
+    'version': '13.14',
     'author': 'Demsa',
     'website': '',
     'depends': [
@@ -13,15 +13,21 @@
         'hr_holidays',
         'sale_management',
         'purchase',
+        # 'nomina.line'
     ],
     'data': [
         # security
         'security/groups.xml',
         'security/ir.model.access.csv',
-        'security/nomina.xml',
+        # 'security/nominasecurity.xml',
         # data
-        # demo
+        # wizards
+        'wizards/nomina_wizard.xml',
+
         # reports
+        'reports/nomina_semanal.xml',
+        # 'reports/formato_papel.xml',
+        # demo
         # views
         'views/hr_attendance.xml',
         'views/hr_employee.xml',
@@ -30,7 +36,10 @@
         'views/account_analytic_account.xml',
         'views/res_user.xml',
         'views/nomina.xml',
-        #'views/account_move.xml',
+        'views/server_action_prenomina.xml',
+        # 'views/account_move.xml',
+
+
 
     ],
 }

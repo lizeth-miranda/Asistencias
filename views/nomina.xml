@@ -186,6 +186,6 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="action_menu_123" name="Nomina" parent="hr.menu_hr_root" />
-    <menuitem id="nomina_sub" name="Nomina" parent="action_menu_123" action="action_123" sequence="2" />
+    <!--<menuitem id="action_menu_123" name="Nomina" parent="hr.menu_hr_root" />-->
+    <menuitem id="nomina_sub" name="Nómina" parent="hr.menu_hr_employee_payroll" action="action_123" sequence="3" />
 </odoo>

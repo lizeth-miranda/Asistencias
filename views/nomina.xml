@@ -44,7 +44,7 @@
                 <field name="total_extra" sum="Total extra" optional="hide" />
                 <!-- <field name="total_ext_sem" optional="show" sum="Total Extra" /> -->
                 <field name="cost_total" sum="Costo Total" optional="hide" />
-                <field name="sueldo_pagar" sum="sueldo_pagar" optional="hide" />
+                <!--<field name="sueldo_pagar" sum="sueldo_pagar" optional="hide" />-->
                 <field name="sueldo_final_sem" optional="show" sum="Sueldo Fin * sem" />
                 <field name="currency_id" invisible="1" />
                 <field name="state" optional="show" />

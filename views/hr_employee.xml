@@ -5,7 +5,10 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
-
+            
+            <field name="work_location" position="after">
+                <field name="empresa" />
+            </field>
             <notebook>
                 <page string=" Horas Laborales Y costos">
                     <group string="Costos">

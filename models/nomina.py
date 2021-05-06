@@ -354,7 +354,7 @@ class Nomina(models.Model):
         #print(employeecount)
 
         for record in self:
-            employeecount2 = self.env['hr.employee'].search([('empresa', 'in', ['enterprise', 'PCA Grupo Prefabricador']),]).mapped('name')
+            employeecount2 = self.env['hr.employee'].search([('empresa', 'in', ['enterprise2', 'DEMSA']),]).mapped('name')
             #print(employeecount2)
 
         resta = set(employeecount2) - set(employeecount)

@@ -46,3 +46,8 @@ class empl(models.Model):
     normal = fields.Boolean(
         String="Horario normal",
     )
+    empresa = fields.Selection([
+        ('enterprise', 'PCA Grupo Prefabricador'),
+        ('enterprise2', 'DEMSA'),
+    ], string="Empresa",)
+    

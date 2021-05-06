@@ -69,6 +69,7 @@
                             <field name="codigo_empleado" />
                             <field name="employee_id" />
                             <field name="puesto_trabajo" />
+                            <field name="empre" invisible="0" />
                             <field name="inci" readonly="1" />
                             <field name="project" />
                             <!-- <field name="normal" /> -->

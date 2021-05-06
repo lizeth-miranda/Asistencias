@@ -21,7 +21,7 @@ class Nomina(models.Model):
     project = fields.Many2one(
         comodel_name='account.analytic.account',
         string="Obra",
-        readonly=False,
+        readonly=True,
     )
     fecha = fields.Date(string="Fecha",
                         required=True, default=fields.Date.today, readonly=True)

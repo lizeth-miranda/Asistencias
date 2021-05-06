@@ -42,7 +42,7 @@ class Nominamywizard(models.TransientModel):
             'date_start': self.date_start,
             'date_end': self.date_end,
         }
-        return self.env.ref('costoempleado.nomina_semanal_report').with_context(landscape=True).report_action(self, data=data)
+        return self.env.ref('Asistencias.nomina_semanal_report').with_context(landscape=True).report_action(self, data=data)
 
     #     data = {
     #         'model': 'nomina.wizard',

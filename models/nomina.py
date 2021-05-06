@@ -351,14 +351,14 @@ class Nomina(models.Model):
                 ('state', 'in', ['draft', 'Borrador']),
 
             ]).mapped('employee_id.name')
-        print(employeecount)
+        #print(employeecount)
 
         for record in self:
-            employeecount2 = self.env['hr.employee'].search([]).mapped('name')
-            print(employeecount2)
+            employeecount2 = self.env['hr.employee'].search([('empresa', 'in', ['enterprise', 'PCA Grupo Prefabricador']),]).mapped('name')
+            #print(employeecount2)
 
         resta = set(employeecount2) - set(employeecount)
-        print(resta)
+        #print(resta)
 
         if resta:
             raise ValidationError(_("Registros de nómina faltantes para: %(resta)s") % {

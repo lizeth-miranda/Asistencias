@@ -18,6 +18,7 @@ class Nomina(models.Model):
         string="Departamento",
         readonly=True,
     )
+    empre = fields.Selection(related="employee_id.empresa", string="Empresa")
     project = fields.Many2one(
         comodel_name='account.analytic.account',
         string="Obra",

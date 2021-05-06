@@ -60,7 +60,7 @@
         <field name="arch" type="xml">
             <form string="Nomina">
                 <header>
-                    <button name="acco_line" type="object" states="draft" class="oe_highlight" string="Confirmar Nómina" attrs="{'invisible': [('reg_sem', '!=', 'week')]}" />
+                    <button name="acco_line" type="object" states="draft" class="oe_highlight" string="Confirmar Nómina" attrs="{'invisible': [('state', 'in', ['confirm', 'Confirmado'])]}" />
                     <field name="state" widget="statusbar" readonly="1" />
                 </header>
                 <sheet>

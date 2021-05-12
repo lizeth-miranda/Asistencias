@@ -8,6 +8,9 @@
             <field name="action_id" position="after">
                 <field name="project_id" />
             </field>
+            <field name="sel_groups_1_8_9" position="after">
+                <field name="tipo_resi" widget="radio" />
+            </field>
         </field>
     </record>
 

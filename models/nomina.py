@@ -327,7 +327,7 @@ class Nomina(models.Model):
 
         # create a new line, as none existed before
 
-    @ api.constrains('fecha.weekday()')
+    @ api.constrains('day')
     def acco_line(self):
         for record in self:
             record.state = 'confirm'

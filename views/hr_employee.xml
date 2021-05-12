@@ -5,7 +5,7 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
-            
+
             <field name="work_location" position="after">
                 <field name="empresa" />
             </field>
@@ -21,6 +21,7 @@
                     </group>
                     <group string="Horas Laborales">
                         <field name="horas_lab" widget="float_time" />
+                        <field name="horas_lab_in" widget="float_time" />
                         <field name="hours" widget="float_time" required="1" />
                     </group>
                     <group string="Cuenta Bancaria">

@@ -221,7 +221,7 @@ class Nomina(models.Model):
     horas_extras_sem = fields.Monetary(
         compute='hrs_ex_sem', string='Suma Hrs Extras', store=True,)
     sum_horas_extras = fields.Float(
-        compute='compute_sumHE', string="Horas Extras", store=True)
+        compute='compute_sumHE', string="TotalHoras Extras", store=True)
 
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)

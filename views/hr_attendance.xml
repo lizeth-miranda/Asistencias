@@ -8,8 +8,9 @@
         <field name="inherit_id" ref="hr_attendance.view_attendance_tree" />
         <field name="arch" type="xml">
             <field name="employee_id" position="after">
+                <field name="employee_id" options="{'no_open': True}" />
                 <field name="department" />
-                <field name="account_ids" domain="['|',('users', '=', uid),('users2', '=', uid)]" required="1" />
+                <field name="account_ids" options="{'no_open': True}" domain="['|',('users', '=', uid),('users2', '=', uid)]" required="1" />
                 <field name="check_in" invisible="1" />
                 <!-- <field name="normal" /> -->
                 <field name="currency_id" invisible="1" />
@@ -36,8 +37,10 @@
                 <field name="horas_trab" widget="float_time" />
                 <field name="total_hours" widget="float_time" invisible="1" />
                 <field name="hours_extra" widget="float_time" sum="hours_extra" />
-                <field name="total_extra" sum="Total extra" invisible="1" />
-                <field name="cost_total" string="Costo Total" sum="Costo Total" invisible="1" />
+                <field name="user_id" optional="hide" options="{'no_open': True}" />
+                <field name="tipo_resid" optional="hide" />
+                <!-- <field name="total_extra" sum="Total extra" invisible="1" />
+                <field name="cost_total" string="Costo Total" sum="Costo Total" invisible="0" /> -->
             </field>
         </field>
     </record>

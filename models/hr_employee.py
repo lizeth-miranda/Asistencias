@@ -11,7 +11,7 @@ class empl(models.Model):
     )
 
     cost_day = fields.Monetary(
-        help="Costo/Día",
+        help="sueldo semanal/6",
         string="Costo/Día",
     )
     costo_dayCS = fields.Monetary(
@@ -22,7 +22,7 @@ class empl(models.Model):
         'Costo por Hora'
     )
     cost_extra = fields.Monetary(
-        help="Costo Extra ",
+        help="Costo Extra/hr",
         string="Costo Extra",
     )
     cost_default = fields.Monetary(
@@ -39,15 +39,18 @@ class empl(models.Model):
     # total_hours = fields.Float(
     #     related="last_attendance_id.total_hours"
     # )
-    horas_lab = fields.Float(string="Horas laborales",)
+    horas_lab = fields.Float(string="Horas laborales",
+                             help="Horales Laborales Control Obra")
+    horas_lab_in = fields.Float(
+        string="Horas Laborales CI", help="Horales Laborales Control Nómina",)
     hours = fields.Float(
         string="Horas Sábado",
     )
     normal = fields.Boolean(
         String="Horario normal",
     )
+
     empresa = fields.Selection([
         ('enterprise', 'PCA Grupo Prefabricador'),
         ('enterprise2', 'DEMSA'),
     ], string="Empresa",)
-    

@@ -12,7 +12,7 @@
                 <field name="bank" optional="hide" />
                 <!-- <field name="normal" optional="hide" /> -->
                 <field name="department" />
-                <field name="fecha" optional="hide" />
+                <field name="fecha" optional="show" />
                 <field name="check_in" widget="float_time" optional="hide" />
                 <field name="check_out" widget="float_time" optional="hide" />
                 <field name="inci" />

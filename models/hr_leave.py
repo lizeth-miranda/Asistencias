@@ -29,7 +29,6 @@ class hr_lea(models.Model):
         string="Falta", default=True,
     )
 
-
     def action_approve(self):
         res = super(hr_lea, self).action_approve()
         self.env['nomina.line'].create({

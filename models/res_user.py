@@ -11,3 +11,8 @@ class Users(models.Model):
         inverse_name='users',
         string="Proyectos",
     )
+
+    tipo_resi = fields.Selection([
+        ('planta', 'Planta'),
+        ('obra', 'Obra'),
+    ], string='Tipo Residente',)

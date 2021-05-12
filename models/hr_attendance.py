@@ -21,7 +21,7 @@ class hr_atten(models.Model):
     check_out = fields.Datetime(
         string="Check Out", default=fields.Datetime.now,)
     fecha = fields.Date(string="Fecha",
-                        required=True, default=fields.Date.today)
+                        required=True, readonly=True, default=fields.Date.today)
     hora_in = fields.Float(string="Entrada",)
     hora_out = fields.Float(string="Salida",)
 
@@ -67,15 +67,16 @@ class hr_atten(models.Model):
         # related="employee_id.resource_calendar_id.attendance_ids.hours",
         string="Horas Laborales",
     )
+    # hrs_lab_in = fields.Float(related="employee_id.horas_lab_in",)
 
     department = fields.Char(
         related="employee_id.department_id.name",
         string="Departamento",
     )
-    Date = fields.Date(
-        compute='_Date',
-        store=True,
-    )
+    # Date = fields.Date(
+    #     compute='_Date',
+    #     store=True,
+    # )
     # total = fields.Char(
     #     compute='_total',
     # )
@@ -97,19 +98,23 @@ class hr_atten(models.Model):
         string="Horas Totales"
     )
 
-    total_extra = fields.Monetary(
-        compute='_total_extra',
-        store=True,
-        string="Total Extra",
-    )
-    hours_whitout_extra = fields.Float(
-        compute='_hours_whitout_extra',
-        store=True,)
+    # total_extra = fields.Monetary(
+    #     compute='_total_extra',
+    #     store=True,
+    #     string="Total Extra",
+    # )
+    # hours_whitout_extra = fields.Float(
+    #     compute='_hours_whitout_extra',
+    #     store=True,)
     horas_trab = fields.Float(
         string="Horas Trabajadas", compute="horas_traba",)
 
     # total_inci = fields.Monetary(
     #     compute="compute_horas_traba", string="Total Incidencia",)
+# obtener usuario actual
+    user_id = fields.Many2one('res.users', string='Residente',
+                              required=False, readonly=True, default=lambda self: self.env.user.id)
+    tipo_resid = fields.Selection(related="user_id.tipo_resi")
 
     @ api.depends('hours')
     def _mitad(self):
@@ -157,49 +162,48 @@ class hr_atten(models.Model):
                 attendance.hours_extra = (
                     attendance.total_hours-attendance.hours)//1
 
-            elif attendance.normal == False and attendance.day == 5 and attendance.total_hours > attendance.hours_sat:
-                attendance.hours_extra = (
-                    attendance.total_hours - attendance.hours_sat)
+            elif attendance.day == 5 and attendance.tipo_resid == 'planta':
+                attendance.hours_extra = attendance.total_hours
+
+            elif attendance.day == 5 and attendance.tipo_resid == 'obra':
+                attendance.hours_extra = attendance.total_hours-attendance.hours_sat
 
             elif attendance.day == 6:
                 attendance.hours_extra = attendance.total_hours
 
-            elif attendance.normal == True and attendance.day == 5:
-                attendance.hours_extra = attendance.horas_trab
+    # @ api.depends('hora_in', 'hora_out')
+    # def _hours_whitout_extra(self):
+    #     for record in self:
+    #         if record.hours_extra > 0:
+    #             record.hours_whitout_extra = record.horas_trab - record.hours_extra
 
-    @ api.depends('hora_in', 'hora_out')
-    def _hours_whitout_extra(self):
-        for record in self:
-            if record.hours_extra > 0:
-                record.hours_whitout_extra = record.horas_trab - record.hours_extra
+    # @ api.depends('hours_extra', 'cost_extra')
+    # def _total_extra(self):
+    #     for record in self:
+    #         record.total_extra = record.hours_extra * record.cost_extra
 
-    @ api.depends('hours_extra', 'cost_extra')
-    def _total_extra(self):
-        for record in self:
-            record.total_extra = record.hours_extra * record.cost_extra
+    # @ api.depends('hora_in', 'hora_out')
+    # def compute_cost_total(self):
+    #     for record in self:
+    #         if record.day != 5:
+    #             total2 = (record.timesheet_cost) * (record.hrs_lab_in)
+    #             record.cost_total = (total2 + record.total_extra) * -1
 
-    @ api.depends('hora_in', 'hora_out')
-    def compute_cost_total(self):
-        for record in self:
-            if record.hours_extra == 0:
-                total2 = (record.timesheet_cost * record.horas_trab)
-                record.cost_total = (total2 + record.total_extra) * -1
+            # elif record.hours_extra > 0:
+            #     total2 = (record.timesheet_cost * record.hours_whitout_extra)
+            #     record.cost_total = (total2 + record.total_extra) * -1
 
-            elif record.hours_extra > 0:
-                total2 = (record.timesheet_cost * record.hours_whitout_extra)
-                record.cost_total = (total2 + record.total_extra) * -1
+            # elif record.day == 5 and record.normal == True:
+            #     record.cost_total = (record.cost_extra *
+            #                          record.horas_trab) * -1
 
-            elif record.day == 5 and record.normal == True:
-                record.cost_total = (record.cost_extra *
-                                     record.horas_trab) * -1
+            # elif record.day == 6:
+            #     record.cost_total = (record.cost_extra *
+            #                          record.hrs_lab_in) * -1
 
-            elif record.day == 6:
-                record.cost_total = (record.cost_extra *
-                                     record.horas_trab) * -1
-
-            elif record.day == 5 and record.normal == False:
-                total1 = record.timesheet_cost * record.hours_sat
-                record.cost_total = (total1 + record.total_extra) * -1
+            # elif record.day == 5 and record.normal == False:
+            #     total1 = record.timesheet_cost * record.hrs_lab_in
+            #     record.cost_total = (total1 + record.total_extra) * -1
 
     @ api.constrains('hora_in')
     def _take(self):
@@ -219,11 +223,12 @@ class hr_atten(models.Model):
 
     # create a new line, as none existed before
 
-    @ api.constrains('fecha')
+    @ api.constrains('day')
     def nomina_line(self):
         for record in self:
             nomina_line = self.env['nomina.line'].search_count([
                 ('employee_id.id', '=', record.employee_id.id),
+                ('project', '=', record.account_ids.id),
                 ('fecha', '=', record.fecha),
                 ('check_in', '=', record.hora_in),
                 ('check_out', '=', record.hora_out),
@@ -248,8 +253,10 @@ class hr_atten(models.Model):
                     'cost_hour': record.timesheet_cost,
                     'extra_cost': record.cost_extra,
                     'hours_extra': record.hours_extra,
-                    'total_extra': record.total_extra,
-                    'cost_total': record.cost_total,
+                    'us_id': record.user_id.name,
+                    'type_resi': record.tipo_resid,
+                    # 'total_extra': record.total_extra,
+                    # 'cost_total': record.cost_total,
                     # 'total_inci': record.total_inci,
                 })
     # if our attendance is "open" (no check_out), we verify there is no other "open" attendance

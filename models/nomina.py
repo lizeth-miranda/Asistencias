@@ -27,7 +27,7 @@ class Nomina(models.Model):
         readonly=True,
     )
     fecha = fields.Date(string="Fecha Asistencia",
-                        required=True, default=fields.Date.today, readonly=False,)
+                        required=True, default=fields.Date.today, readonly=True,)
 
     check_in = fields.Float(string="Entrada",)
     check_out = fields.Float(string="Salida",)

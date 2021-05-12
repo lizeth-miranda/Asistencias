@@ -8,3 +8,4 @@ from . import account_analytic_account
 from . import res_user
 from . import nomina
 from . import sale_order
+#from . import account_move

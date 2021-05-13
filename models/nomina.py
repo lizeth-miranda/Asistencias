@@ -281,7 +281,7 @@ class Nomina(models.Model):
     @ api.depends('worked_hours')
     def _hours_extra(self):
         for record in self:
-            if record.worked_hours >= record.hours:
+            if record.day != 5 and record.worked_hours >= record.hours:
                 record.hours_extra = (record.worked_hours-record.hours) // 1
 
             elif record.day == 5 and record.type_resi == 'planta':

@@ -158,7 +158,7 @@ class hr_atten(models.Model):
     @ api.depends('total_hours')
     def _hours_extra(self):
         for attendance in self:
-            if attendance.total_hours >= attendance.hours:
+            if attendance.day != 5 and attendance.total_hours >= attendance.hours:
                 attendance.hours_extra = (
                     attendance.total_hours-attendance.hours)//1
 

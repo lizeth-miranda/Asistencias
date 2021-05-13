@@ -258,7 +258,16 @@ class hr_atten(models.Model):
                     # 'total_extra': record.total_extra,
                     # 'cost_total': record.cost_total,
                     # 'total_inci': record.total_inci,
+
                 })
+            return {
+                'effect': {
+                    'fadeout': 'slow',
+                    'message': 'Registro Exitoso',
+                    'type': 'rainbow_man',
+                }
+            }
+              
     # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
 
     # @ api.constrains('check_in', 'check_out', 'employee_id')

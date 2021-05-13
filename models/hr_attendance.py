@@ -223,7 +223,7 @@ class hr_atten(models.Model):
 
     # create a new line, as none existed before
 
-    @ api.constrains('day')
+    @ api.constrains('fecha')
     def nomina_line(self):
         for record in self:
             nomina_line = self.env['nomina.line'].search_count([
@@ -238,7 +238,7 @@ class hr_atten(models.Model):
                 raise ValidationError(_("Los registros ya existen"))
 
             elif not nomina_line:
-                self.env['nomina.line'].create({
+                record.env['nomina.line'].create({
                     'employee_id': record.employee_id.id,
                     'department': record.department,
                     'project': record.account_ids.id,
@@ -260,13 +260,13 @@ class hr_atten(models.Model):
                     # 'total_inci': record.total_inci,
 
                 })
-            return {
-                'effect': {
-                    'fadeout': 'slow',
-                    'message': 'Registro Exitoso',
-                    'type': 'rainbow_man',
-                }
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Registro Exitoso',
+                'type': 'rainbow_man',
             }
+        }
               
     # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
 

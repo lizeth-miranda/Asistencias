@@ -212,12 +212,13 @@ class hr_atten(models.Model):
             last_attendance_before_check_in = self.env['hr.attendance'].search([
                 ('employee_id', '=', attendance.employee_id.id),
                 ('fecha', '=', attendance.fecha),
-                ('hora_in', '=', attendance.hora_in),
+                ('hora_in', '<=', attendance.hora_in),
                 ('id', '!=', attendance.id),
             ], order='hora_in desc', limit=1)
             if last_attendance_before_check_in:
-                raise exceptions.ValidationError(_("No se puede crear una nueva asistencia para el registro %(empl_name)s") % {
+                raise exceptions.ValidationError(_("No se puede crear un nuevo registro del empleado%(empl_name)s, el empleado ya esta registrado desde %(hora_in)s") % {
                     'empl_name': attendance.employee_id.name,
+                    'hora_in': attendance.hora_in,
                     # 'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in))),
                 })
 

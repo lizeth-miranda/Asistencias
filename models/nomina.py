@@ -327,28 +327,35 @@ class Nomina(models.Model):
 
         # create a new line, as none existed before
 
-    @ api.constrains('day')
+    @ api.constrains('fecha')
     def acco_line(self):
         for record in self:
             record.state = 'confirm'
-            record.account_line = self.env['account.analytic.line'].search_count([
-                ('date', '=', self.nomina_date),
-                ('name', '=', self.employee_id.name),
-                ('job_pos', '=', self.department),
-                ('account_id', '=', self.project.id),
-                ('amount', '=', self.suma_percep),
+            account_line = self.env['account.analytic.line'].search_count([
+                ('date', '=', record.fecha),
+                ('name', '=', record.employee_id.name),
+                ('job_pos', '=', record.department),
+                ('account_id', '=', record.project.id),
+                ('amount', '=', record.suma_percep),
             ])
-            if record.account_line > 0:
+            if account_line > 0:
                 raise ValidationError(_("Los registros ya existen"))
 
-            elif not record.account_line:
+            elif not account_line:
                 self.env['account.analytic.line'].create({
-                    'date': self.nomina_date,
-                    'name': self.employee_id.name,
-                    'job_pos': self.department,
-                    'account_id': self.project.id,
-                    'amount': self.suma_percep,
+                    'date': record.fecha,
+                    'name': record.employee_id.name,
+                    'job_pos': record.department,
+                    'account_id': record.project.id,
+                    'amount': record.suma_percep,
                 })
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Registro Exitoso',
+                'type': 'rainbow_man',
+            }
+        }
     # calculo sueldo a pagar
     # calculo del costo de obra con la carga social
 

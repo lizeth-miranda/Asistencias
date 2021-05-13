@@ -311,7 +311,7 @@ class Nomina(models.Model):
 
             elif record.day == 5 and record.type_resi == 'obra':
                 t1 = (record.hrs_lab_in * record.cost_hour)
-                self.cost_total = t1 + self.total_extra
+                record.cost_total = t1 + record.total_extra
 
             elif record.day == 5 and record.type_resi == 'planta':
                 record.cost_total = record.total_extra

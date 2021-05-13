@@ -183,6 +183,7 @@ class Nomina(models.Model):
 
     # Deducciones
     cre_info = fields.Monetary(
+        related="employee_id.credito_info",
         string="Crédito Infonavit"
     )
     pres_per = fields.Monetary(
@@ -201,6 +202,7 @@ class Nomina(models.Model):
         store=True,
     )
     fona = fields.Monetary(
+        related="employee_id.credito_fona",
         string="Crédito Fonacot",
     )
     suma_dedu = fields.Monetary(

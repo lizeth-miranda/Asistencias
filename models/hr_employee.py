@@ -49,6 +49,8 @@ class empl(models.Model):
     normal = fields.Boolean(
         String="Horario normal",
     )
+    credito_info = fields.Monetary(sring="Crédito Infonavit",)
+    credito_fona = fields.Monetary(string="Crédito Fonacot",)
 
     empresa = fields.Selection([
         ('enterprise', 'PCA Grupo Prefabricador'),

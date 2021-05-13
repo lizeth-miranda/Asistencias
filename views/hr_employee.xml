@@ -18,6 +18,8 @@
                         <field name="costo_dayCS" required="1" />
                         <field name="cost_extra" required="1" />
                         <field name="cost_default" required="1" />
+                        <field name="credito_info" />
+                        <field name="credito_fona" />
                     </group>
                     <group string="Horas Laborales">
                         <field name="horas_lab" widget="float_time" />

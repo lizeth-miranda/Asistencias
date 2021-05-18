@@ -20,7 +20,7 @@
                 <field name="hora_in" widget="float_time" />
                 <field name="hora_out" widget="float_time" />
                 <!-- <field name="resta" /> -->
-                <field name="day" />
+                <field name="day" invisible="1"/>
                 <!-- <field name="Date" /> -->
                 <field name="cost_day" optional="hide" invisible="1" />
                 <field name="timesheet_cost" class="oe_inline" optional="hide" invisible="1" />
@@ -35,7 +35,7 @@
                 <!-- <field name="hours_sat" widget="float_time" /> -->
                 <field name="hours" widget="float_time" />
                 <field name="horas_trab" widget="float_time" />
-                <field name="total_hours" widget="float_time" invisible="0" />
+                <field name="total_hours" widget="float_time" invisible="1" />
                 <field name="hours_extra" widget="float_time" sum="hours_extra" />
                 <field name="user_id" optional="hide" options="{'no_open': True}" />
                 <field name="tipo_resid" optional="hide" />

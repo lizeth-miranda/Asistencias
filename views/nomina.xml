@@ -12,7 +12,7 @@
                 <field name="bank" optional="hide" />
                 <!-- <field name="normal" optional="hide" /> -->
                 <field name="department" />
-                <field name="fecha" optional="show" />
+                <field name="fechaA" optional="show" />
                 <field name="check_in" widget="float_time" optional="hide" />
                 <field name="check_out" widget="float_time" optional="hide" />
                 <field name="inci" />
@@ -96,7 +96,7 @@
                     <notebook>
                         <page string=" Resumen Costo MO">
                             <group>
-                                <field name="fecha" />
+                                <field name="fechaA" />
                                 <field name="check_in" widget="float_time" />
                                 <field name="check_out" widget="float_time" />
                                 <field name="inci" readonly="1" />
@@ -122,6 +122,7 @@
                                 <field name="vacaciones" />
                                 <field name="prima_vaca" />
                                 <field name="aguin" />
+                                <field name="semana_fondo" />
                                 <field name="sum_perc_notCarga" />
                             </group>
                             <group>

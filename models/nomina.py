@@ -26,8 +26,8 @@ class Nomina(models.Model):
         string="Obra",
         readonly=True,
     )
-    fecha = fields.Date(string="Fecha Asistencia",
-                        required=True, default=fields.Date.today, readonly=True,)
+    fechaA = fields.Date(string="Fecha Asistencia",
+                         required=True, default=fields.Date.today, readonly=True,)
 
     check_in = fields.Float(string="Entrada",)
     check_out = fields.Float(string="Salida",)
@@ -138,7 +138,7 @@ class Nomina(models.Model):
     inci = fields.Char(string="Incidencia",)
     leavee = fields.Boolean(string="Falta",)
     # cuentas bancarias
-    account = fields.Char(relate="employee_id.cuenta",
+    account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)
     cla = fields.Char(related="employee_id.clabe",
                       string="CLABE Interbancaria",)
@@ -176,11 +176,11 @@ class Nomina(models.Model):
         help="costo/día + total extra + carga social",
         compute="sum_perc",
         string="Costo MO",
-        store=True,
+        store=True
     )
     sum_perc_notCarga = fields.Monetary(
-        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True,)
-    
+        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True)
+
     semana_fondo = fields.Monetary(string="Semana de Fondo",)
 
     # Deducciones
@@ -225,7 +225,7 @@ class Nomina(models.Model):
     horas_extras_sem = fields.Monetary(
         compute='hrs_ex_sem', string='Suma Hrs Extras', store=True,)
     sum_horas_extras = fields.Float(
-        compute='compute_sumHE', string="TotalHoras Extras", store=True)
+        compute='compute_sumHE', string="total Horas Extras", store=True)
 
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)
@@ -253,8 +253,8 @@ class Nomina(models.Model):
     def compute_sumHE(self):
         for record in self:
             record.sum_horas_extras = sum(self.env['nomina.line'].search([
-                ('fecha', '>=', record.start_date),
-                ('fecha', '<=', record.end_date),
+                ('fechaA', '>=', record.start_date),
+                ('fechaA', '<=', record.end_date),
                 ('employee_id', '=', record.employee_id.id),
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('hours_extra'))
@@ -263,16 +263,16 @@ class Nomina(models.Model):
     def hrs_ex_sem(self):
         for record in self:
             record.horas_extras_sem = sum(self.env['nomina.line'].search([
-                ('fecha', '>=', record.start_date),
-                ('fecha', '<=', record.end_date),
+                ('fechaA', '>=', record.start_date),
+                ('fechaA', '<=', record.end_date),
                 ('employee_id', '=', record.employee_id.id),
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('total_extra'))
 
-    @ api.depends('fecha')
+    @ api.depends('fechaA')
     def _day(self):
         for record in self:
-            record.day = record.fecha.weekday()
+            record.day = record.fechaA.weekday()
 
     @ api.depends('check_in', 'check_out')
     def _compute_worked_hours(self):
@@ -331,23 +331,24 @@ class Nomina(models.Model):
 
         # create a new line, as none existed before
 
-    @ api.constrains('fecha')
+    @ api.constrains('date', 'name', 'amount')
     def acco_line(self):
         for record in self:
             record.state = 'confirm'
             account_line = self.env['account.analytic.line'].search_count([
-                ('date', '=', record.fecha),
+                ('date', '=', record.fechaA),
                 ('name', '=', record.employee_id.name),
                 ('job_pos', '=', record.department),
                 ('account_id', '=', record.project.id),
                 ('amount', '=', record.suma_percep),
             ])
             if account_line > 0:
-                raise ValidationError(_("Los registros ya existen"))
+                raise ValidationError(
+                    _("Uno o varios de los registros ya fueron Confirmados"))
 
             elif not account_line:
                 self.env['account.analytic.line'].create({
-                    'date': record.fecha,
+                    'date': record.fechaA,
                     'name': record.employee_id.name,
                     'job_pos': record.department,
                     'account_id': record.project.id,
@@ -429,6 +430,7 @@ class Nomina(models.Model):
         # print(employeecount2)
         #
         #
+
 
             
 

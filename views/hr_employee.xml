@@ -9,6 +9,11 @@
             <field name="work_location" position="after">
                 <field name="empresa" />
             </field>
+            <field name="parent_id" position="after">
+                <field name="cod_emp" />
+                <field name="fecha_ingreso" />
+                <field name="afiliacion_imss" />
+            </field>
             <notebook>
                 <page string=" Horas Laborales Y costos">
                     <group string="Costos">

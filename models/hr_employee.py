@@ -9,7 +9,11 @@ class empl(models.Model):
     salary = fields.Monetary(
         string="Salario",
     )
-
+    
+    cod_emp = fields.Char(string="Código Empleado",)
+    fecha_ingreso = fields.Date(string="Fecha de Ingreso",)
+    afiliacion_imss = fields.Char(string="Afiliación IMSS",)
+    
     cost_day = fields.Monetary(
         help="sueldo semanal/6",
         string="Costo/Día",

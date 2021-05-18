@@ -205,45 +205,75 @@ class hr_atten(models.Model):
             #     total1 = record.timesheet_cost * record.hrs_lab_in
             #     record.cost_total = (total1 + record.total_extra) * -1
 
-    @ api.constrains('hora_in')
+    @api.constrains('hora_in', 'hora_out', 'employee_id')
     def _take(self):
         for attendance in self:
             # we take the latest attendance before our check_in time and check it doesn't overlap with ours
             last_attendance_before_check_in = self.env['hr.attendance'].search([
                 ('employee_id', '=', attendance.employee_id.id),
+                ('account_ids', '!=', attendance.account_ids.id),
                 ('fecha', '=', attendance.fecha),
                 ('hora_in', '<=', attendance.hora_in),
                 ('id', '!=', attendance.id),
-            ], order='hora_in desc', limit=1)
-            if last_attendance_before_check_in:
-                raise exceptions.ValidationError(_("No se puede crear un nuevo registro del empleado%(empl_name)s, el empleado ya esta registrado desde %(hora_in)s") % {
+            ], order='hora_in desc', limit=1).mapped('hora_out')
+            print(last_attendance_before_check_in)
+            if last_attendance_before_check_in and last_attendance_before_check_in.hora_out and last_attendance_before_check_in.hora_in > attendance.hora_in:
+                raise exceptions.ValidationError(_("No se puede crear un nuevo registro de Entrada del empleado%(empl_name)s, el empleado ya esta registrado ") % {
                     'empl_name': attendance.employee_id.name,
-                    'hora_in': attendance.hora_in,
                     # 'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in))),
                 })
 
+            if not attendance.hora_out:
+                # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
+                no_check_out_attendances = self.env['hr.attendance'].search([
+                    ('employee_id', '=', attendance.employee_id.id),
+                    ('hora_out', '=', 0),
+                    ('id', '!=', attendance.id),
+                ], order='hora_in desc', limit=1).mapped('hora_out')
+                print(no_check_out_attendances)
+                if no_check_out_attendances:
+                    raise exceptions.ValidationError(_("Cannot create new attendance record for %(empl_name)s, the employee hasn't checked out") % {
+                        'empl_name': attendance.employee_id.name,
+                    })
+
+            else:
+                last_attendance_before_check_out = self.env['hr.attendance'].search([
+                    ('employee_id', '=', attendance.employee_id.id),
+                    ('account_ids', '!=', attendance.account_ids.id),
+                    ('fecha', '=', attendance.fecha),
+                    ('hora_in', '<', attendance.hora_out),
+                    ('id', '!=', attendance.id),
+                ], order='hora_in desc', limit=1).mapped('hora_out')
+                print(last_attendance_before_check_out)
+                if last_attendance_before_check_out and last_attendance_before_check_in != last_attendance_before_check_out:
+                    raise exceptions.ValidationError(_("No se puede crear un nuevo registro del empleado%(empl_name)s, el empleado ya esta registrado ") % {
+                        'empl_name': attendance.employee_id.name,
+                        'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in))),
+                    })
+
     # create a new line, as none existed before
 
-    @ api.constrains('fecha')
+    @ api.constrains('fechaA')
     def nomina_line(self):
         for record in self:
             nomina_line = self.env['nomina.line'].search_count([
                 ('employee_id.id', '=', record.employee_id.id),
                 ('project', '=', record.account_ids.id),
-                ('fecha', '=', record.fecha),
+                ('fechaA', '=', record.fecha),
                 ('check_in', '=', record.hora_in),
                 ('check_out', '=', record.hora_out),
             ])
             print(nomina_line)
             if nomina_line > 0:
-                raise ValidationError(_("Los registros ya existen"))
+                raise ValidationError(
+                    _("Una o varias asistencias ya existen registradas "))
 
             elif not nomina_line:
                 record.env['nomina.line'].create({
                     'employee_id': record.employee_id.id,
                     'department': record.department,
                     'project': record.account_ids.id,
-                    'fecha': record.fecha,
+                    'fechaA': record.fecha,
                     'check_in': record.hora_in,
                     'check_out': record.hora_out,
                     'worked_hours': record.horas_trab,
@@ -268,7 +298,7 @@ class hr_atten(models.Model):
                 'type': 'rainbow_man',
             }
         }
-              
+
     # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
 
     # @ api.constrains('check_in', 'check_out', 'employee_id')
@@ -287,4 +317,3 @@ class hr_atten(models.Model):
     #                     'empl_name': attendance.employee_id.name,
     #                     'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(no_check_out_attendances.check_in))),
     #                 })
-

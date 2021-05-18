@@ -176,10 +176,12 @@ class Nomina(models.Model):
         help="costo/día + total extra + carga social",
         compute="sum_perc",
         string="Costo MO",
-        store=True
+        store=True,
     )
     sum_perc_notCarga = fields.Monetary(
-        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True)
+        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True,)
+    
+    semana_fondo = fields.Monetary(string="Semana de Fondo",)
 
     # Deducciones
     cre_info = fields.Monetary(
@@ -374,7 +376,7 @@ class Nomina(models.Model):
         for record in self:
             record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
                                         record.bono_even + record.gasolina +
-                                        record.vacaciones + record.prima_vaca + record.aguin)
+                                        record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo)
 
     @api.depends('cre_info', 'fona', 'pres_per', 'otros_desc')
     def sum_dedu(self):

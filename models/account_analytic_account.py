@@ -12,5 +12,5 @@ class Account(models.Model):
         string="Residente",
     )
     
-    userss = fields.Many2many('res.users', string='Residente',)
+    userss = fields.Many2many('res.users', string='Residentes',)
   

@@ -151,7 +151,8 @@ class Nomina(models.Model):
     pasa = fields.Monetary(
         string="Pasaje",
     )
-    bono = fields.Monetary(
+   bono = fields.Monetary(
+        related="employee_id.bono",
         string="Bono Fijo",
     )
     bono_even = fields.Monetary(

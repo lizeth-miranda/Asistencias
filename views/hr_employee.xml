@@ -25,6 +25,7 @@
                         <field name="cost_default" required="1" />
                         <field name="credito_info" />
                         <field name="credito_fona" />
+                        <field name="bono" />
                     </group>
                     <group string="Horas Laborales">
                         <field name="horas_lab" widget="float_time" />

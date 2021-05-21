@@ -218,7 +218,7 @@ class hr_atten(models.Model):
             ]).mapped('account_ids')
             #print(last_attendance_before_check_out)
             if last_attendance_before_check_out:
-                raise ValidationError(_("No se puede crear un nuevo registro de asistencia para el empleado %(empl_name)s, el empleado ya cuenta con una asistencias registrada en la hora de entrada que esta tratando de ingresar") % {
+                raise ValidationError(_("No se puede crear un nuevo registro de asistencia para el empleado %(empl_name)s, el empleado ya cuenta con una asistencia registrada en la hora de entrada que esta tratando de ingresar") % {
                     'empl_name': attendance.employee_id.name,
                     # 'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in_kiosko))),
                 })

@@ -205,51 +205,23 @@ class hr_atten(models.Model):
             #     total1 = record.timesheet_cost * record.hrs_lab_in
             #     record.cost_total = (total1 + record.total_extra) * -1
 
-    @api.constrains('hora_in', 'hora_out', 'employee_id')
+   @api.constrains('hora_in', 'employee_id')
     def _take(self):
         for attendance in self:
-            # we take the latest attendance before our check_in time and check it doesn't overlap with ours
-            last_attendance_before_check_in = self.env['hr.attendance'].search([
+            last_attendance_before_check_out = self.env['hr.attendance'].search([
                 ('employee_id', '=', attendance.employee_id.id),
                 ('account_ids', '!=', attendance.account_ids.id),
                 ('fecha', '=', attendance.fecha),
                 ('hora_in', '<=', attendance.hora_in),
+                ('hora_out', '>=', attendance.hora_in),
                 ('id', '!=', attendance.id),
-            ], order='hora_in desc', limit=1).mapped('hora_out')
-            print(last_attendance_before_check_in)
-            if last_attendance_before_check_in and last_attendance_before_check_in.hora_out and last_attendance_before_check_in.hora_in > attendance.hora_in:
-                raise exceptions.ValidationError(_("No se puede crear un nuevo registro de Entrada del empleado%(empl_name)s, el empleado ya esta registrado ") % {
+            ]).mapped('account_ids')
+            #print(last_attendance_before_check_out)
+            if last_attendance_before_check_out:
+                raise ValidationError(_("No se puede crear un nuevo registro de asistencia para el empleado %(empl_name)s, el empleado ya cuenta con una asistencias registrada en la hora de entrada que esta tratando de ingresar") % {
                     'empl_name': attendance.employee_id.name,
-                    # 'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in))),
+                    # 'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in_kiosko))),
                 })
-
-            if not attendance.hora_out:
-                # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
-                no_check_out_attendances = self.env['hr.attendance'].search([
-                    ('employee_id', '=', attendance.employee_id.id),
-                    ('hora_out', '=', 0),
-                    ('id', '!=', attendance.id),
-                ], order='hora_in desc', limit=1).mapped('hora_out')
-                print(no_check_out_attendances)
-                if no_check_out_attendances:
-                    raise exceptions.ValidationError(_("Cannot create new attendance record for %(empl_name)s, the employee hasn't checked out") % {
-                        'empl_name': attendance.employee_id.name,
-                    })
-
-            else:
-                last_attendance_before_check_out = self.env['hr.attendance'].search([
-                    ('employee_id', '=', attendance.employee_id.id),
-                    ('account_ids', '!=', attendance.account_ids.id),
-                    ('fecha', '=', attendance.fecha),
-                    ('hora_in', '<', attendance.hora_out),
-                    ('id', '!=', attendance.id),
-                ], order='hora_in desc', limit=1).mapped('hora_out')
-                print(last_attendance_before_check_out)
-                if last_attendance_before_check_out and last_attendance_before_check_in != last_attendance_before_check_out:
-                    raise exceptions.ValidationError(_("No se puede crear un nuevo registro del empleado%(empl_name)s, el empleado ya esta registrado ") % {
-                        'empl_name': attendance.employee_id.name,
-                        'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in))),
-                    })
 
     # create a new line, as none existed before
 

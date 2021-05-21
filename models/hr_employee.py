@@ -55,6 +55,9 @@ class empl(models.Model):
     )
     credito_info = fields.Monetary(string="Crédito Infonavit",)
     credito_fona = fields.Monetary(string="Crédito Fonacot",)
+    bono = fields.Monetary(
+        string="Bono Fijo",
+    )
 
     empresa = fields.Selection([
         ('enterprise', 'PCA Grupo Prefabricador'),

@@ -205,7 +205,7 @@ class hr_atten(models.Model):
             #     total1 = record.timesheet_cost * record.hrs_lab_in
             #     record.cost_total = (total1 + record.total_extra) * -1
 
-   @api.constrains('hora_in', 'employee_id')
+    @api.constrains('hora_in', 'employee_id')
     def _take(self):
         for attendance in self:
             last_attendance_before_check_out = self.env['hr.attendance'].search([

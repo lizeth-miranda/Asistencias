@@ -373,25 +373,27 @@ class Nomina(models.Model):
                                   record.vacaciones + record.prima_vaca + record.aguin + record.costo_daycs) * -1
 
     # calculo costo de percepciones sin carga social
-    @api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @api.depends('reg_sem', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def compute_sum_perc_noCS(self):
         for record in self:
-            record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
-                                        record.bono_even + record.gasolina +
-                                        record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo)
+            if record.reg_sem in ['week', 'semanal']:
+                record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
+                                            record.bono_even + record.gasolina +
+                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo)
 
-    @api.depends('cre_info', 'fona', 'pres_per', 'otros_desc')
+    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'otros_desc')
     def sum_dedu(self):
         for record in self:
-            record.suma_dedu = record.cre_info + \
-                record.pres_per + record.des_epp + record.otros_desc
+            if record.reg_sem in ['week', 'semanal']:
+                record.suma_dedu = record.cre_info + \
+                    record.pres_per + record.des_epp + record.otros_desc
 
-    @ api.depends('start_date', 'end_date')
+    @api.depends('reg_sem', 'start_date', 'end_date')
     def suel_pagar(self):
         for record in self:
-
-            record.sueldo_pagar = (
-                record.sum_perc_notCarga + record.horas_extras_sem) - record.suma_dedu
+            if record.reg_sem in ['week', 'semanal']:
+                record.sueldo_pagar = (
+                    record.sum_perc_notCarga + record.horas_extras_sem) - record.suma_dedu
 
 # if record.reg_sem in ['week', 'semanal']:
     # funcion para revisar que no falten empleados de registrar su nomina en algun dia de la semana o en la semana completa

@@ -78,11 +78,11 @@
                             <field name="empre" invisible="0" />
                             <field name="project" options="{'no_open': True}" />
                             <field name="hrs_lab_in" widget="float_time" />
-                            <field name="costo_daycs" />
                             <!-- <field name="normal" /> -->
                             <field name="hours" widget="float_time" />
                             <field name="hours_sat" widget="float_time" />
                             <!-- <field name="department" /> -->
+                             <field name="costo_daycs" />
                             <field name="cost_day" widget="Monetary" />
                             <field name="cost_hour" />
                             <field name="extra_cost" />

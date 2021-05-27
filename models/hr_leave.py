@@ -9,7 +9,6 @@ class hr_lea(models.Model):
     account_ids = fields.Many2one(
         comodel_name='account.analytic.account',
         string="Obra",
-        required=True,
     )
     cost_day = fields.Monetary(
         related='employee_id.cost_day',
@@ -36,9 +35,10 @@ class hr_lea(models.Model):
             'codigo_empleado': self.num_emp,
             'project': self.account_ids.id,
             'department': self.pues_tra,
-            'fecha': self.request_date_from,
+            'fechaA': self.request_date_from,
             'inci': self.holiday_status_id.name,
             'leavee': self.leavee,
+            'notas': self.report_note,
             # 'total_inci': self.cost_default,
         })
         return res

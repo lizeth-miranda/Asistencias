@@ -368,9 +368,14 @@ class Nomina(models.Model):
     @api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def sum_perc(self):
         for record in self:
-            record.suma_percep = (record.cost_total + record.viat + record.pasa + record.bono +
-                                  record.bono_even + record.gasolina +
-                                  record.vacaciones + record.prima_vaca + record.aguin + record.costo_daycs) * -1
+            if record.inci != False:
+                record.suma_percep = (record.cost_total + record.viat + record.pasa + record.bono +
+                                      record.bono_even + record.gasolina +
+                                      record.vacaciones + record.prima_vaca + record.aguin) * -1
+            else:
+                record.suma_percep = (record.cost_total + record.viat + record.pasa + record.bono +
+                                      record.bono_even + record.gasolina +
+                                      record.vacaciones + record.prima_vaca + record.aguin + record.costo_daycs) * -1
 
     # calculo costo de percepciones sin carga social
     @api.depends('reg_sem', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')

@@ -37,6 +37,7 @@
                 <field name="horas_trab" widget="float_time" />
                 <field name="total_hours" widget="float_time" invisible="1" />
                 <field name="hours_extra" widget="float_time" sum="hours_extra" />
+                <field name="comen" />
                 <field name="user_id" optional="hide" options="{'no_open': True}" />
                 <field name="tipo_resid" optional="hide" />
                 <!-- <field name="total_extra" sum="Total extra" invisible="1" />

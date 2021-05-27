@@ -45,7 +45,7 @@
                 <field name="total_extra" sum="Total extra" optional="hide" />
                 <!-- <field name="total_ext_sem" optional="show" sum="Total Extra" /> -->
                 <field name="cost_total" sum="Costo Total" optional="hide" />
-                <field name="sueldo_semanal" sum="Sueldo Semanal" optional="show" />
+                <field name="sueldo_semanal" optional="hide" />
                 <field name="sum_perc_notCarga" sum="Suma Percepciones" optional="show" />
                 <field name="suma_dedu" sum="Suma Deducciones" optional="show" />
                 <field name="sueldo_pagar" sum="sueldo_pagar" optional="show" />

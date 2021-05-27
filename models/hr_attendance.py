@@ -108,6 +108,7 @@ class hr_atten(models.Model):
     #     store=True,)
     horas_trab = fields.Float(
         string="Horas Trabajadas", compute="horas_traba",)
+    comen = fields.Char(string="Comentarios",)
 
     # total_inci = fields.Monetary(
     #     compute="compute_horas_traba", string="Total Incidencia",)
@@ -256,6 +257,7 @@ class hr_atten(models.Model):
                     'cost_hour': record.timesheet_cost,
                     'extra_cost': record.cost_extra,
                     'hours_extra': record.hours_extra,
+                    'notas': record.comen,
                     'us_id': record.user_id.name,
                     'type_resi': record.tipo_resid,
                     # 'total_extra': record.total_extra,

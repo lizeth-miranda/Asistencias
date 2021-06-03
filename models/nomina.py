@@ -390,7 +390,7 @@ class Nomina(models.Model):
     def sum_dedu(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
-                record.suma_dedu = record.cre_info + \
+                record.suma_dedu = record.cre_info + record.fona + \
                     record.pres_per + record.des_epp + record.otros_desc
 
     @api.depends('reg_sem', 'start_date', 'end_date')

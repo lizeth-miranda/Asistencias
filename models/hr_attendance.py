@@ -148,7 +148,7 @@ class hr_atten(models.Model):
                 rec.horas_trab = False
 
     @ api.depends('fecha')
-    def total_hours(self):
+    def _total_hours(self):
         for attendance in self:
             attendance.total_hours = sum(self.env['hr.attendance'].search([
                 ('employee_id', '=', attendance.employee_id.name),

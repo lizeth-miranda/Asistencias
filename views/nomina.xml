@@ -177,15 +177,6 @@
                                 <!-- <field name="sueldo_final_sem" /> -->
                             </group>
                         </page>
-                        <page string="Préstamos y Descuentos Personales">
-                            <group>
-                                <field name="total_prestamo" />
-                                <field name="semanas" />
-                                <field name="num_pago" />
-                                <field name="abono" />
-                                <field name="saldo" />
-                            </group>
-                        </page>
                     </notebook>
                 </sheet>
             </form>

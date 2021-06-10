@@ -8,7 +8,8 @@
 
 
             <field name="name" position="after">
-                <field name="account_ids" domain="[('userss', '=', uid)]" />
+                <field name="employee_id" options="{'no_open': True}" />
+                <field name="account_ids" options="{'no_open': True}" domain="[('userss', '=', uid)]" />
                 <field name="num_emp" />
                 <field name="pues_tra" />
                 <field name="cost_day" invisible="1" readonly="1" />

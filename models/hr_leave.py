@@ -24,9 +24,32 @@ class hr_lea(models.Model):
     )
     num_emp = fields.Char(related="employee_id.cod_emp",)
 
+    codigo_falta = fields.Char(
+        related="holiday_status_id.code", string="Código Falta",)
+
     leavee = fields.Boolean(
-        string="Falta", default=True,
+        string="Falta",
     )
+    asist = fields.Boolean(string="asistencia",)
+    
+    @api.onchange('holiday_status_id')
+    def falta(self):
+
+        if self.codigo_falta == 'FALTA' or self.codigo_falta == 'PSG':
+            self.leavee = True
+            self.asist = False
+        else:
+            self.leavee = False
+
+    @api.onchange('holiday_status_id')
+    def asis(self):
+
+        if self.codigo_falta != 'FALTA' or self.codigo_falta != 'PSG':
+            self.asist = True
+            self.leavee = False
+        else:
+            self.asist = False
+
 
     def action_approve(self):
         res = super(hr_lea, self).action_approve()
@@ -38,6 +61,9 @@ class hr_lea(models.Model):
             'fechaA': self.request_date_from,
             'inci': self.holiday_status_id.name,
             'leavee': self.leavee,
+            'asis': self.asist,
+            'cost_day': self.cost_day,
+            'extra_cost': self.costo_extra,
             'notas': self.report_note,
             # 'total_inci': self.cost_default,
         })

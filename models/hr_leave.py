@@ -9,11 +9,14 @@ class hr_lea(models.Model):
     account_ids = fields.Many2one(
         comodel_name='account.analytic.account',
         string="Obra",
+        required=True,
     )
     cost_day = fields.Monetary(
         related='employee_id.cost_day',
         string="Cost day",
     )
+    costo_extra = fields.Monetary(
+        related='employee_id.cost_extra', string="Costo extra",)
 
     currency_id = fields.Many2one(
         related='employee_id.currency_id',
@@ -31,7 +34,7 @@ class hr_lea(models.Model):
         string="Falta",
     )
     asist = fields.Boolean(string="asistencia",)
-    
+
     @api.onchange('holiday_status_id')
     def falta(self):
 
@@ -50,7 +53,6 @@ class hr_lea(models.Model):
         else:
             self.asist = False
 
-
     def action_approve(self):
         res = super(hr_lea, self).action_approve()
         self.env['nomina.line'].create({
@@ -64,7 +66,6 @@ class hr_lea(models.Model):
             'asis': self.asist,
             'cost_day': self.cost_day,
             'extra_cost': self.costo_extra,
-            'notas': self.report_note,
             # 'total_inci': self.cost_default,
         })
         return res

@@ -128,7 +128,6 @@
                                 <field name="sueldo_semanal" />
                                 <field name="viat" />
                                 <field name="pasa" />
-                                <field name="total_prestamo" />
                                 <field name="semanas" />
                                 <field name="bono" />
                                 <field name="bono_even" />

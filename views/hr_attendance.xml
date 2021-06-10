@@ -8,7 +8,7 @@
         <field name="inherit_id" ref="hr_attendance.view_attendance_tree" />
         <field name="arch" type="xml">
             <field name="employee_id" position="after">
-                <!-- <field name="employee_id" options="{'no_open': True}" /> -->
+                <field name="employee_id" options="{'no_open': True}" /> 
                 <field name="department" />
                 <field name="account_ids" options="{'no_open': True}" domain="[('userss', '=', uid)]" />
                 <field name="check_in" invisible="1" />
@@ -23,6 +23,7 @@
                 <!-- <field name="resta" /> -->
                 <!-- <field name="day" /> -->
                 <!-- <field name="Date" /> -->
+                <field name="sueldo_semanal" invisible="1" />
                 <field name="cost_day" optional="hide" invisible="1" />
                 <field name="timesheet_cost" class="oe_inline" optional="hide" invisible="1" />
                 <field name="cost_extra" optional="hide" invisible="1" />

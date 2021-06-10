@@ -111,10 +111,7 @@ class Nomina(models.Model):
         string="Horas laborales sábados",
     )
     hrs_lab_in = fields.Float(related="employee_id.horas_lab_in",)
-    Date = fields.Date(
-        compute='_Date',
-        store=True,
-    )
+   
     nomina_date = fields.Date(
         default=fields.Date.context_today,
     )
@@ -237,7 +234,7 @@ class Nomina(models.Model):
     nomina = fields.Boolean(default=True, string="nomina",)
     asis = fields.Boolean(string="asistencia",)
     
-    @api.depends('start_date', 'end_date')
+    @ api.depends('start_date', 'end_date')
     def compute_sumHE(self):
         for record in self:
             record.sum_horas_extras = sum(self.env['nomina.line'].search([
@@ -246,7 +243,7 @@ class Nomina(models.Model):
                 ('employee_id', '=', record.employee_id.id),
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('hours_extra'))
-    @api.depends('start_date', 'end_date')
+    @ api.depends('start_date', 'end_date')
     def hrs_ex_sem(self):
         for record in self:
             record.horas_extras_sem = sum(self.env['nomina.line'].search([
@@ -310,7 +307,7 @@ class Nomina(models.Model):
             elif record.day == 6:
                 record.cost_total = record.total_extra
 
-    @api.depends('leavee')
+    @ api.depends('leavee')
     def compute_costo_falta(self):
         for rec in self:
             if rec.leavee == True:
@@ -319,7 +316,7 @@ class Nomina(models.Model):
      # calculo sueldo a pagar
     # calculo del costo de obra con la carga social
 
-    @api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @ api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def sum_perc(self):
         for record in self:
             if record.inci != False:
@@ -334,7 +331,7 @@ class Nomina(models.Model):
     cant_ausen = fields.Float(compute="compute_cant_ausen",)
     cant_asis = fields.Float(compute="compute_cant_asis",)
 
-    @api.depends('start_date', 'end_date')
+    @ api.depends('start_date', 'end_date')
     def compute_cant_ausen(self):
         for record in self:
             record.cant_ausen = self.env['nomina.line'].search_count([
@@ -345,7 +342,7 @@ class Nomina(models.Model):
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ])
 
-    @api.depends('start_date', 'end_date')
+    @ api.depends('start_date', 'end_date')
     def compute_cant_asis(self):
         for record in self:
             record.cant_asis = self.env['nomina.line'].search_count([
@@ -358,7 +355,7 @@ class Nomina(models.Model):
     suel_Sem_faltas = fields.Monetary(
         compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
 
-    @api.depends('cost_day', 'cant_asis', 'cant_ausen')
+    @ api.depends('cost_day', 'cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
         for rec in self:
             r1 = rec.extra_cost * rec.cant_ausen
@@ -366,7 +363,7 @@ class Nomina(models.Model):
 
     # calculo costo de percepciones sin carga social para la nómina
 
-    @api.depends('reg_sem', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @ api.depends('reg_sem', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def compute_sum_perc_noCS(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal'] and record.cant_ausen == 0:
@@ -379,7 +376,7 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo)
 
-    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'otros_desc')
+    @ api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'otros_desc')
     def sum_dedu(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:

@@ -3,8 +3,8 @@
 from odoo import api, fields, models, exceptions, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError, UserError
-import time
-import pytz
+# import time
+# import pytz
 
 
 class hr_atten(models.Model):
@@ -73,13 +73,7 @@ class hr_atten(models.Model):
         related="employee_id.department_id.name",
         string="Departamento",
     )
-    # Date = fields.Date(
-    #     compute='_Date',
-    #     store=True,
-    # )
-    # total = fields.Char(
-    #     compute='_total',
-    # )
+
     day = fields.Integer(
         compute='_day',
     )
@@ -98,25 +92,15 @@ class hr_atten(models.Model):
         string="Horas Totales"
     )
 
-    # total_extra = fields.Monetary(
-    #     compute='_total_extra',
-    #     store=True,
-    #     string="Total Extra",
-    # )
-    # hours_whitout_extra = fields.Float(
-    #     compute='_hours_whitout_extra',
-    #     store=True,)
     horas_trab = fields.Float(
         string="Horas Trabajadas", compute="horas_traba",)
+
     comen = fields.Char(string="Comentarios",)
 
-    # total_inci = fields.Monetary(
-    #     compute="compute_horas_traba", string="Total Incidencia",)
-# obtener usuario actual
     user_id = fields.Many2one('res.users', string='Residente',
                               required=False, readonly=True, default=lambda self: self.env.user.id)
     tipo_resid = fields.Selection(related="user_id.tipo_resi")
-    
+
     asistencia = fields.Boolean(default=True, string="asistencia",)
 
     @ api.depends('hours')
@@ -132,16 +116,9 @@ class hr_atten(models.Model):
         for record in self:
             record.day = record.fecha.weekday()
 
-    # @ api.depends('check_in')
-    # def _Date(self):
-    #     for record in self:
-    #         dt = record.check_in
-    #         date = fields.Datetime.to_string(fields.Datetime.context_timestamp(
-    #             self, fields.Datetime.from_string(dt)))[:10]
-    #         record.Date = date
-
     # suma los valores de un campo de todos sus registros
-    @api.depends('hora_in', 'hora_out')
+
+    @ api.depends('hora_in', 'hora_out')
     def horas_traba(self):
         for rec in self:
             if rec.hora_out:
@@ -169,46 +146,13 @@ class hr_atten(models.Model):
                 attendance.hours_extra = attendance.total_hours
 
             elif attendance.day == 5 and attendance.tipo_resid == 'obra':
-                attendance.hours_extra = attendance.total_hours-attendance.hours_sat
+                attendance.hours_extra = (
+                    attendance.total_hours-attendance.hours_sat) // 1
 
             elif attendance.day == 6:
                 attendance.hours_extra = attendance.total_hours
 
-    # @ api.depends('hora_in', 'hora_out')
-    # def _hours_whitout_extra(self):
-    #     for record in self:
-    #         if record.hours_extra > 0:
-    #             record.hours_whitout_extra = record.horas_trab - record.hours_extra
-
-    # @ api.depends('hours_extra', 'cost_extra')
-    # def _total_extra(self):
-    #     for record in self:
-    #         record.total_extra = record.hours_extra * record.cost_extra
-
-    # @ api.depends('hora_in', 'hora_out')
-    # def compute_cost_total(self):
-    #     for record in self:
-    #         if record.day != 5:
-    #             total2 = (record.timesheet_cost) * (record.hrs_lab_in)
-    #             record.cost_total = (total2 + record.total_extra) * -1
-
-            # elif record.hours_extra > 0:
-            #     total2 = (record.timesheet_cost * record.hours_whitout_extra)
-            #     record.cost_total = (total2 + record.total_extra) * -1
-
-            # elif record.day == 5 and record.normal == True:
-            #     record.cost_total = (record.cost_extra *
-            #                          record.horas_trab) * -1
-
-            # elif record.day == 6:
-            #     record.cost_total = (record.cost_extra *
-            #                          record.hrs_lab_in) * -1
-
-            # elif record.day == 5 and record.normal == False:
-            #     total1 = record.timesheet_cost * record.hrs_lab_in
-            #     record.cost_total = (total1 + record.total_extra) * -1
-
-    @api.constrains('hora_in', 'employee_id')
+    @ api.constrains('hora_in', 'employee_id')
     def _take(self):
         for attendance in self:
             last_attendance_before_check_out = self.env['hr.attendance'].search([
@@ -219,13 +163,13 @@ class hr_atten(models.Model):
                 ('hora_out', '>=', attendance.hora_in),
                 ('id', '!=', attendance.id),
             ]).mapped('account_ids')
-            #print(last_attendance_before_check_out)
+            print(last_attendance_before_check_out)
             if last_attendance_before_check_out:
-                raise ValidationError(_("No se puede crear un nuevo registro de asistencia para el empleado %(empl_name)s, el empleado ya cuenta con una asistencia registrada en la hora de entrada que esta tratando de ingresar") % {
+                raise ValidationError(_("No se puede crear un nuevo registro de asistencia para el empleado %(empl_name)s, el empleado ya cuenta con una asistencias registrada en la hora de entrada que esta tratando de ingresar") % {
                     'empl_name': attendance.employee_id.name,
                     # 'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in_kiosko))),
                 })
-            
+
             last_attendance_before_check_out2 = self.env['hr.attendance'].search([
                 ('employee_id', '=', attendance.employee_id.id),
                 ('account_ids', '=', attendance.account_ids.id),
@@ -241,7 +185,7 @@ class hr_atten(models.Model):
                     # 'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in_kiosko))),
                 })
 
-    # create a new line, as none existed before
+            # create a new line, as none existed before
 
     @ api.constrains('fechaA')
     def nomina_line(self):
@@ -290,22 +234,3 @@ class hr_atten(models.Model):
                 'type': 'rainbow_man',
             }
         }
-
-    # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
-
-    # @ api.constrains('check_in', 'check_out', 'employee_id')
-    # def _check_validity(self):
-
-    #     for attendance in self:
-    #         if not attendance.check_out:
-
-    #             no_check_out_attendances = self.env['hr.attendance'].search([
-    #                 ('employee_id', '=', attendance.employee_id.id),
-    #                 ('check_out', '=', False),
-    #                 ('id', '!=', attendance.id),
-    #             ], order='check_in desc', limit=1)
-    #             if no_check_out_attendances:
-    #                 raise exceptions.ValidationError(_("Cannot create new attendance record for %(empl_name)s, the employee hasn't checked out since %(datetime)s") % {
-    #                     'empl_name': attendance.employee_id.name,
-    #                     'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(no_check_out_attendances.check_in))),
-    #                 })

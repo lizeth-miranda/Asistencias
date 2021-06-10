@@ -8,10 +8,11 @@
         <field name="inherit_id" ref="hr_attendance.view_attendance_tree" />
         <field name="arch" type="xml">
             <field name="employee_id" position="after">
-                <field name="employee_id" options="{'no_open': True}" /> 
+                <!-- <field name="employee_id" options="{'no_open': True}" /> -->
                 <field name="department" />
                 <field name="account_ids" options="{'no_open': True}" domain="[('userss', '=', uid)]" />
                 <field name="check_in" invisible="1" />
+                <!-- domain="['|',('users', '=', uid),('users2', '=', uid)]" -->
                 <!-- <field name="normal" /> -->
                 <field name="currency_id" invisible="1" />
             </field>
@@ -20,7 +21,7 @@
                 <field name="hora_in" widget="float_time" />
                 <field name="hora_out" widget="float_time" />
                 <!-- <field name="resta" /> -->
-                <field name="day" invisible="1"/>
+                <!-- <field name="day" /> -->
                 <!-- <field name="Date" /> -->
                 <field name="cost_day" optional="hide" invisible="1" />
                 <field name="timesheet_cost" class="oe_inline" optional="hide" invisible="1" />
@@ -35,9 +36,11 @@
                 <!-- <field name="hours_sat" widget="float_time" /> -->
                 <field name="hours" widget="float_time" />
                 <field name="horas_trab" widget="float_time" />
-                <field name="total_hours" widget="float_time" invisible="1" />
+                <field name="total_hours" widget="float_time" invisible="0" />
+                <!-- <field name="total_hours_kiosko" widget="float_time" invisible="0" /> -->
                 <field name="hours_extra" widget="float_time" sum="hours_extra" />
                 <field name="comen" />
+                <!-- <field name="hours_extra_kiosko" widget="float_time" sum="Horas Extras" /> -->
                 <field name="user_id" optional="hide" options="{'no_open': True}" />
                 <field name="tipo_resid" optional="hide" />
                 <!-- <field name="total_extra" sum="Total extra" invisible="1" />

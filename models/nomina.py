@@ -228,8 +228,8 @@ class Nomina(models.Model):
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)
 
-    suma_costoMO = fields.Monetary(
-        compute="compute_sumaMO", string="Costo MO Semanal", store=True,)
+    #suma_costoMO = fields.Monetary(
+       # compute="compute_sumaMO", string="Costo MO Semanal", store=True,)
 
     nomina = fields.Boolean(default=True, string="nomina",)
     asis = fields.Boolean(string="asistencia",)

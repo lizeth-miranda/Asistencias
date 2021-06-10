@@ -11,10 +11,13 @@
                 <field name="account_ids" domain="[('userss', '=', uid)]" />
                 <field name="num_emp" />
                 <field name="pues_tra" />
-                <field name="cost_day" invisible="1" readonly="1" widget="monetary" />
+                <field name="cost_day" invisible="1" readonly="1" />
+                <field name="costo_extra" invisible="1" readonly="1" />
                 <!-- <field name="cost_default" invisible="0" readonly="1" widget="monetary" /> -->
                 <field name="currency_id" invisible="1" />
                 <field name="leavee" invisible="1" />
+                <field name="asist" invisible="1" />
+                <field name="codigo_falta" />
             </field>
         </field>
     </record>

@@ -116,6 +116,8 @@ class hr_atten(models.Model):
     user_id = fields.Many2one('res.users', string='Residente',
                               required=False, readonly=True, default=lambda self: self.env.user.id)
     tipo_resid = fields.Selection(related="user_id.tipo_resi")
+    
+    asistencia = fields.Boolean(default=True, string="asistencia",)
 
     @ api.depends('hours')
     def _mitad(self):
@@ -275,6 +277,7 @@ class hr_atten(models.Model):
                     'notas': record.comen,
                     'us_id': record.user_id.name,
                     'type_resi': record.tipo_resid,
+                    'asis': record.asistencia,
                     # 'total_extra': record.total_extra,
                     # 'cost_total': record.cost_total,
                     # 'total_inci': record.total_inci,

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # instruccion para hacer importaciones desde odoo
-from odoo import api, fields, models, _
+from odoo import api, fields, models, exceptions, _
+from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError, UserError
-from datetime import date, timedelta
 
 
 class Nomina(models.Model):
@@ -231,25 +231,12 @@ class Nomina(models.Model):
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)
 
-    # @api.depends('start_date', 'end_date')
-    # def sueldo_sem(self):
-    #     for record in self:
-    #         record.suel_semanal = sum(self.env['nomina.line'].search([
-    #             ('fecha', '>=', record.start_date),
-    #             ('fecha', '<=', record.end_date),
-    #             ('employee_id', '=', record.employee_id.id),
-    #             # ('reg_sem', 'in', ['week', 'semanal'])
-    #         ]).mapped('cost_total'))
+    suma_costoMO = fields.Monetary(
+        compute="compute_sumaMO", string="Costo MO Semanal", store=True,)
 
-    # @api.depends('start_date', 'end_date')
-    # def sueldo_pagar_sem(self):
-    #     for record in self:
-    #         record.sueldo_final_sem = sum(self.env['nomina.line'].search([
-    #             ('fecha', '>=', record.start_date),
-    #             ('fecha', '<=', record.end_date),
-    #             ('employee_id', '=', record.employee_id.id),
-    #             # ('reg_sem', 'in', ['week', 'semanal'])
-    #         ]).mapped('sueldo_pagar'))
+    nomina = fields.Boolean(default=True, string="nomina",)
+    asis = fields.Boolean(string="asistencia",)
+    
     @api.depends('start_date', 'end_date')
     def compute_sumHE(self):
         for record in self:
@@ -259,7 +246,6 @@ class Nomina(models.Model):
                 ('employee_id', '=', record.employee_id.id),
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('hours_extra'))
-
     @api.depends('start_date', 'end_date')
     def hrs_ex_sem(self):
         for record in self:
@@ -330,7 +316,83 @@ class Nomina(models.Model):
             if rec.leavee == True:
                 rec.cost_total = rec.cost_default
 
-        # create a new line, as none existed before
+     # calculo sueldo a pagar
+    # calculo del costo de obra con la carga social
+
+    @api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    def sum_perc(self):
+        for record in self:
+            if record.inci != False:
+                record.suma_percep = (record.cost_total + record.viat + record.pasa + record.bono +
+                                      record.bono_even + record.gasolina +
+                                      record.vacaciones + record.prima_vaca + record.aguin) * -1
+            else:
+                record.suma_percep = (record.cost_total + record.viat + record.pasa + record.bono +
+                                      record.bono_even + record.gasolina +
+                                      record.vacaciones + record.prima_vaca + record.aguin + record.costo_daycs) * -1
+    # calcular las faltas y asistencias
+    cant_ausen = fields.Float(compute="compute_cant_ausen",)
+    cant_asis = fields.Float(compute="compute_cant_asis",)
+
+    @api.depends('start_date', 'end_date')
+    def compute_cant_ausen(self):
+        for record in self:
+            record.cant_ausen = self.env['nomina.line'].search_count([
+                ('fechaA', '>=', record.start_date),
+                ('fechaA', '<=', record.end_date),
+                ('employee_id', '=', record.employee_id.id),
+                ('leavee', '=', True),
+                # ('reg_sem', 'in', ['week', 'semanal'])
+            ])
+
+    @api.depends('start_date', 'end_date')
+    def compute_cant_asis(self):
+        for record in self:
+            record.cant_asis = self.env['nomina.line'].search_count([
+                ('fechaA', '>=', record.start_date),
+                ('fechaA', '<=', record.end_date),
+                ('employee_id', '=', record.employee_id.id),
+                ('asis', '=', True),
+                # ('reg_sem', 'in', ['week', 'semanal'])
+            ])
+    suel_Sem_faltas = fields.Monetary(
+        compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
+
+    @api.depends('cost_day', 'cant_asis', 'cant_ausen')
+    def compute_suel_sem_faltas(self):
+        for rec in self:
+            r1 = rec.extra_cost * rec.cant_ausen
+            rec.suel_Sem_faltas = (rec.cost_day * rec.cant_asis) - r1
+
+    # calculo costo de percepciones sin carga social para la nómina
+
+    @api.depends('reg_sem', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    def compute_sum_perc_noCS(self):
+        for record in self:
+            if record.reg_sem in ['week', 'semanal'] and record.cant_ausen == 0:
+                record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
+                                            record.bono_even + record.gasolina +
+                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo)
+
+            elif record.reg_sem in ['week', 'semanal'] and record.cant_ausen > 0:
+                record.sum_perc_notCarga = (record.suel_Sem_faltas + record.viat + record.pasa + record.bono +
+                                            record.bono_even + record.gasolina +
+                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo)
+
+    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'otros_desc')
+    def sum_dedu(self):
+        for record in self:
+            if record.reg_sem in ['week', 'semanal']:
+                record.suma_dedu = record.cre_info + record.fona + \
+                    record.pres_per + record.des_epp + record.otros_desc
+
+    @ api.depends('reg_sem', 'start_date', 'end_date')
+    def suel_pagar(self):
+        for record in self:
+            if record.reg_sem in ['week', 'semanal']:
+                record.sueldo_pagar = (
+                    record.sum_perc_notCarga + record.horas_extras_sem) - record.suma_dedu 
+    # create a new line, as none existed before
 
     @ api.constrains('date', 'name', 'amount')
     def acco_line(self):
@@ -351,6 +413,7 @@ class Nomina(models.Model):
                 self.env['account.analytic.line'].create({
                     'date': record.fechaA,
                     'name': record.employee_id.name,
+                    'nom': record.nomina,
                     'job_pos': record.department,
                     'account_id': record.project.id,
                     'amount': record.suma_percep,
@@ -362,83 +425,3 @@ class Nomina(models.Model):
                 'type': 'rainbow_man',
             }
         }
-    # calculo sueldo a pagar
-    # calculo del costo de obra con la carga social
-
-    @api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
-    def sum_perc(self):
-        for record in self:
-            if record.inci != False:
-                record.suma_percep = (record.cost_total + record.viat + record.pasa + record.bono +
-                                      record.bono_even + record.gasolina +
-                                      record.vacaciones + record.prima_vaca + record.aguin) * -1
-            else:
-                record.suma_percep = (record.cost_total + record.viat + record.pasa + record.bono +
-                                      record.bono_even + record.gasolina +
-                                      record.vacaciones + record.prima_vaca + record.aguin + record.costo_daycs) * -1
-
-    # calculo costo de percepciones sin carga social
-    @api.depends('reg_sem', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
-    def compute_sum_perc_noCS(self):
-        for record in self:
-            if record.reg_sem in ['week', 'semanal']:
-                record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
-                                            record.bono_even + record.gasolina +
-                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo)
-
-    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'otros_desc')
-    def sum_dedu(self):
-        for record in self:
-            if record.reg_sem in ['week', 'semanal']:
-                record.suma_dedu = record.cre_info + record.fona + \
-                    record.pres_per + record.des_epp + record.otros_desc
-
-    @api.depends('reg_sem', 'start_date', 'end_date')
-    def suel_pagar(self):
-        for record in self:
-            if record.reg_sem in ['week', 'semanal']:
-                record.sueldo_pagar = (
-                    record.sum_perc_notCarga + record.horas_extras_sem) - record.suma_dedu
-
-# if record.reg_sem in ['week', 'semanal']:
-    # funcion para revisar que no falten empleados de registrar su nomina en algun dia de la semana o en la semana completa
-
-    @api.depends('empĺoyee_id')
-    def cron_check_employees(self):
-
-        for record in self:
-            employeecount = record.env['nomina.line'].search([
-                #('employee_id', '=', record.employee_id.id),
-                # ('fecha', '>=', record.start_date),
-
-                ('reg_sem', 'in', ['week', 'semanal']),
-                ('state', 'in', ['draft', 'Borrador']),
-
-            ]).mapped('employee_id.name')
-        print(employeecount)
-
-        for record in self:
-            employeecount2 = self.env['hr.employee'].search([
-                ('empresa', 'in', ['enterprise2', 'DEMSA']), ]).mapped('name')
-            print(employeecount2)
-
-        resta = set(employeecount2) - set(employeecount)
-        print(resta)
-
-        if resta:
-            raise ValidationError(_("Registros de nómina faltantes para: %(resta)s") % {
-                'resta': resta,
-            })
-        else:
-            raise ValidationError(_("Todo esta correcto"))
-
-        # for record in self:
-        #     employeecount2 = self.env['hr.employee'].search(
-        #         [('id', 'not in', record.employee_id.ids),]).mapped('name')
-        # print(employeecount2)
-        #
-        #
-
-
-            
-

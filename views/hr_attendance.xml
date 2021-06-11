@@ -23,10 +23,6 @@
                 <!-- <field name="resta" /> -->
                 <!-- <field name="day" /> -->
                 <!-- <field name="Date" /> -->
-                <field name="sueldo_semanal" invisible="1" />
-                <field name="cost_day" optional="hide" invisible="1" />
-                <field name="timesheet_cost" class="oe_inline" optional="hide" invisible="1" />
-                <field name="cost_extra" optional="hide" invisible="1" />
             </field>
             <!-- <field name="hours" position="after">
                 <field name="horas_traba" widget="float_time" />

@@ -153,7 +153,7 @@ class hr_atten(models.Model):
                 attendance.hours_extra = attendance.total_hours
 
     @ api.constrains('hora_in', 'employee_id')
-    def _take(self):
+    def take(self):
         for attendance in self:
             last_attendance_before_check_out = self.env['hr.attendance'].search([
                 ('employee_id', '=', attendance.employee_id.id),

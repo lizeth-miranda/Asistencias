@@ -71,22 +71,25 @@ class Nomina(models.Model):
         string="# empleado",
     )
     sueldo_semanal = fields.Monetary(
+        related="employee_id.salary",
         string="Sueldo Semanal",
         readonly=True,
     )
     cost_day = fields.Monetary(
         help="sueldo semanal/6",
+        related="employee_id.cost_day",
         string="Costo/Día",
-        store=True,
         readonly=True,
     )
     cost_hour = fields.Monetary(
         help="Costo por día/8",
+        related="employee_id.timesheet_cost",
         string="Costo/Hora",
         readonly=True,
     )
     extra_cost = fields.Monetary(
         help="sueldo semanal/6/8*2",
+        related="employee_id.cost_extra",
         string="Costo Extra/hr",
         readonly=True,
     )

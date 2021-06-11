@@ -29,22 +29,7 @@ class hr_atten(models.Model):
         related="employee_id.cod_emp",
         string="Código empleado",
     )
-    sueldo_semanal = fields.Monetary(
-        related="employee_id.salary",
-        string="Sueldo Semanal",
-    )
-    cost_day = fields.Monetary(
-        related='employee_id.cost_day',
-        string="Costo/Día",
-    )
-    timesheet_cost = fields.Monetary(
-        related='employee_id.timesheet_cost',
-        string="Costo/Hora",
-    )
-    cost_extra = fields.Monetary(
-        related='employee_id.cost_extra',
-        string="Costo Extra",
-    )
+    
     currency_id = fields.Many2one(
         related='employee_id.currency_id',
     )
@@ -211,21 +196,10 @@ class hr_atten(models.Model):
                     'check_in': record.hora_in,
                     'check_out': record.hora_out,
                     'worked_hours': record.horas_trab,
-                    # 'puesto_trabajo': self.puesto_trabajo,
-                    # 'codigo_empleado': record.codigo_empleado,
-                    'sueldo_semanal': record.sueldo_semanal,
-                    'cost_day': record.cost_day,
-                    'cost_hour': record.timesheet_cost,
-                    'extra_cost': record.cost_extra,
-                    'hours_extra': record.hours_extra,
                     'notas': record.comen,
                     'us_id': record.user_id.name,
                     'type_resi': record.tipo_resid,
                     'asis': record.asistencia,
-                    # 'total_extra': record.total_extra,
-                    # 'cost_total': record.cost_total,
-                    # 'total_inci': record.total_inci,
-
                 })
         return {
             'effect': {

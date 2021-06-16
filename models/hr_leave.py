@@ -37,7 +37,7 @@ class hr_lea(models.Model):
     @api.onchange('holiday_status_id')
     def falta(self):
 
-        if self.codigo_falta == 'FALTA' or self.codigo_falta == 'PSG':
+        if self.codigo_falta == 'F' or self.codigo_falta == 'PSG':
             self.leavee = True
             self.asist = False
         else:
@@ -46,7 +46,7 @@ class hr_lea(models.Model):
     @api.onchange('holiday_status_id')
     def asis(self):
 
-        if self.codigo_falta != 'FALTA' or self.codigo_falta != 'PSG':
+        if self.codigo_falta != 'F' or self.codigo_falta != 'PSG':
             self.asist = True
             self.leavee = False
         else:

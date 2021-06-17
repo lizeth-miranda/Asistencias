@@ -18,5 +18,6 @@ class Cuenta(models.Model):
         String="Motivo",
         store=True,
     )
+    nom = fields.Boolean(string="nomina",)
 
 

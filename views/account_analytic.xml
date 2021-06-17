@@ -11,6 +11,7 @@
                 <field name="motivo" />
                 <field name="job_pos" string="Puesto de Trabajo" optional="show" />
                 <field name="cate" string="Categoria" />
+                <field name="nom" optional="hide" />
             </field>
             <field name="account_id" position="after"></field>
         </field>

@@ -30,14 +30,14 @@ class hr_lea(models.Model):
         related="holiday_status_id.code", string="Código Falta",)
 
     leavee = fields.Boolean(
-        string="Falta",
+        string="Falta", readonly=True,
     )
-    asist = fields.Boolean(string="asistencia",)
+    asist = fields.Boolean(string="asistencia", readonly=True,)
 
     @api.onchange('holiday_status_id')
     def falta(self):
 
-        if self.codigo_falta == 'F' or self.codigo_falta == 'PSG':
+        if self.codigo_falta == 'F' or self.codigo_falta == 'PSG' or self.codigo_falta == 'I' or self.codigo_falta == 'B':
             self.leavee = True
             self.asist = False
         else:
@@ -46,7 +46,7 @@ class hr_lea(models.Model):
     @api.onchange('holiday_status_id')
     def asis(self):
 
-        if self.codigo_falta != 'F' or self.codigo_falta != 'PSG':
+        if self.codigo_falta != 'F' or self.codigo_falta != 'PSG' or self.codigo_falta != 'I' or self.codigo_falta != 'B':
             self.asist = True
             self.leavee = False
         else:

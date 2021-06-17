@@ -362,7 +362,7 @@ class Nomina(models.Model):
     def compute_suel_sem_faltas(self):
         for rec in self:
             r1 = rec.extra_cost * rec.cant_ausen
-            rec.suel_Sem_faltas = (rec.cost_day * rec.cant_asis) - r1
+            rec.suel_Sem_faltas = (rec.cost_day * rec.cant_asis + rec.cost_day) - r1
 
     # calculo costo de percepciones sin carga social para la nómina
 

@@ -30,9 +30,9 @@ class hr_lea(models.Model):
         related="holiday_status_id.code", string="Código Falta",)
 
     leavee = fields.Boolean(
-        string="Falta", readonly=True,
+        string="Falta",
     )
-    asist = fields.Boolean(string="asistencia", readonly=True,)
+    asist = fields.Boolean(string="asistencia",)
 
     @api.onchange('holiday_status_id')
     def falta(self):

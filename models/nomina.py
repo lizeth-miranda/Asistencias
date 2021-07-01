@@ -285,10 +285,10 @@ class Nomina(models.Model):
     fecha_desc2 = fields.Date(compute="compute_fecha_desc2")
     descuento = fields.Monetary(
         string="Total material a cobro", related="employee_id.descuento",)
-    rang = fields.Float(string="Semanas.", related="employee_id.rango",)
-    pag = fields.Monetary(string="Abono.", related="employee_id.pago")
+    rang = fields.Float(string="#Semanas ", related="employee_id.rango",)
+    pag = fields.Monetary(string="Cantidad Abonar", related="employee_id.pago")
     fecha_pd2 = fields.Date(related="employee_id.onlyfecha_pd",)
-    fecha_fin = fields.Datetime(related="employee_id.fecha_final",)
+    fecha_fin = fields.Datetime(related="employee_id.fecha_final", string="Fecha Final Pago")
     desc = fields.Text(related="employee_id.desc", string="Descripción",)
     numero_pago = fields.Integer(
         string="#Pago.", compute="compute_numero_pago")

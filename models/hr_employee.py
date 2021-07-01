@@ -112,8 +112,8 @@ class empl(models.Model):
     fecha_descuento = fields.Datetime(
         string="Fecha", default=fields.Datetime.now, readonly=False,)
     descuento = fields.Monetary(string="Total material a cobro",)
-    rango = fields.Float(string="Semanas",)
-    pago = fields.Monetary(string="Abono", compute="compute_pago", store=True,)
+    rango = fields.Float(string="Num. Semanas",)
+    pago = fields.Monetary(string="Cantidad a Descontar", compute="compute_pago", store=True,)
     fecha_pd = fields.Datetime(
         compute="compute_fecha_pd", string="Fecha Primer Descuento",)
     onlyfecha_pd = fields.Date(compute="compute_onlyfecha_pd")

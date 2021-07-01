@@ -114,10 +114,7 @@ class Nomina(models.Model):
         string="Horas laborales sábados",
     )
     hrs_lab_in = fields.Float(related="employee_id.horas_lab_in",)
-    Date = fields.Date(
-        compute='_Date',
-        store=True,
-    )
+   
     nomina_date = fields.Date(
         default=fields.Date.context_today,
     )

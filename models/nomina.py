@@ -251,7 +251,7 @@ class Nomina(models.Model):
     num_pago = fields.Integer(string="# Pago", compute="compute_num_pago")
     semanas = fields.Float(string="Semanas", related="employee_id.semanas",)
     fecha_pp2 = fields.Date(related="employee_id.onlyfecha_pp",)
-    fecha_up2 = fields.Datetime(related="employee_id.fecha_up",)
+    fecha_up2 = fields.Datetime(related="employee_id.fecha_up", string="Fecha Final")
     saldo = fields.Monetary(string="Saldo",)
     resta2 = fields.Float()
 

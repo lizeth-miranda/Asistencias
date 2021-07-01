@@ -15,27 +15,54 @@
                 <field name="afiliacion_imss" />
             </field>
             <notebook>
-                <page string=" Horas Laborales Y costos">
-                    <group string="Costos">
-                        <field name="salary" widget="monetary" required="1" />
-                        <field name="timesheet_cost" />
-                        <field name="cost_day" widget="monetary" required="1" />
-                        <field name="costo_dayCS" required="1" />
-                        <field name="cost_extra" required="1" />
-                        <field name="cost_default" required="1" />
-                        <field name="credito_info" />
-                        <field name="credito_fona" />
-                        <field name="bono" />
+                <page string=" Horas Laborales y Costos">
+                    <group>
+                        <group string="Costos">
+                            <field name="salary" widget="monetary" />
+                            <field name="timesheet_cost" />
+                            <field name="cost_day" widget="monetary" />
+                            <field name="costo_dayCS" />
+                            <field name="cost_extra" />
+                            <field name="cost_default" />
+                            <field name="credito_info" />
+                            <field name="credito_fona" />
+                            <field name="bono" />
+                        </group>
+                        <group string="Horas Laborales">
+                            <field name="horas_lab" widget="float_time" />
+                            <field name="horas_lab_in" widget="float_time" />
+                            <field name="hours" widget="float_time" required="1" />
+                        </group>
+                        <group string="Cuenta Bancaria">
+                            <field name="cuenta" />
+                            <field name="clabe" />
+                            <field name="banco" />
+                        </group>
                     </group>
-                    <group string="Horas Laborales">
-                        <field name="horas_lab" widget="float_time" />
-                        <field name="horas_lab_in" widget="float_time" />
-                        <field name="hours" widget="float_time" required="1" />
-                    </group>
-                    <group string="Cuenta Bancaria">
-                        <field name="cuenta" />
-                        <field name="clabe" />
-                        <field name="banco" />
+                </page>
+                <page string="Préstamos Personales y Desc. Herramienta">
+                    <group>
+                        <group string="Préstamos Personales">
+                            <field name="fecha_actual" />
+                            <field name="total_prestamo" />
+                            <field name="semanas" />
+                            <!-- <field name="num_pago" /> -->
+                            <field name="abono" />
+                            <!-- <field name="saldo" /> -->
+                            <field name="fecha_pp" />
+                            <field name="onlyfecha_pp" invisible="1" />
+                            <field name="fecha_up" />
+                        </group>
+                        <group string="Descuentos Herramienta, otros">
+                            <field name="fecha_descuento" />
+                            <field name="descuento" />
+                            <field name="rango" />
+                            <field name="pago" />
+                            <field name="fecha_pd" />
+                            <field name="onlyfecha_pd" invisible="1" />
+                            <field name="fecha_final" />
+                            <field name="desc" />
+                        </group>
                     </group>
                 </page>
             </notebook>

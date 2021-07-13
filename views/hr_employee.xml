@@ -33,35 +33,16 @@
                             <field name="horas_lab_in" widget="float_time" />
                             <field name="hours" widget="float_time" required="1" />
                         </group>
+                        <group string="Préstamos y Descuentos personales">
+                            <field name="pres_perso" />
+                            <field name="desc_HPP" />
+                            <field name="otros_desc" />
+                            <field name="depo" />
+                        </group>
                         <group string="Cuenta Bancaria">
                             <field name="cuenta" />
                             <field name="clabe" />
                             <field name="banco" />
-                        </group>
-                    </group>
-                </page>
-                <page string="Préstamos Personales y Desc. Herramienta">
-                    <group>
-                        <group string="Préstamos Personales">
-                            <field name="fecha_actual" />
-                            <field name="total_prestamo" />
-                            <field name="semanas" />
-                            <!-- <field name="num_pago" /> -->
-                            <field name="abono" />
-                            <!-- <field name="saldo" /> -->
-                            <field name="fecha_pp" />
-                            <field name="onlyfecha_pp" invisible="1" />
-                            <field name="fecha_up" />
-                        </group>
-                        <group string="Descuentos Herramienta, otros">
-                            <field name="fecha_descuento" />
-                            <field name="descuento" />
-                            <field name="rango" />
-                            <field name="pago" />
-                            <field name="fecha_pd" />
-                            <field name="onlyfecha_pd" invisible="1" />
-                            <field name="fecha_final" />
-                            <field name="desc" />
                         </group>
                     </group>
                 </page>

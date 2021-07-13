@@ -7,7 +7,7 @@
             <form string="Descuentos por Empleado">
                 <sheet>
                     <group>
-                        <field name="employee" />
+                        <field name="employee" required="1"/>
                         <field name="sum_abono" />
                         <field name="sum_descEPP" />
                         <field name="sum_otros_desc" />

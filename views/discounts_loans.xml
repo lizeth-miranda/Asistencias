@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="discount_loans_view_form" model="ir.ui.view">
+        <field name="name">discounts.loans.view.form</field>
+        <field name="model">discounts.loans</field>
+        <field name="arch" type="xml">
+            <form string="Préstamos">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type_discount" required="1" />
+                            <field name="fecha" required="1" />
+                            <field name="total" required="1" />
+                            <!-- <field name="total2" /> -->
+                            <!-- <field name="deposito" /> -->
+                            <field name="semanas" required="1" />
+                            <field name="abono" />
+                            <field name="fecha_actual" invisible="0" />
+                            <field name="fecha_pp" />
+                            <field name="fecha_up" />
+                            <field name="dep" />
+                        </group>
+                        <group>
+                            <field name="num_pago" />
+                            <field name="saldo" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="discount_loans_view_tree" model="ir.ui.view">
+        <field name="name">discounts.loans.view.tree</field>
+        <field name="model">discounts.loans</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="type_discount" />
+                <field name="abono" />
+                <field name="num_pago" />
+                <field name="saldo" />
+            </tree>
+        </field>
+    </record>
+
+</odoo>    

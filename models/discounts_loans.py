@@ -119,6 +119,7 @@ class DiscountsLoans(models.Model):
     def compute_sum_abono(self):
         for record in self:
             record.suma_abonopp = sum(self.env['discounts.loans'].search([
+                ('employee_id', '=', record.employee_id.id),
                 ('type_discount', '=', 'pre_per'),
                 ('num_pago', '>', 0),
                 ('saldo', '>', 0),
@@ -128,6 +129,7 @@ class DiscountsLoans(models.Model):
     def compute_suma_descEpp(self):
         for record in self:
             record.suma_descEpp = sum(self.env['discounts.loans'].search([
+                ('employee_id', '=', record.employee_id.id),
                 ('type_discount', '=', 'desc_herr'),
                 ('num_pago', '>', 0),
                 ('saldo', '>', 0),
@@ -137,6 +139,7 @@ class DiscountsLoans(models.Model):
     def compute_suma_otrosDesc(self):
         for record in self:
             record.suma_otros_desc = sum(self.env['discounts.loans'].search([
+                ('employee_id', '=', record.employee_id.id),
                 ('type_discount', '=', 'otr_des'),
                 ('num_pago', '>', 0),
                 ('saldo', '>', 0),

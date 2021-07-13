@@ -114,7 +114,10 @@ class Nomina(models.Model):
         string="Horas laborales sábados",
     )
     hrs_lab_in = fields.Float(related="employee_id.horas_lab_in",)
-   
+    # Date = fields.Date(
+    #     compute='_Date',
+    #     store=True,
+    # )
     nomina_date = fields.Date(
         default=fields.Date.context_today,
     )
@@ -185,33 +188,32 @@ class Nomina(models.Model):
     semana_fondo = fields.Monetary(string="Semana de Fondo",)
 
     pres_personal = fields.Monetary(
-        string="Préstamo Personal",)
+        string="Préstamo Personal", related="employee_id.depo")
 
     # Deducciones
     cre_info = fields.Monetary(
         related="employee_id.credito_info",
         string="Crédito Infonavit"
     )
-    # pres_per = fields.Monetary(
-    #     string="Préstamo Personal",
-    # )
-    abono = fields.Monetary(string="Préstamo Personal",
-                            related="employee_id.abono")
-    des_epp = fields.Monetary(
-        string="Desc. EPP Herramienta", related="employee_id.pago")
-    otros_desc = fields.Monetary(
-        string="Otros Descuentos",
+    fona = fields.Monetary(
+        related="employee_id.credito_fona",
+        string="Crédito Fonacot",
     )
+    pres_per = fields.Monetary(
+        string="Préstamo Personal", related="employee_id.pres_perso",)
+
+    des_epp = fields.Monetary(
+        string="Desc. EPP Herramienta", related="employee_id.desc_HPP",)
+    otros_desc = fields.Monetary(
+        string="Otros Descuentos", related="employee_id.otros_desc",)
+
     sueldo_pagar = fields.Monetary(
         help="(Sueldo semanal + Suma percepciones + suma hrs extras) - deducciones ",
         string="Sueldo a pagar",
         compute="suel_pagar",
         store=True,
     )
-    fona = fields.Monetary(
-        related="employee_id.credito_fona",
-        string="Crédito Fonacot",
-    )
+
     suma_dedu = fields.Monetary(
         string="Suma Deducciones",
         compute="sum_dedu",
@@ -240,79 +242,6 @@ class Nomina(models.Model):
 
     nomina = fields.Boolean(default=True, string="nomina",)
     asis = fields.Boolean(string="Asistencia",)
-
-    # Prestamos personales
-    datee = fields.Datetime(
-        string="Fecha", default=fields.Datetime.now, readonly=False,)
-    datee2 = fields.Date(compute="compute_datee")
-    total_prestamo = fields.Monetary(
-        string="Préstamo", related="employee_id.total_prestamo",)
-    abono = fields.Monetary(string="Abono", related="employee_id.abono")
-    num_pago = fields.Integer(string="# Pago", compute="compute_num_pago")
-    semanas = fields.Float(string="Semanas", related="employee_id.semanas",)
-    fecha_pp2 = fields.Date(related="employee_id.onlyfecha_pp",)
-    fecha_up2 = fields.Datetime(related="employee_id.fecha_up", string="Fecha última de pago")
-    saldo = fields.Monetary(string="Saldo",)
-    resta2 = fields.Float()
-
-    # calcular solo fecha de el primer pago
-    @ api.depends('datee')
-    def compute_datee(self):
-        for record in self:
-            f1 = record.datee
-            date = fields.Datetime.to_string(fields.Datetime.context_timestamp(
-                self, fields.Datetime.from_string(f1)))[:10]
-            record.datee2 = date
-
-    @api.onchange('datee')
-    def compute_num_pago(self):
-
-        for rec in self:
-            if not rec.fecha_up2:
-                rec.num_pago = 0
-            else:
-                r1 = (rec.fecha_up2 - rec.datee).days
-                r2 = r1 / 7
-                rec.resta2 = rec.semanas - r2
-                rec.num_pago = rec.resta2
-
-                rec.saldo = rec.total_prestamo - \
-                    (rec.abono * rec.num_pago)
-
-    # descuentos herramienta
-    fecha_desc = fields.Datetime(
-        string="Fecha.", default=fields.Datetime.now, readonly=False,)
-    fecha_desc2 = fields.Date(compute="compute_fecha_desc2")
-    descuento = fields.Monetary(
-        string="Total material a cobro", related="employee_id.descuento",)
-    rang = fields.Float(string="#Semanas ", related="employee_id.rango",)
-    pag = fields.Monetary(string="Cantidad Abonar", related="employee_id.pago")
-    fecha_pd2 = fields.Date(related="employee_id.onlyfecha_pd",)
-    fecha_fin = fields.Datetime(related="employee_id.fecha_final", string="Fecha Final Pago")
-    desc = fields.Text(related="employee_id.desc", string="Descripción",)
-    numero_pago = fields.Integer(
-        string="#Pago.", compute="compute_numero_pago")
-    sal = fields.Monetary(string="Saldo.",)
-    resta = fields.Float()
-
-    @ api.depends('fecha_desc')
-    def compute_fecha_desc2(self):
-        for record in self:
-            f2 = record.fecha_desc
-            date2 = fields.Datetime.to_string(fields.Datetime.context_timestamp(
-                self, fields.Datetime.from_string(f2)))[:10]
-            record.fecha_desc2 = date2
-
-    @api.onchange('fecha_desc')
-    def compute_numero_pago(self):
-
-        for rec in self:
-            l1 = (rec.fecha_fin - rec.fecha_desc).days
-            l2 = l1 / 7
-            rec.resta = rec.rang - l2
-            rec.numero_pago = rec.resta
-
-            rec.sal = rec.descuento - (rec.pag * rec.numero_pago)
 
     @api.depends('start_date', 'end_date')
     def compute_sumHE(self):
@@ -344,12 +273,12 @@ class Nomina(models.Model):
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('total_extra'))
 
-    @ api.depends('fechaA')
+    @api.depends('fechaA')
     def _day(self):
         for record in self:
             record.day = record.fechaA.weekday()
 
-    @ api.depends('check_in', 'check_out')
+    @api.depends('check_in', 'check_out')
     def _compute_worked_hours(self):
         for rec in self:
             if rec.check_out:
@@ -357,7 +286,7 @@ class Nomina(models.Model):
             else:
                 rec.worked_hours = False
 
-    @ api.depends('worked_hours')
+    @api.depends('worked_hours')
     def _hours_extra(self):
         for record in self:
             if record.day != 5 and record.worked_hours >= record.hours:
@@ -372,7 +301,7 @@ class Nomina(models.Model):
             elif record.day == 6:
                 record.hours_extra = record.worked_hours
 
-    @ api.depends('hours_extra')
+    @api.depends('hours_extra')
     def compute_total_extra(self):
         for record in self:
             if record.hours_extra == 0:
@@ -380,7 +309,7 @@ class Nomina(models.Model):
             else:
                 record.total_extra = record.hours_extra * record.extra_cost
 
-    @ api.depends('hrs_lab_in', 'hours_extra')
+    @api.depends('hrs_lab_in', 'hours_extra')
     def compute_cost_total(self):
         for record in self:
             if record.day != 5:
@@ -484,21 +413,14 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal)
 
-    @api.depends('reg_sem', 'cre_info', 'fona', 'abono', 'otros_desc')
+    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc')
     def sum_dedu(self):
         for record in self:
-            if record.reg_sem in ['week', 'semanal'] and record.saldo != 0 and record.datee2 >= record.fecha_pp2 and record.fecha_desc2 >= record.fecha_pd2:
+            if record.reg_sem in ['week', 'semanal']:
                 record.suma_dedu = record.cre_info + record.fona + \
-                    record.abono + record.des_epp + record.otros_desc
+                    record.pres_per + record.des_epp + record.otros_desc
 
-            elif record.reg_sem in ['week', 'semanal'] and record.saldo != 0 and record.datee2 < record.fecha_pp2 and record.fecha_desc2 < record.fecha_pd2:
-                record.suma_dedu = record.cre_info + record.fona + record.otros_desc
-
-            elif record.reg_sem in ['week', 'semanal'] and record.saldo == 0:
-                record.suma_dedu = record.cre_info + \
-                    record.fona + record.otros_desc
-
-    @ api.depends('reg_sem', 'start_date', 'end_date')
+    @api.depends('reg_sem', 'start_date', 'end_date')
     def suel_pagar(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
@@ -507,7 +429,7 @@ class Nomina(models.Model):
 
     # create a new line, as none existed before
 
-    @ api.constrains('date', 'name', 'amount')
+    @api.constrains('date', 'name', 'amount')
     def acco_line(self):
         for record in self:
             record.state = 'confirm'
@@ -538,8 +460,9 @@ class Nomina(models.Model):
                 'type': 'rainbow_man',
             }
         }
+
     
-    @ api.depends('empĺoyee_id')
+    @api.depends('empĺoyee_id')
     def cron_check_employees(self):
 
         for record in self:

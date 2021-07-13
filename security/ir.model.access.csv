@@ -1,3 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 nomina_manager,nomina manager,model_nomina_line,nomina_group,1,1,1,1
 nomina_read_all,nomina all,model_nomina_line,,1,0,0,0
+Employee_manager,employee manager,model_discount_employee,discounts_group,1,1,1,1
+loans_manager,loans manager,model_discounts_loans,discounts_group,1,1,1,1
+employee_read_all,employee all,model_discount_employee,,1,0,0,0
+loans_read_all,loans all,model_discounts_loans,,1,0,0,0

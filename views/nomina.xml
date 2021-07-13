@@ -37,7 +37,7 @@
                 <field name="aguin" optional="hide" />
                 <field name="cre_info" optional="hide" />
                 <field name="fona" optional="hide" />
-                <field name="abono" optional="hide" />
+                <!-- <field name="abono" optional="hide" /> -->
                 <field name="des_epp" optional="hide" />
                 <field name="otros_desc" optional="hide" />
                 <field name="horas_extras_sem" optional="hide" sum="total Extras Semanal" />
@@ -110,6 +110,7 @@
                                     <field name="worked_hours" widget="float_time" />
                                     <!-- <field name="worked_hours_kiosko" widget="float_time" /> -->
                                     <field name="hours_extra" widget="float_time" />
+
                                     <!-- <field name="hours_extra_kiosko" widget="float_time" /> -->
 
                                 </group>
@@ -152,7 +153,7 @@
                             <group string="Deducciones">
                                 <field name="cre_info" />
                                 <field name="fona" />
-                                <field name="abono" string="Préstamo Personal" />
+                                <field name="pres_per" />
                                 <field name="des_epp" />
                                 <field name="otros_desc" />
                                 <field name="suma_dedu" />
@@ -184,34 +185,6 @@
                                     <!-- <field name="sueldo_final_sem" /> -->
                                 </group>
                             </group>
-                        </page>
-                        <page string="Préstamos Personales y Desc. Herramienta">
-                            <group>
-                                <group string="Préstamos Personales">
-                                    <field name="datee" />
-                                    <field name="total_prestamo" />
-                                    <field name="abono" />
-                                    <!-- <field name="resta2" /> -->
-                                    <field name="semanas" />
-                                    <field name="num_pago" />
-                                    <field name="fecha_pp2" invisible="1" />
-                                    <field name="fecha_up2" />
-                                    <field name="saldo" />
-                                </group>
-                                <group string="Descuentos Herramienta, otros">
-                                    <field name="fecha_desc" />
-                                    <field name="descuento" />
-                                    <field name="rang" />
-                                    <!-- <field name="resta" /> -->
-                                    <field name="numero_pago" />
-                                    <field name="pag" />
-                                    <field name="fecha_pd2" invisible="1" />
-                                    <field name="fecha_fin" />
-                                    <field name="sal" />
-                                    <field name="desc" />
-                                </group>
-                            </group>
-
                         </page>
                     </notebook>
                 </sheet>

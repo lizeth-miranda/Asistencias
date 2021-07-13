@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.5',
+    'version': '13.1',
     'author': 'Demsa',
     'website': '',
     'depends': [
@@ -18,6 +18,7 @@
     'data': [
         # security
         'security/groups.xml',
+        'security/groupsDisc.xml',
         'security/ir.model.access.csv',
         # 'security/nominasecurity.xml',
         # data
@@ -37,6 +38,8 @@
         'views/res_user.xml',
         'views/nomina.xml',
         'views/server_action_prenomina.xml',
+        'views/dicounts_employee.xml',
+        'views/discounts_loans.xml',
         # 'views/account_move.xml',
 
 

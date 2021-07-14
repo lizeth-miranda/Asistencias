@@ -135,8 +135,11 @@ class DiscountsLoans(models.Model):
     @api.depends('num_pago')
     def compute_saldo(self):
         for rec in self:
-            rec.saldo = rec.total - \
-                (rec.abono * rec.num_pago)
+            if rec.num_pago < rec.semanas:
+                rec.saldo = rec.total - \
+                    (rec.abono * rec.num_pago)
+            else:
+                rec.saldo = False
 
     @api.depends('abono')
     def compute_sum_abono(self):

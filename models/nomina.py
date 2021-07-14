@@ -307,17 +307,7 @@ class Nomina(models.Model):
     @api.depends('worked_hours')
     def _inverse_hours_extra(self):
         for record in self:
-            if record.day != 5 and record.worked_hours >= record.hours:
-                record.hours_extra = (record.worked_hours-record.hours) // 1
-
-            elif record.day == 5 and record.type_resi == 'planta':
-                record.hours_extra = record.worked_hours
-
-            elif record.day == 5 and record.type_resi == 'obra':
-                record.hours_extra = record.worked_hours-record.hours_sat
-
-            elif record.day == 6:
-                record.hours_extra = record.worked_hours
+            record.hours_extra = record.hours_extra + 0
 
     @api.depends('hours_extra')
     def compute_total_extra(self):

@@ -219,6 +219,8 @@ class Nomina(models.Model):
         compute="sum_dedu",
         store=True
     )
+    
+    otros = fields.Monetary(string="Otros",)
     # Costo semanal
     reg_sem = fields.Selection([('week', 'Semanal')], string='Tipo Registro', )
     start_date = fields.Date(string="Fecha Inicial",

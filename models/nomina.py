@@ -42,6 +42,7 @@ class Nomina(models.Model):
         help="horas trabajadas - horas laborales",
         string="Horas Extras",
         compute='_hours_extra',
+        inverse='_inverse_hours_extra',
         store=True,
     )
     total_extra = fields.Monetary(
@@ -290,6 +291,21 @@ class Nomina(models.Model):
 
     @api.depends('worked_hours')
     def _hours_extra(self):
+        for record in self:
+            if record.day != 5 and record.worked_hours >= record.hours:
+                record.hours_extra = (record.worked_hours-record.hours) // 1
+
+            elif record.day == 5 and record.type_resi == 'planta':
+                record.hours_extra = record.worked_hours
+
+            elif record.day == 5 and record.type_resi == 'obra':
+                record.hours_extra = record.worked_hours-record.hours_sat
+
+            elif record.day == 6:
+                record.hours_extra = record.worked_hours
+    
+    @api.depends('worked_hours')
+    def _inverse_hours_extra(self):
         for record in self:
             if record.day != 5 and record.worked_hours >= record.hours:
                 record.hours_extra = (record.worked_hours-record.hours) // 1

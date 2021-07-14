@@ -400,7 +400,7 @@ class Nomina(models.Model):
     @api.depends('reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def compute_sum_perc_noCS(self):
         for record in self:
-            if record.reg_sem in ['week', 'semanal'] and record.cant_asis == 5:
+            if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5:
                 record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal)

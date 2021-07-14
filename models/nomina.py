@@ -415,12 +415,12 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal)
 
-    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc')
+    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc', 'otros')
     def sum_dedu(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
                 record.suma_dedu = record.cre_info + record.fona + \
-                    record.pres_per + record.des_epp + record.otros_desc
+                    record.pres_per + record.des_epp + record.otros_desc + record.otros
 
     @api.depends('reg_sem', 'start_date', 'end_date')
     def suel_pagar(self):

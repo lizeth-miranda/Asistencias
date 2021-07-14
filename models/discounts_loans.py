@@ -22,6 +22,7 @@ class DiscountsLoans(models.Model):
 
     fecha_actual = fields.Datetime(
         'Fecha_actual', readonly=False, compute="compute_fechaActual",)
+    fecha_antes = fields.Datetime(compute="compute_fecha_antes",)
     total = fields.Monetary(string="Total",)
     #total2 = fields.Monetary(compute="compute_total2",)
     # deposito = fields.Boolean(
@@ -39,6 +40,10 @@ class DiscountsLoans(models.Model):
     onlyfecha_pp = fields.Date(compute="compute_onlyfecha_pp")
     fecha_up = fields.Datetime(
         compute="compute_fecha_up", string="Fecha Final de pago",)
+
+    fecha_back_ultima = fields.Datetime(
+        compute="compute_fecha_back_ultima",)
+
     num_pago = fields.Integer(
         string="# Pago", compute="compute_num_pago", store=True,)
     saldo = fields.Monetary(
@@ -52,6 +57,13 @@ class DiscountsLoans(models.Model):
         string="Suma Otros Descuentos", compute="compute_suma_otrosDesc",)
 
     dep = fields.Monetary(string="Deposito",)
+
+    @api.depends('fecha')
+    def compute_fecha_antes(self):
+        for record in self:
+            if record.fecha:
+                record.fecha_antes = record.fecha - timedelta(weeks=1)
+                return fields.Date.context_today(self, timestamp=record.fecha_antes)
 
     @api.depends('type_discount')
     def compute_fechaActual(self):
@@ -92,6 +104,13 @@ class DiscountsLoans(models.Model):
             return fields.Date.context_today(self, timestamp=record.fecha_up)
 
     @api.depends('semanas')
+    def compute_fecha_back_ultima(self):
+        for record in self:
+            record.fecha_back_ultima = record.fecha_antes + \
+                timedelta(weeks=(record.semanas))
+            return fields.Date.context_today(self, timestamp=record.fecha_back_ultima)
+
+    @api.depends('semanas')
     def compute_abono(self):
         for record in self:
             if not record.semanas:
@@ -101,10 +120,14 @@ class DiscountsLoans(models.Model):
 
     @api.depends('fecha_actual')
     def compute_num_pago(self):
-
         for rec in self:
-            if rec.fecha_actual:
+            if rec.fecha_actual and rec.type_discount in ['pre_per', 'Préstamo Personal']:
                 r1 = (rec.fecha_up - rec.fecha_actual).days
+                r2 = r1 / 7
+                rec.resta2 = rec.semanas - r2
+                rec.num_pago = rec.resta2
+            else:
+                r1 = (rec.fecha_back_ultima - rec.fecha_actual).days
                 r2 = r1 / 7
                 rec.resta2 = rec.semanas - r2
                 rec.num_pago = rec.resta2
@@ -152,3 +175,4 @@ class DiscountsLoans(models.Model):
                 rec.dep = rec.total
             elif rec.total != rec.saldo:
                 rec.dep = False
+

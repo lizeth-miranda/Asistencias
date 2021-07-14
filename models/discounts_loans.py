@@ -15,7 +15,8 @@ class DiscountsLoans(models.Model):
         ('desc_herr', 'Desc.EPP Herramienta'),
         ('otr_des', 'Otros Descuentos'),
     ], string='Tipo de Descuento',)
-
+    
+    desc = fields.Text(string="Descripción",)
     fecha = fields.Datetime(
         'Fecha', required=False, readonly=False, default=fields.Datetime.now)
     fecha2 = fields.Date(compute="compute_fecha2",)

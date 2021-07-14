@@ -10,14 +10,14 @@
                         <group>
                             <field name="type_discount" required="1" />
                             <field name="fecha" required="1" />
+                            <field name="fecha_antes" />
                             <field name="total" required="1" />
-                            <!-- <field name="total2" /> -->
-                            <!-- <field name="deposito" /> -->
                             <field name="semanas" required="1" />
                             <field name="abono" />
                             <field name="fecha_actual" invisible="0" />
                             <field name="fecha_pp" />
                             <field name="fecha_up" />
+                            <field name="fecha_back_ultima" />
                             <field name="dep" />
                         </group>
                         <group>

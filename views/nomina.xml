@@ -157,6 +157,7 @@
                                 <field name="des_epp" />
                                 <field name="otros_desc" />
                                 <field name="suma_dedu" />
+                                <field name="otros" />
                             </group>
                             <group>
                                 <field name="notas" />

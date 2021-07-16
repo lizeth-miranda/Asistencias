@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.7',
+    'version': '13.6',
     'author': 'Demsa',
     'website': '',
     'depends': [

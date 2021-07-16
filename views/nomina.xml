@@ -26,7 +26,7 @@
                 <field name="cost_day" widget="Monetary" optional="hide" />
                 <field name="cost_hour" optional="hide" />
                 <field name="extra_cost" optional="hide" />
-                <field name="hours_extra" widget="float_time" sum="hours_extra" optional="hide" />
+                <field name="hours_extra" widget="float_time" sum="hours_extra" optional="show" />
                 <field name="viat" optional="hide" />
                 <field name="pasa" optional="hide" />
                 <field name="bono" optional="hide" />

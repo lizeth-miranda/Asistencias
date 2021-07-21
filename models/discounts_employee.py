@@ -41,3 +41,4 @@ class DiscountsEmployee(models.Model):
     saldo = fields.Monetary(string="Saldo", related="discLoans_ids.saldo",)
 
     deposito = fields.Monetary(string="Déposito", related="discLoans_ids.dep",)
+    sem = fields.Float(string="Semanas", related="discLoans_ids.semanas",)

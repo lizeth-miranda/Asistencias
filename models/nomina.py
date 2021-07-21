@@ -388,11 +388,14 @@ class Nomina(models.Model):
     @api.depends('cost_day', 'cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
         for rec in self:
-            r1 = rec.extra_cost * rec.cant_ausen
-            rec.suel_Sem_faltas = (
-                rec.cost_day * rec.cant_asis + rec.cost_day) - r1
-      
-                
+            if rec.cant_asis > 4 and rec.cant_ausen > 0 :
+                r1 = rec.extra_cost * rec.cant_ausen
+                rec.suel_Sem_faltas = (
+                    rec.cost_day * rec.cant_asis) - r1     
+            else:
+                r1 = rec.extra_cost * rec.cant_ausen
+                rec.suel_Sem_faltas = (
+                    rec.cost_day * rec.cant_asis + rec.cost_day) - r1     
 
     # calcular sueldo con nuevo ingreso
     suel_nuevo_ingreso = fields.Monetary(

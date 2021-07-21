@@ -28,7 +28,7 @@ class DiscountsLoans(models.Model):
     #total2 = fields.Monetary(compute="compute_total2",)
     # deposito = fields.Boolean(
     #     string="Depósito", compute="dep_false", inverse="inverse_dep_false", store=True,)
-    semanas = fields.Float(string="Semanas",)
+    semanas = fields.Integer(string="Semanas",)
     abono = fields.Monetary(
         string="Abono",
         compute="compute_abono", store=True, )

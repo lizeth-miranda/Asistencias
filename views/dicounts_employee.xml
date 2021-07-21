@@ -40,6 +40,7 @@
                 <field name="tipo_desc" />
                 <field name="total_desc" />
                 <field name="abono" />
+                <field name="sem" />
                 <field name="numero_pago" />
                 <field name="saldo" />
             </tree>

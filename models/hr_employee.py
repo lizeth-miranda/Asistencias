@@ -82,5 +82,6 @@ class empl(models.Model):
 
     depo = fields.Monetary(related="discounts_ids.deposito",)
     
-    
+    fecha_nacimiento = fields.Date(string="Fecha de Nacimiento",)
+
    

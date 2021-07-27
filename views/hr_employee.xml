@@ -5,7 +5,10 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
-
+            
+            <field name="mobile_phone" position="before">
+                <field name="fecha_nacimiento" />
+            </field>
             <field name="work_location" position="after">
                 <field name="empresa" />
             </field>

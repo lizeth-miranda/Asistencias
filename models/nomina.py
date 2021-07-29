@@ -190,6 +190,8 @@ class Nomina(models.Model):
 
     pres_personal = fields.Monetary(
         string="Préstamo", related="employee_id.depo")
+    
+    others = fields.Monetary(string="Reembolsos u otros",)
 
     # Deducciones
     cre_info = fields.Monetary(
@@ -414,17 +416,17 @@ class Nomina(models.Model):
             if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5 and record.cant_ausen == 0:
                 record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
-                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal)
+                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
             elif record.reg_sem in ['week', 'semanal'] and record.cant_asis < 6 and record.cant_ausen > 0:
                 record.sum_perc_notCarga = (record.suel_Sem_faltas + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
-                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal)
+                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
             elif record.reg_sem in ['week', 'semanal'] and record.cant_asis < 6 and record.cant_ausen == 0:
                 record.sum_perc_notCarga = (record.suel_nuevo_ingreso + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
-                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal)
+                                            record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
     @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc', 'otros')
     def sum_dedu(self):

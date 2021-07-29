@@ -38,7 +38,7 @@
         <field name="model">discounts.loans</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="nombre" />
+                <field name="employee_id" />
                 <field name="type_discount" />
                 <field name="abono" />
                 <field name="semanas" />

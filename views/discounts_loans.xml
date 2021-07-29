@@ -8,6 +8,8 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="employee_id" />
+                            <field name="nombre" invisible="1" />
                             <field name="type_discount" required="1" />
                             <field name="desc" />
                             <field name="fecha" required="1" />
@@ -36,12 +38,22 @@
         <field name="model">discounts.loans</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="nombre" />
                 <field name="type_discount" />
                 <field name="abono" />
+                <field name="semanas" />
                 <field name="num_pago" />
                 <field name="saldo" />
             </tree>
         </field>
     </record>
+
+    <record id="discount_loans_action" model="ir.actions.act_window">
+        <field name="name">prestamos por Empleado</field>
+        <field name="res_model">discounts.loans</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="loans_menu" name="Detalles de Préstamos" parent="Asistencias.prestamos_menu" action="discount_loans_action" sequence="2" />
 
 </odoo>    

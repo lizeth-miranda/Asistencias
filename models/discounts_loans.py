@@ -45,7 +45,7 @@ class DiscountsLoans(models.Model):
         compute="compute_fecha_up", string="Fecha Final de pago",)
 
     fecha_back_ultima = fields.Datetime(
-        compute="compute_fecha_back_ultima",)
+        compute="compute_fecha_back_ultima", string="Ultima fecha de pago",)
 
     num_pago = fields.Integer(
         string="# Pago", compute="compute_num_pago", store=True,)

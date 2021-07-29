@@ -47,6 +47,19 @@
             </tree>
         </field>
     </record>
+    
+    <record id="discount_loans_view_search" model="ir.ui.view">
+        <field name="name">discounts.loans.view.form</field>
+        <field name="model">discounts.loans</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id" />
+                <!-- <group string="Group By">
+                    <filter name="by_type" string="Tipo Préstamo" context="{'group_by': 'tipo_desc'}" />
+                </group> -->
+            </search>
+        </field>
+    </record>
 
     <record id="discount_loans_action" model="ir.actions.act_window">
         <field name="name">prestamos por Empleado</field>

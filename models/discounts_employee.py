@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class DiscountsEmployee(models.Model):
     _name = 'discount.employee'
     _description = 'Discount Employee'
-    
+
     _sql_constraints = [
         ('name_unique',
          'UNIQUE(employee)',
@@ -15,6 +15,7 @@ class DiscountsEmployee(models.Model):
 
     employee = fields.Many2one(
         comodel_name='hr.employee', string="Empleado", ondelete='set null', index=True,)
+    name = fields.Char(related="employee.name",)
 
     discLoans_ids = fields.One2many(
         comodel_name='discounts.loans',
@@ -41,4 +42,5 @@ class DiscountsEmployee(models.Model):
     saldo = fields.Monetary(string="Saldo", related="discLoans_ids.saldo",)
 
     deposito = fields.Monetary(string="Déposito", related="discLoans_ids.dep",)
+
     sem = fields.Integer(string="Semanas", related="discLoans_ids.semanas",)

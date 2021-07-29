@@ -136,6 +136,7 @@
                                     <field name="bono_even" />
                                     <field name="gasolina" />
                                     <field name="pres_personal" />
+                                    <field name="others" />
                                 </group>
                                 <group>
                                     <field name="vacaciones" />

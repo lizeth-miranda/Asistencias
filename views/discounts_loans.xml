@@ -18,9 +18,9 @@
                             <field name="semanas" required="1" />
                             <field name="abono" />
                             <field name="fecha_actual" invisible="0" />
-                            <field name="fecha_pp" />
-                            <field name="fecha_up" />
-                            <field name="fecha_back_ultima" invisible="1" />
+                            <field name="fecha_pp" attrs="{'invisible':['|',('type_discount', '=', 'desc_herr') , ('type_discount', '=', 'otr_des')]}" />
+                            <field name="fecha_up" attrs="{'invisible':['|',('type_discount', '=', 'desc_herr') , ('type_discount', '=', 'otr_des')]}" />
+                            <field name="fecha_back_ultima" attrs="{'invisible':[('type_discount', '=', 'pre_per')]}" />
                             <field name="dep" invisible="1" />
                         </group>
                         <group>

@@ -8,15 +8,17 @@ class DiscountsLoans(models.Model):
     _description = 'Discount Loans'
 
     employee_id = fields.Many2one(
-        'discount.employee', ondelete='cascade', required=True,)
-
+        'discount.employee', ondelete='cascade', required=True, string="Nombre")
+    nombre = fields.Char(related="employee_id.name",
+                         string="Nombre del Empleado",)
     type_discount = fields.Selection([
         ('pre_per', 'Préstamo Personal'),
         ('desc_herr', 'Desc.EPP Herramienta'),
         ('otr_des', 'Otros Descuentos'),
     ], string='Tipo de Descuento',)
-    
+
     desc = fields.Text(string="Descripción",)
+
     fecha = fields.Datetime(
         'Fecha', required=False, readonly=False, default=fields.Datetime.now)
     fecha2 = fields.Date(compute="compute_fecha2",)
@@ -51,11 +53,11 @@ class DiscountsLoans(models.Model):
         string="Saldo", compute="compute_saldo", store=True,)
 
     suma_abonopp = fields.Monetary(
-        string="Suma Prestamos personal", compute="compute_sum_abono",)
+        string="Prstamos personales", compute="compute_sum_abono",)
     suma_descEpp = fields.Monetary(
-        string="Suma Desc.EPP", compute="compute_suma_descEpp",)
+        string="Descuentos EPP", compute="compute_suma_descEpp",)
     suma_otros_desc = fields.Monetary(
-        string="Suma Otros Descuentos", compute="compute_suma_otrosDesc",)
+        string="Otros Descuentos", compute="compute_suma_otrosDesc",)
 
     dep = fields.Monetary(string="Deposito",)
 
@@ -119,10 +121,10 @@ class DiscountsLoans(models.Model):
             else:
                 record.abono = record.total / record.semanas
 
-    @api.depends('fecha_actual')
+    # @api.depends('fecha_actual')
     def compute_num_pago(self):
         for rec in self:
-            if rec.fecha_actual and rec.type_discount in ['pre_per', 'Préstamo Personal']:
+            if rec.type_discount in ['pre_per', 'Préstamo Personal']:
                 r1 = (rec.fecha_up - rec.fecha_actual).days
                 r2 = r1 / 7
                 rec.resta2 = rec.semanas - r2
@@ -130,8 +132,14 @@ class DiscountsLoans(models.Model):
             else:
                 r1 = (rec.fecha_back_ultima - rec.fecha_actual).days
                 r2 = r1 / 7
-                rec.resta2 = rec.semanas - r2
-                rec.num_pago = rec.resta2
+                rec.resta3 = rec.semanas - r2
+                rec.num_pago = rec.resta3
+
+        # r1 = (rec.fecha_up - rec.fecha_actual).days
+        # r2 = r1 / 7
+        # rec.resta2 = rec.semanas - r2
+        # rec.num_pago = rec.resta2
+        # print(r2)
 
     @api.depends('num_pago')
     def compute_saldo(self):

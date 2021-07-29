@@ -8,7 +8,7 @@ class DiscountsLoans(models.Model):
     _description = 'Discount Loans'
 
     employee_id = fields.Many2one(
-        'discount.employee', ondelete='cascade', required=True, string="Nombre")
+        'discount.employee', ondelete='cascade', required=True, string="Nombre", readonly=True,)
     nombre = fields.Char(related="employee_id.name",
                          string="Nombre del Empleado",)
     type_discount = fields.Selection([

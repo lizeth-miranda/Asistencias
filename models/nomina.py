@@ -486,14 +486,14 @@ class Nomina(models.Model):
                 ('fechaA', '>=', record.start_date),
                 ('fechaA', '<=', record.end_date),
                 ('reg_sem', 'in', ['week', 'semanal']),
-                #('state', 'in', ['draft', 'Borrador']),
-
             ]).mapped('employee_id.name')
         print(employeecount)
 
         for record in self:
             employeecount2 = self.env['hr.employee'].search([
-                ('empresa', 'in', ['enterprise2', 'DEMSA']), ]).mapped('name')
+                ('empresa', 'in', ['enterprise2', 'DEMSA']),
+                ('active', '=', True),
+            ]).mapped('name')
             print(employeecount2)
 
         resta = set(employeecount2) - set(employeecount)

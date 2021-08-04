@@ -5,7 +5,7 @@ from odoo import api, fields, models
 
 class DiscountsLoans(models.Model):
     _name = 'discounts.loans'
-    _description = 'Discount Loans'
+    _description = 'Detalles de los Préstamos y descuento por herramienta'
 
     employee_id = fields.Many2one(
         'discount.employee', ondelete='cascade', string="Nombre", readonly=True,)

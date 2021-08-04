@@ -5,14 +5,15 @@ from odoo import api, fields, models
 
 class DiscountsEmployee(models.Model):
     _name = 'discount.employee'
-    _description = 'Discount Employee'
+    _description = 'Listado de los empleados con descuentos de préstamos personales, descuentos por herramientas'
 
     _sql_constraints = [
         ('name_unique',
          'UNIQUE(employee)',
-         "EL EMPLEADO QUE INTENTA REGISTRAR YA CUENTA EXISTE"),
+         "EL EMPLEADO QUE INTENTA REGISTRAR YA SE ENCUENTRA EN LA LISTA DE PRESTAMOS"),
     ]
-
+    
+    
     employee = fields.Many2one(
         comodel_name='hr.employee', string="Empleado", ondelete='set null', index=True,)
     name = fields.Char(related="employee.name",)

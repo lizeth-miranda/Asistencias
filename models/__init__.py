@@ -10,4 +10,5 @@ from . import nomina
 from . import sale_order
 from . import discounts_employee
 from . import discounts_loans
+from . import quality
 #from . import account_move

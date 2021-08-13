@@ -25,6 +25,7 @@
                             <field name="cost_day" widget="monetary" />
                             <field name="timesheet_cost" />
                             <field name="cost_extra" />
+                            <field name="cost_extra_bono" />
                             <field name="costo_dayCS" />
                             <field name="cost_default" />
                             <field name="credito_info" />
@@ -35,6 +36,7 @@
                             <field name="horas_lab" widget="float_time" />
                             <field name="horas_lab_in" widget="float_time" />
                             <field name="hours" widget="float_time" required="1" />
+                            <field name="active_CEXB" />
                         </group>
                         <group string="Préstamos y Descuentos personales">
                             <field name="pres_perso" />

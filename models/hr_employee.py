@@ -29,6 +29,11 @@ class empl(models.Model):
         string="Costo Extra",
         compute="compute_costExtra",
     )
+    cost_extra_bono = fields.Monetary(
+        help="(sueldov+ bono fijo/6) /8 *2",
+        string="Costo Extra + Bono",
+        compute="compute_costExtra_bono",
+    )
     cost_default = fields.Monetary(
         help="cost per absence",
         string="Costo/Falta",

@@ -8,7 +8,8 @@ from odoo.exceptions import ValidationError, UserError
 class Nomina(models.Model):
     _name = "nomina.line"
     _description = 'Registro de Nomina'
-
+    
+    active = fields.Boolean(string="Archivado", default=True,)
     us_id = fields.Char(string="Residente",)
     type_resi = fields.Char(string="Tipo",)
     employee_id = fields.Many2one(
@@ -92,6 +93,12 @@ class Nomina(models.Model):
         help="sueldo semanal/6/8*2",
         related="employee_id.cost_extra",
         string="Costo Extra/hr",
+        readonly=True,
+    )
+    costo_extra_bono = fields.Monetary(
+        help="(((sueldo semanal + Bono fijo) /6)/8)*2",
+        related="employee_id.cost_extra_bono",
+        string="Costo Extra/hr + Bono",
         readonly=True,
     )
     cost_default = fields.Monetary(
@@ -247,6 +254,8 @@ class Nomina(models.Model):
 
     nomina = fields.Boolean(default=True, string="nomina",)
     asis = fields.Boolean(string="Asistencia",)
+    active_CEXB2 = fields.Boolean(
+        string="Costo Extra + Bono Activo", related="employee_id.active_CEXB",)
 
     @api.depends('start_date', 'end_date')
     def compute_sumHE(self):
@@ -311,13 +320,14 @@ class Nomina(models.Model):
         for record in self:
             record.hours_extra = record.hours_extra + 0
 
-    @api.depends('hours_extra')
+    @api.depends('active_CEXB2')
     def compute_total_extra(self):
         for record in self:
-            if record.hours_extra == 0:
-                record.total_extra = False
-            else:
-                record.total_extra = record.hours_extra * record.extra_cost
+            if record.active_CEXB2 == True:
+                record.total_extra = (
+                    record.hours_extra * record.costo_extra_bono)
+            elif record.active_CEXB2 == False:
+                record.total_extra = (record.hours_extra * record.extra_cost)
 
     @api.depends('hrs_lab_in', 'hours_extra')
     def compute_cost_total(self):

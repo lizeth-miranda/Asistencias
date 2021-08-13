@@ -82,6 +82,8 @@ class empl(models.Model):
     depo = fields.Monetary(related="discounts_ids.deposito",)
 
     fecha_nacimiento = fields.Date(string="Fecha de Nacimiento",)
+    
+    active_CEXB = fields.Boolean(string="Activar Costo Extra + Bono",)
 
     @api.depends('salary')
     def compute_timecost(self):
@@ -100,5 +102,13 @@ class empl(models.Model):
             r2 = r1 / 8
             r3 = r2 * 2
             rec.cost_extra = r3
+    
+    @api.depends('salary')
+    def compute_costExtra_bono(self):
+        for rec in self:
+            r4 = (rec.salary + rec.bono) / 6
+            r5 = r4 / 8
+            r6 = r5 * 2
+            rec.cost_extra_bono = r6
 
    

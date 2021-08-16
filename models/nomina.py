@@ -50,7 +50,7 @@ class Nomina(models.Model):
         help="Horas extras * Costo/ hora extra",
         string="Total Extra",
         compute='compute_total_extra',
-        store=True,
+        store=False,
         readonly=True,
     )
     total_inci = fields.Monetary(string="Total Incidencia")

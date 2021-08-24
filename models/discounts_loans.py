@@ -5,17 +5,18 @@ from odoo import api, fields, models
 
 class DiscountsLoans(models.Model):
     _name = 'discounts.loans'
-    _description = 'Detalles de los Préstamos y descuento por herramienta'
+    _description = 'Discount Loans'
 
+    active = fields.Boolean(string="Archivar", default=True,)
     employee_id = fields.Many2one(
         'discount.employee', ondelete='cascade', string="Nombre", readonly=True,)
     nombre = fields.Char(related="employee_id.name",
-                         string="Nombre del Empleado",)
+                         string="Nombre del Empleado", )
     type_discount = fields.Selection([
         ('pre_per', 'Préstamo Personal'),
         ('desc_herr', 'Desc.EPP Herramienta'),
         ('otr_des', 'Otros Descuentos'),
-    ], string='Tipo de Descuento',)
+    ], string='Tipo de Descuento', default='pre_per',)
 
     desc = fields.Text(string="Descripción",)
 
@@ -59,7 +60,7 @@ class DiscountsLoans(models.Model):
     suma_otros_desc = fields.Monetary(
         string="Otros Descuentos", compute="compute_suma_otrosDesc",)
 
-    dep = fields.Monetary(string="Deposito",)
+    dep = fields.Monetary(string="Deposito", compute="deposito_false",)
 
     @api.depends('fecha')
     def compute_fecha_antes(self):
@@ -121,7 +122,7 @@ class DiscountsLoans(models.Model):
             else:
                 record.abono = record.total / record.semanas
 
-    # @api.depends('fecha_actual')
+    @api.depends('fecha_actual')
     def compute_num_pago(self):
         for rec in self:
             if rec.type_discount in ['pre_per', 'Préstamo Personal']:
@@ -181,7 +182,7 @@ class DiscountsLoans(models.Model):
                 ('saldo', '>', 0),
             ]).mapped('abono'))
 
-    @api.onchange('num_pago')
+    @api.depends('type_discount')
     def deposito_false(self):
         for rec in self:
             if rec.total == rec.saldo and rec.type_discount in ['pre_per', 'Préstamo Personal']:

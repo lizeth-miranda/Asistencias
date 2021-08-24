@@ -5,7 +5,7 @@
         <field name="name">purchase_requisition.move.form</field>
         <field name="model">purchase.requisition</field>
         <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form" />
-        <field name="groups_id" eval="[(6,0,[ref('purchase.group_purchase_user')])]" />
+        <field name="groups_id" eval="[(6,0,[ref('Asistencias.acuerdoCompra_group')])]" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_uom_id']" position="attributes">
                 <attribute name="readonly">1</attribute>

@@ -40,6 +40,7 @@
         'views/server_action_prenomina.xml',
         'views/dicounts_employee.xml',
         'views/discounts_loans.xml',
+        'views/purchase_requisition.xml',
         # 'views/account_move.xml',
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.3',
+    'version': '13.4',
     'author': 'Demsa',
     'website': '',
     'depends': [
@@ -41,6 +41,7 @@
         'views/dicounts_employee.xml',
         'views/discounts_loans.xml',
         'views/purchase_requisition.xml',
+        'views/group_acuerdoCompra.xml',
         # 'views/account_move.xml',
 
 

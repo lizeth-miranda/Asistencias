@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record model="ir.ui.view" id="purchase_requisition_form_view">
-        <field name="name">purchase_requisition.move.form</field>
+    <record model="ir.ui.view" id="purchase_requi_form_view">
+        <field name="name">purchase_requi.move.form</field>
         <field name="model">purchase.requisition</field>
         <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form" />
         <field name="groups_id" eval="[(6,0,[ref('Asistencias.acuerdoCompra_group')])]" />

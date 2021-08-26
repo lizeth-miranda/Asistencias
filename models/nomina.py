@@ -296,7 +296,7 @@ class Nomina(models.Model):
     def _compute_worked_hours(self):
         for rec in self:
             if rec.check_out:
-                rec.worked_hours = (rec.check_out-rec.check_in) // 1
+                rec.worked_hours = rec.check_out-rec.check_in
             else:
                 rec.worked_hours = False
 

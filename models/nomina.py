@@ -296,7 +296,7 @@ class Nomina(models.Model):
     def _compute_worked_hours(self):
         for rec in self:
             if rec.check_out:
-                rec.worked_hours = rec.check_out-rec.check_in
+                rec.worked_hours = (rec.check_out-rec.check_in) // 1
             else:
                 rec.worked_hours = False
 
@@ -310,7 +310,7 @@ class Nomina(models.Model):
                 record.hours_extra = record.worked_hours
 
             elif record.day == 5 and record.type_resi == 'obra':
-                record.hours_extra = record.worked_hours-record.hours_sat
+                record.hours_extra = (record.worked_hours-record.hours_sat) //1
 
             elif record.day == 6:
                 record.hours_extra = record.worked_hours

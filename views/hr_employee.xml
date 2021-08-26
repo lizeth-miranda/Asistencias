@@ -13,7 +13,8 @@
                 <field name="empresa" />
             </field>
             <field name="parent_id" position="after">
-                <field name="cod_emp" />
+                <field name="cod_emp" invisible='1' />
+                <field name="pin" string="Código Empleado" />
                 <field name="fecha_ingreso" />
                 <field name="afiliacion_imss" />
             </field>

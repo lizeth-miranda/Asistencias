@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 # instruccion para hacer importaciones desde odoo
 from odoo import fields, models, api
-from datetime import datetime, timedelta
 
 
 class empl(models.Model):
     _inherit = 'hr.employee'
 
+    _sql_constraints = [
+        ('pin_uniq', 'unique (pin)', "El empleado que se está registrando, ya existe!"),
+    ]
+
     salary = fields.Monetary(
         string="Salario",
     )
 
-    cod_emp = fields.Char(string="Código Empleado",)
+    cod_emp = fields.Char(string="Código",)
     fecha_ingreso = fields.Date(string="Fecha de Ingreso",)
     afiliacion_imss = fields.Char(string="Afiliación IMSS",)
 
@@ -87,7 +90,7 @@ class empl(models.Model):
     depo = fields.Monetary(related="discounts_ids.deposito",)
 
     fecha_nacimiento = fields.Date(string="Fecha de Nacimiento",)
-    
+
     active_CEXB = fields.Boolean(string="Activar Costo Extra + Bono",)
 
     @api.depends('salary')
@@ -107,7 +110,7 @@ class empl(models.Model):
             r2 = r1 / 8
             r3 = r2 * 2
             rec.cost_extra = r3
-    
+
     @api.depends('salary')
     def compute_costExtra_bono(self):
         for rec in self:
@@ -115,5 +118,14 @@ class empl(models.Model):
             r5 = r4 / 8
             r6 = r5 * 2
             rec.cost_extra_bono = r6
+
+    @api.model
+    def employee_unique(self):
+        for record in self:
+            new_value = record.cod_emp
+            existing_records = self.env['hr.employee'].search(
+                [('cod_emp', '=', new_value)])
+            if len(existing_records) > 1:
+                raise Warning('field must be unique')
 
    

@@ -84,6 +84,8 @@
                             <!-- <field name="normal" /> -->
                             <field name="hours" widget="float_time" />
                             <field name="hours_sat" widget="float_time" />
+                            <field name="fecha_ing" />
+                            <field name="nuevo_ing" />
                             <!-- <field name="department" /> -->
                         </group>
                         <group string="costos laborales por día">

@@ -289,12 +289,12 @@ class Nomina(models.Model):
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('total_extra'))
 
-    @ api.depends('fechaA')
+    @api.depends('fechaA')
     def _day(self):
         for record in self:
             record.day = record.fechaA.weekday()
 
-    @ api.depends('check_in', 'check_out')
+    @api.depends('check_in', 'check_out')
     def _compute_worked_hours(self):
         for rec in self:
             if rec.check_out:
@@ -302,7 +302,7 @@ class Nomina(models.Model):
             else:
                 rec.worked_hours = False
 
-    @ api.depends('worked_hours')
+    @api.depends('worked_hours')
     def _hours_extra(self):
         for record in self:
             if record.day != 5 and record.worked_hours >= record.hours:
@@ -318,7 +318,7 @@ class Nomina(models.Model):
             elif record.day == 6:
                 record.hours_extra = record.worked_hours
 
-    @ api.depends('worked_hours')
+    @api.depends('worked_hours')
     def _inverse_hours_extra(self):
         for record in self:
             record.hours_extra = record.hours_extra + 0
@@ -423,13 +423,16 @@ class Nomina(models.Model):
             #         rec.cost_day * rec.cant_asis + rec.cost_day) - r1
 
     # calcular sueldo con nuevo ingreso
-    @ api.depends('start_date', 'end_date')
+    @api.depends('start_date', 'end_date')
     def compute_nuevo_ing(self):
         for record in self:
             domain = self.env['nomina.line'].search_count([
                 ('fecha_ing', '>=', record.start_date),
                 ('fecha_ing', '<=', record.end_date),
+                # ('employee_id', '=', record.employee_id.id),
+                ('reg_sem', 'in', ['week', 'semanal'])
             ])
+            print(domain)
             if domain > 0:
                 record.nuevo_ing = True
             else:
@@ -438,14 +441,14 @@ class Nomina(models.Model):
     suel_nuevo_ingreso = fields.Monetary(
         compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
 
-    @ api.depends('cost_day', 'cant_asis')
+    @api.depends('cost_day', 'cant_asis')
     def compute_suel_nuevo_ingreso(self):
         for rec in self:
             rec.suel_nuevo_ingreso = rec.cost_day * rec.cant_asis
 
     # calculo costo de percepciones sin carga social para la nómina
 
-    @ api.depends('nuevo_ing', 'reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @api.depends('nuevo_ing', 'reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def compute_sum_perc_noCS(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5 and record.cant_ausen == 0 and record.nuevo_ing == False:
@@ -463,14 +466,14 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
-    @ api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc', 'otros')
+    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc', 'otros')
     def sum_dedu(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
                 record.suma_dedu = record.cre_info + record.fona + \
                     record.pres_per + record.des_epp + record.otros_desc + record.otros
 
-    @ api.depends('reg_sem', 'start_date', 'end_date')
+    @api.depends('reg_sem', 'start_date', 'end_date')
     def suel_pagar(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
@@ -479,7 +482,7 @@ class Nomina(models.Model):
 
     # create a new line, as none existed before
 
-    @ api.constrains('date', 'name', 'amount')
+    @api.constrains('date', 'name', 'amount')
     def acco_line(self):
         for record in self:
             record.state = 'confirm'

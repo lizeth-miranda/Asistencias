@@ -423,7 +423,7 @@ class Nomina(models.Model):
             #         rec.cost_day * rec.cant_asis + rec.cost_day) - r1
 
     # calcular sueldo con nuevo ingreso
-    @api.depends('start_date', 'end_date')
+    @ api.depends('start_date', 'end_date')
     def compute_nuevo_ing(self):
         for record in self:
             domain = self.env['nomina.line'].search_count([
@@ -438,7 +438,7 @@ class Nomina(models.Model):
     suel_nuevo_ingreso = fields.Monetary(
         compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
 
-    @api.depends('cost_day', 'cant_asis')
+    @ api.depends('cost_day', 'cant_asis')
     def compute_suel_nuevo_ingreso(self):
         for rec in self:
             rec.suel_nuevo_ingreso = rec.cost_day * rec.cant_asis

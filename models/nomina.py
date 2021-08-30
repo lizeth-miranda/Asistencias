@@ -8,7 +8,7 @@ from odoo.exceptions import ValidationError, UserError
 class Nomina(models.Model):
     _name = "nomina.line"
     _description = 'Registro de Nomina'
-    
+
     active = fields.Boolean(string="Archivado", default=True,)
     us_id = fields.Char(string="Residente",)
     type_resi = fields.Char(string="Tipo",)
@@ -199,8 +199,7 @@ class Nomina(models.Model):
     semana_fondo = fields.Monetary(string="Semana de Fondo",)
 
     pres_personal = fields.Monetary(
-        string="Préstamo", related="employee_id.depo")
-    
+        string="Préstamo Personal", related="employee_id.depo")
     others = fields.Monetary(string="Reembolsos u otros",)
 
     # Deducciones
@@ -232,7 +231,7 @@ class Nomina(models.Model):
         compute="sum_dedu",
         store=True
     )
-    
+
     otros = fields.Monetary(string="Otros",)
     # Costo semanal
     reg_sem = fields.Selection([('week', 'Semanal')], string='Tipo Registro', )
@@ -290,20 +289,20 @@ class Nomina(models.Model):
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('total_extra'))
 
-    @api.depends('fechaA')
+    @ api.depends('fechaA')
     def _day(self):
         for record in self:
             record.day = record.fechaA.weekday()
 
-    @api.depends('check_in', 'check_out')
+    @ api.depends('check_in', 'check_out')
     def _compute_worked_hours(self):
         for rec in self:
             if rec.check_out:
-                rec.worked_hours = (rec.check_out-rec.check_in) // 1
+                rec.worked_hours = rec.check_out-rec.check_in
             else:
                 rec.worked_hours = False
 
-    @api.depends('worked_hours')
+    @ api.depends('worked_hours')
     def _hours_extra(self):
         for record in self:
             if record.day != 5 and record.worked_hours >= record.hours:
@@ -313,12 +312,13 @@ class Nomina(models.Model):
                 record.hours_extra = record.worked_hours
 
             elif record.day == 5 and record.type_resi == 'obra':
-                record.hours_extra = (record.worked_hours-record.hours_sat) //1
+                record.hours_extra = (
+                    record.worked_hours-record.hours_sat) // 1
 
             elif record.day == 6:
                 record.hours_extra = record.worked_hours
-    
-    @api.depends('worked_hours')
+
+    @ api.depends('worked_hours')
     def _inverse_hours_extra(self):
         for record in self:
             record.hours_extra = record.hours_extra + 0
@@ -332,7 +332,7 @@ class Nomina(models.Model):
             elif record.active_CEXB2 == False:
                 record.total_extra = (record.hours_extra * record.extra_cost)
 
-    @api.depends('hrs_lab_in', 'hours_extra')
+    @ api.depends('hrs_lab_in', 'hours_extra')
     def compute_cost_total(self):
         for record in self:
             if record.day != 5:
@@ -411,10 +411,19 @@ class Nomina(models.Model):
             elif m1 == 6:
                 r1 = rec.extra_cost * rec.cant_ausen
                 rec.suel_Sem_faltas = (
-                    rec.cost_day * rec.cant_asis) - r1     
+                    rec.cost_day * rec.cant_asis) - r1
+
+            # if rec.cant_asis >= 4 and rec.cant_ausen > 0 or rec.cant_asis == 5 and rec.cant_ausen == 0:
+            #     r1 = rec.extra_cost * rec.cant_ausen
+            #     rec.suel_Sem_faltas = (
+            #         rec.cost_day * rec.cant_asis) - r1
+            # else:
+            #     r1 = rec.extra_cost * rec.cant_ausen
+            #     rec.suel_Sem_faltas = (
+            #         rec.cost_day * rec.cant_asis + rec.cost_day) - r1
 
     # calcular sueldo con nuevo ingreso
-    @api.depends('start_date', 'end_date')
+    @ api.depends('start_date', 'end_date')
     def compute_nuevo_ing(self):
         for record in self:
             domain = self.env['nomina.line'].search_count([
@@ -427,25 +436,26 @@ class Nomina(models.Model):
                 record.nuevo_ing = True
             else:
                 record.nuevo_ing = False
+
     suel_nuevo_ingreso = fields.Monetary(
         compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
 
-    @api.depends('cost_day', 'cant_asis')
+    @ api.depends('cost_day', 'cant_asis')
     def compute_suel_nuevo_ingreso(self):
         for rec in self:
             rec.suel_nuevo_ingreso = rec.cost_day * rec.cant_asis
 
     # calculo costo de percepciones sin carga social para la nómina
 
-    @api.depends('nuevo_ing','reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @ api.depends('nuevo_ing', 'reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def compute_sum_perc_noCS(self):
         for record in self:
-            if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5 and record.cant_ausen == 0:
+            if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5 and record.cant_ausen == 0 and record.nuevo_ing == False:
                 record.sum_perc_notCarga = (record.sueldo_semanal + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
-            elif record.reg_sem in ['week', 'semanal'] and record.cant_asis < 6 and record.cant_ausen > 0:
+            elif record.reg_sem in ['week', 'semanal'] and record.cant_asis < 6 and record.cant_ausen > 0 and record.nuevo_ing == False:
                 record.sum_perc_notCarga = (record.suel_Sem_faltas + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
@@ -455,14 +465,14 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
-    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc', 'otros')
+    @ api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc', 'otros')
     def sum_dedu(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
                 record.suma_dedu = record.cre_info + record.fona + \
                     record.pres_per + record.des_epp + record.otros_desc + record.otros
 
-    @api.depends('reg_sem', 'start_date', 'end_date')
+    @ api.depends('reg_sem', 'start_date', 'end_date')
     def suel_pagar(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
@@ -471,7 +481,7 @@ class Nomina(models.Model):
 
     # create a new line, as none existed before
 
-    @api.constrains('date', 'name', 'amount')
+    @ api.constrains('date', 'name', 'amount')
     def acco_line(self):
         for record in self:
             record.state = 'confirm'
@@ -503,33 +513,4 @@ class Nomina(models.Model):
             }
         }
 
-    
-    @api.depends('empĺoyee_id')
-    def cron_check_employees(self):
-
-        for record in self:
-            employeecount = record.env['nomina.line'].search([
-                # ('employee_id', '=', record.employee_id.id),
-                ('fechaA', '>=', record.start_date),
-                ('fechaA', '<=', record.end_date),
-                ('reg_sem', 'in', ['week', 'semanal']),
-            ]).mapped('employee_id.name')
-        print(employeecount)
-
-        for record in self:
-            employeecount2 = self.env['hr.employee'].search([
-                ('empresa', 'in', ['enterprise2', 'DEMSA']),
-                ('active', '=', True),
-            ]).mapped('name')
-            print(employeecount2)
-
-        resta = set(employeecount2) - set(employeecount)
-        print(resta)
-
-        if resta:
-            raise ValidationError(_("Registros de nómina faltantes para: %(resta)s") % {
-                'resta': resta,
-            })
-        else:
-            raise ValidationError(_("Todo esta correcto"))
    

@@ -148,6 +148,9 @@ class Nomina(models.Model):
     )
     inci = fields.Char(string="Incidencia",)
     leavee = fields.Boolean(string="Falta",)
+    fecha_ing = fields.Date(related="employee_id.fecha_ingreso",)
+    nuevo_ing = fields.Boolean(
+        string="Nuevo Ingreso", compute="compute_nuevo_ing",)
     # cuentas bancarias
     account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)
@@ -411,6 +414,19 @@ class Nomina(models.Model):
                     rec.cost_day * rec.cant_asis) - r1     
 
     # calcular sueldo con nuevo ingreso
+    @api.depends('start_date', 'end_date')
+    def compute_nuevo_ing(self):
+        for record in self:
+            domain = self.env['nomina.line'].search_count([
+                ('fecha_ing', '>=', record.start_date),
+                ('fecha_ing', '<=', record.end_date),
+                # ('employee_id', '=', record.employee_id.id),
+                # ('reg_sem', 'in', ['week', 'semanal'])
+            ])
+            if domain > 0:
+                record.nuevo_ing = True
+            else:
+                record.nuevo_ing = False
     suel_nuevo_ingreso = fields.Monetary(
         compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
 
@@ -421,7 +437,7 @@ class Nomina(models.Model):
 
     # calculo costo de percepciones sin carga social para la nómina
 
-    @api.depends('reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @api.depends('nuevo_ing','reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def compute_sum_perc_noCS(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5 and record.cant_ausen == 0:
@@ -434,7 +450,7 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
-            elif record.reg_sem in ['week', 'semanal'] and record.cant_asis < 6 and record.cant_ausen == 0:
+            elif record.reg_sem in ['week', 'semanal'] and record.nuevo_ing == True:
                 record.sum_perc_notCarga = (record.suel_nuevo_ingreso + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)

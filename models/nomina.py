@@ -430,9 +430,8 @@ class Nomina(models.Model):
                 ('fecha_ing', '>=', record.start_date),
                 ('fecha_ing', '<=', record.end_date),
                 # ('employee_id', '=', record.employee_id.id),
-                ('reg_sem', 'in', ['week', 'semanal'])
+                ('reg_sem', 'in', ['week', 'semanal']),
             ])
-            print(domain)
             if domain > 0:
                 record.nuevo_ing = True
             else:

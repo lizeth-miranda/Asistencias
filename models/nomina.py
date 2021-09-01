@@ -426,8 +426,8 @@ class Nomina(models.Model):
     @api.depends('start_date', 'end_date')
     def compute_nuevo_ing(self):
         for record in self:
-            domain = [('start_date', '<=', self.fecha_ing),
-                      ('end_date', '>=', self.fecha_ing)]
+            domain = [('start_date', '<=', record.fecha_ing),
+                      ('end_date', '>=', record.fecha_ing)]
             booking = self.env['nomina.line'].search_count(domain)
             if booking > 0:
                 record.nuevo_ing = True

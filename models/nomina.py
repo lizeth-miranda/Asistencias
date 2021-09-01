@@ -21,7 +21,7 @@ class Nomina(models.Model):
         string="Departamento",
         readonly=True,
     )
-    empre = fields.Selection(related="employee_id.empresa", string="Empresa")
+    empre = fields.Selection(related="employee_id.empresa", string="Empresa",)
     project = fields.Many2one(
         comodel_name='account.analytic.account',
         string="Obra",
@@ -139,7 +139,7 @@ class Nomina(models.Model):
     state = fields.Selection([
         ('draft', 'Borrador'),
         ('confirm', 'Confirmado'),
-    ], string='Status', readonly=True, default='draft', store=True,)
+    ], string='Status', readonly=True, default='draft', store=False,)
 
     responsible_id = fields.Many2one(
         comodel_name='res.users',
@@ -160,7 +160,7 @@ class Nomina(models.Model):
     # PERCEPCIONES
 
     viat = fields.Monetary(
-        string="Viáticos"
+        string="Viáticos",
     )
     pasa = fields.Monetary(
         string="Pasaje",
@@ -194,18 +194,18 @@ class Nomina(models.Model):
         store=True
     )
     sum_perc_notCarga = fields.Monetary(
-        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True)
+        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True,)
 
     semana_fondo = fields.Monetary(string="Semana de Fondo",)
 
     pres_personal = fields.Monetary(
-        string="Deposito Préstamo", related="employee_id.depo")
+        string="Deposito Préstamo", related="employee_id.depo",)
     others = fields.Monetary(string="Reembolsos u otros",)
 
     # Deducciones
     cre_info = fields.Monetary(
         related="employee_id.credito_info",
-        string="Crédito Infonavit"
+        string="Crédito Infonavit",
     )
     fona = fields.Monetary(
         related="employee_id.credito_fona",
@@ -229,7 +229,7 @@ class Nomina(models.Model):
     suma_dedu = fields.Monetary(
         string="Suma Deducciones",
         compute="sum_dedu",
-        store=True
+        store=True,
     )
 
     otros = fields.Monetary(string="Otros",)
@@ -246,7 +246,7 @@ class Nomina(models.Model):
     horas_extras_sem = fields.Monetary(
         compute='hrs_ex_sem', string='Suma Hrs Extras', store=True,)
     sum_horas_extras = fields.Float(
-        compute='compute_sumHE', string="total Horas Extras", store=True)
+        compute='compute_sumHE', string="total Horas Extras", store=True,)
 
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)

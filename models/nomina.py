@@ -199,7 +199,7 @@ class Nomina(models.Model):
     semana_fondo = fields.Monetary(string="Semana de Fondo",)
 
     pres_personal = fields.Monetary(
-        string="Deposito Préstamo Personal", related="employee_id.depo")
+        string="Deposito Préstamo", related="employee_id.depo")
     others = fields.Monetary(string="Reembolsos u otros",)
 
     # Deducciones

@@ -150,7 +150,7 @@ class Nomina(models.Model):
     leavee = fields.Boolean(string="Falta",)
     fecha_ing = fields.Date(related="employee_id.fecha_ingreso",)
     nuevo_ing = fields.Boolean(
-        string="Nuevo Ingreso", compute="compute_nuevo_ing", store=False,)
+        string="Nuevo Ingreso", compute="compute_nuevo_ing", store=True,)
     # cuentas bancarias
     account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)

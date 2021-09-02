@@ -150,7 +150,7 @@ class Nomina(models.Model):
     leavee = fields.Boolean(string="Falta",)
     fecha_ing = fields.Date(related="employee_id.fecha_ingreso",)
     nuevo_ing = fields.Boolean(
-        string="Nuevo Ingreso", compute="compute_nuevo_ing", store=True,)
+        string="Nuevo Ingreso", compute="compute_nuevo_ing", store=False,)
     # cuentas bancarias
     account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)
@@ -427,7 +427,7 @@ class Nomina(models.Model):
     def compute_nuevo_ing(self):
         for record in self:
             domain = [('start_date', '<=', record.fecha_ing),
-                      ('end_date', '>=', record.fecha_ing)]
+                      ('end_date', '>=', record.fecha_ing),]
             booking = self.env['nomina.line'].search_count(domain)
             if booking > 0:
                 record.nuevo_ing = True

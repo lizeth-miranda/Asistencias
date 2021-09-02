@@ -78,14 +78,13 @@
                             <field name="codigo_empleado" />
                             <field name="employee_id" />
                             <field name="puesto_trabajo" />
+                            <field name="fecha_ing" />
                             <field name="empre" invisible="0" />
                             <field name="project" options="{'no_open': True}" />
                             <field name="hrs_lab_in" widget="float_time" />
                             <!-- <field name="normal" /> -->
                             <field name="hours" widget="float_time" />
                             <field name="hours_sat" widget="float_time" />
-                            <field name="fecha_ing" />
-                            <field name="nuevo_ing" />
                             <!-- <field name="department" /> -->
                         </group>
                         <group string="costos laborales por día">
@@ -176,6 +175,7 @@
                                     <field name="end_date" />
                                     <field name="leavee" invisible="0" />
                                     <field name="asis" />
+                                    <field name="nuevo_ing" />
                                     <field name="active_CEXB2" />
                                 </group>
                                 <group>

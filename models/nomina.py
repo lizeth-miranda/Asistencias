@@ -150,7 +150,7 @@ class Nomina(models.Model):
     leavee = fields.Boolean(string="Falta",)
     fecha_ing = fields.Date(related="employee_id.fecha_ingreso",)
     nuevo_ing = fields.Boolean(
-        string="Nuevo Ingreso", compute="compute_nuevo_ing", store=False, default=False,)
+        string="Nuevo Ingreso",)
     # cuentas bancarias
     account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)
@@ -424,25 +424,7 @@ class Nomina(models.Model):
             #     rec.suel_Sem_faltas = (
             #         rec.cost_day * rec.cant_asis + rec.cost_day) - r1
 
-    # calcular sueldo con nuevo ingreso
-    # @api.depends('start_date', 'end_date')
-    def compute_nuevo_ing(self):
-        for record in self:
-            domain = [('start_date', '<=', record.fecha_ing),
-                      ('end_date', '>=', record.fecha_ing), ]
-            booking = self.env['nomina.line'].search_count(domain)
-
-            # domain = self.env['nomina.line'].search_count([
-            #     ('fecha_ing', '>=', record.start_date),
-            #     ('fecha_ing', '<=', record.end_date),
-            #     # ('employee_id', '=', record.employee_id.id),
-            #     ('reg_sem', 'in', ['week', 'semanal']),
-            # ])
-            print(booking)
-            if booking > 0:
-                record.nuevo_ing = True
-            else:
-                record.nuevo_ing = False
+   
 
     suel_nuevo_ingreso = fields.Monetary(
         compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)

@@ -21,7 +21,7 @@ class Nomina(models.Model):
         string="Departamento",
         readonly=True,
     )
-    empre = fields.Selection(related="employee_id.empresa", string="Empresa",)
+    empre = fields.Selection(related="employee_id.empresa", string="Empresa")
     project = fields.Many2one(
         comodel_name='account.analytic.account',
         string="Obra",
@@ -139,7 +139,7 @@ class Nomina(models.Model):
     state = fields.Selection([
         ('draft', 'Borrador'),
         ('confirm', 'Confirmado'),
-    ], string='Status', readonly=True, default='draft', store=False,)
+    ], string='Status', readonly=True, default='draft', store=True,)
 
     responsible_id = fields.Many2one(
         comodel_name='res.users',
@@ -150,7 +150,7 @@ class Nomina(models.Model):
     leavee = fields.Boolean(string="Falta",)
     fecha_ing = fields.Date(related="employee_id.fecha_ingreso",)
     nuevo_ing = fields.Boolean(
-        string="Nuevo Ingreso", compute="compute_nuevo_ing", store=False,)
+        string="Nuevo Ingreso", compute="compute_nuevo_ing", store=False, default=False,)
     # cuentas bancarias
     account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)
@@ -160,7 +160,7 @@ class Nomina(models.Model):
     # PERCEPCIONES
 
     viat = fields.Monetary(
-        string="Viáticos",
+        string="Viáticos"
     )
     pasa = fields.Monetary(
         string="Pasaje",
@@ -194,18 +194,18 @@ class Nomina(models.Model):
         store=True
     )
     sum_perc_notCarga = fields.Monetary(
-        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True,)
+        compute="compute_sum_perc_noCS", string="Suma Percepciones", store=True)
 
     semana_fondo = fields.Monetary(string="Semana de Fondo",)
 
     pres_personal = fields.Monetary(
-        string="Deposito Préstamo", related="employee_id.depo",)
+        string="Deposito Préstamo Personal", related="employee_id.depo")
     others = fields.Monetary(string="Reembolsos u otros",)
 
     # Deducciones
     cre_info = fields.Monetary(
         related="employee_id.credito_info",
-        string="Crédito Infonavit",
+        string="Crédito Infonavit"
     )
     fona = fields.Monetary(
         related="employee_id.credito_fona",
@@ -229,7 +229,7 @@ class Nomina(models.Model):
     suma_dedu = fields.Monetary(
         string="Suma Deducciones",
         compute="sum_dedu",
-        store=True,
+        store=True
     )
 
     otros = fields.Monetary(string="Otros",)
@@ -246,7 +246,7 @@ class Nomina(models.Model):
     horas_extras_sem = fields.Monetary(
         compute='hrs_ex_sem', string='Suma Hrs Extras', store=True,)
     sum_horas_extras = fields.Float(
-        compute='compute_sumHE', string="total Horas Extras", store=True,)
+        compute='compute_sumHE', string="total Horas Extras", store=True)
 
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)
@@ -375,6 +375,8 @@ class Nomina(models.Model):
         compute="compute_cant_ausen", string="Cantidad de Ausencias",)
     cant_asis = fields.Float(compute="compute_cant_asis",
                              string="Cantidad de Asistencias",)
+    cant_reg_Sem = fields.Float(compute="compute_cant_reg_Sem",
+                                string="Cantidad de rgistri",)
 
     @api.depends('start_date', 'end_date')
     def compute_cant_ausen(self):
@@ -423,12 +425,20 @@ class Nomina(models.Model):
             #         rec.cost_day * rec.cant_asis + rec.cost_day) - r1
 
     # calcular sueldo con nuevo ingreso
-    @api.depends('start_date', 'end_date')
+    # @api.depends('start_date', 'end_date')
     def compute_nuevo_ing(self):
         for record in self:
             domain = [('start_date', '<=', record.fecha_ing),
-                      ('end_date', '>=', record.fecha_ing),]
+                      ('end_date', '>=', record.fecha_ing), ]
             booking = self.env['nomina.line'].search_count(domain)
+
+            # domain = self.env['nomina.line'].search_count([
+            #     ('fecha_ing', '>=', record.start_date),
+            #     ('fecha_ing', '<=', record.end_date),
+            #     # ('employee_id', '=', record.employee_id.id),
+            #     ('reg_sem', 'in', ['week', 'semanal']),
+            # ])
+            print(booking)
             if booking > 0:
                 record.nuevo_ing = True
             else:
@@ -444,7 +454,7 @@ class Nomina(models.Model):
 
     # calculo costo de percepciones sin carga social para la nómina
 
-    @api.depends('nuevo_ing', 'reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @api.depends('reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def compute_sum_perc_noCS(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5 and record.cant_ausen == 0 and record.nuevo_ing == False:

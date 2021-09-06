@@ -106,7 +106,7 @@ class hr_atten(models.Model):
     def horas_traba(self):
         for rec in self:
             if rec.hora_out:
-                rec.horas_trab = (rec.hora_out-rec.hora_in) // 1
+                rec.horas_trab = rec.hora_out-rec.hora_in
             else:
                 rec.horas_trab = False
 

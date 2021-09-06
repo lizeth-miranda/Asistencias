@@ -402,7 +402,7 @@ class Nomina(models.Model):
     suel_Sem_faltas = fields.Monetary(
         compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
 
-        @api.depends('cant_asis', 'cant_ausen')
+    @api.depends('cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
         for rec in self:
             m1 = rec.cant_asis + rec.cant_ausen

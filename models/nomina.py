@@ -402,18 +402,16 @@ class Nomina(models.Model):
     suel_Sem_faltas = fields.Monetary(
         compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
 
-    @api.depends('cost_day', 'cant_asis', 'cant_ausen')
+        @api.depends('cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
         for rec in self:
             m1 = rec.cant_asis + rec.cant_ausen
             if m1 < 6:
-                r1 = rec.extra_cost * rec.cant_ausen
                 rec.suel_Sem_faltas = (
-                    rec.cost_day * rec.cant_asis + rec.cost_day) - r1
-            elif m1 == 6:
-                r1 = rec.extra_cost * rec.cant_ausen
+                    rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
+            else:
                 rec.suel_Sem_faltas = (
-                    rec.cost_day * rec.cant_asis) - r1
+                    rec.cost_day * rec.cant_asis) - (rec.extra_cost * rec.cant_ausen)
 
             # if rec.cant_asis >= 4 and rec.cant_ausen > 0 or rec.cant_asis == 5 and rec.cant_ausen == 0:
             #     r1 = rec.extra_cost * rec.cant_ausen

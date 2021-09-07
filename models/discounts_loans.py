@@ -182,7 +182,7 @@ class DiscountsLoans(models.Model):
                 ('saldo', '>', 0),
             ]).mapped('abono'))
 
-    @api.depends('type_discount')
+    @api.depends('total')
     def deposito_false(self):
         for rec in self:
             if rec.total == rec.saldo and rec.type_discount in ['pre_per', 'Préstamo Personal']:

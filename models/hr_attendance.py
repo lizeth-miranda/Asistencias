@@ -86,6 +86,7 @@ class hr_atten(models.Model):
     tipo_resid = fields.Selection(related="user_id.tipo_resi")
 
     asistencia = fields.Boolean(default=True, string="asistencia",)
+    block_lines = fields.Selection([('done', 'Registrado')], string='Estado',)
 
     @ api.depends('hours')
     def _mitad(self):
@@ -200,6 +201,7 @@ class hr_atten(models.Model):
                     'type_resi': record.tipo_resid,
                     'asis': record.asistencia,
                 })
+            record.block_lines = 'done'
         return {
             'effect': {
                 'fadeout': 'slow',

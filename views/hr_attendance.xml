@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-
     <record id="hr_attendance_view_tree" model="ir.ui.view">
         <field name="name">hr.attendance.view.tree.inherited</field>
         <field name="model">hr.attendance</field>
@@ -10,7 +8,7 @@
             <field name="employee_id" position="after">
                 <field name="employee_id" attrs="{'readonly':[('block_lines', '=', 'done')]}" options="{'no_open': True}" /> 
                 <field name="department" />
-                <field name="account_ids" attrs="{'readonly':[('block_lines', '=', 'done')]}" options="{'no_open': True}" domain="[('userss', '=', uid)]" />
+                <field name="account_ids" options="{'no_open': True}" domain="[('userss', '=', uid)]" attrs="{'readonly':[('block_lines', '=', 'done')]}" />
                 <!--<field name="check_in" invisible="0" />-->
                 <!-- domain="['|',('users', '=', uid),('users2', '=', uid)]" -->
                 <!-- <field name="normal" /> -->
@@ -18,8 +16,8 @@
             </field>
             <field name="check_out" position="after">
                 <field name="fecha" attrs="{'readonly':[('block_lines', '=', 'done')]}"/>
-                <field name="hora_in" attrs="{'readonly':[('block_lines', '=', 'done')]}" widget="float_time" />
-                <field name="hora_out" attrs="{'readonly':[('block_lines', '=', 'done')]}" widget="float_time" />
+                <field name="hora_in" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}"/>
+                <field name="hora_out" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}" />
                 <!-- <field name="resta" /> -->
                 <!-- <field name="day" /> -->
                 <!-- <field name="Date" /> -->

@@ -7,17 +7,16 @@ class empl(models.Model):
     _inherit = 'hr.employee'
 
     _sql_constraints = [
-        ('pin_uniq', 'unique (pin)', "EL CODIGO DE EMPLEADO QUE INTENTA REGISTRAR, YA EXISTE!"),
+        ('pin_uniq', 'unique (pin)', "ahhhhh !"),
     ]
-
-    salary = fields.Monetary(
-        string="Salario",
-    )
 
     cod_emp = fields.Char(string="Código",)
     fecha_ingreso = fields.Date(string="Fecha de Ingreso",)
     afiliacion_imss = fields.Char(string="Afiliación IMSS",)
 
+    salario = fields.Monetary(
+        string="Salario",
+    )
     cost_day = fields.Monetary(
         help="sueldo semanal/6", string="Costo/Día", compute="compute_costday",)
 
@@ -93,30 +92,31 @@ class empl(models.Model):
 
     active_CEXB = fields.Boolean(string="Activar Costo Extra + Bono",)
 
-    @api.depends('salary')
+    @api.depends('salario')
     def compute_timecost(self):
         for rec in self:
-            rec.timesheet_cost = (rec.salary/6) / 8
+            rec.timesheet_cost = (rec.salario/6) / 8
 
-    @api.depends('salary')
+    @api.depends('salario')
     def compute_costday(self):
         for rec in self:
-            rec.cost_day = rec.salary/6
+            rec.cost_day = rec.salario/6
 
-    @api.depends('salary')
+    @api.depends('salario')
     def compute_costExtra(self):
         for rec in self:
-            r1 = (rec.salary/6)
+            r1 = (rec.salario/6)
             r2 = r1 / 8
             r3 = r2 * 2
             rec.cost_extra = r3
 
-    @api.depends('salary')
+    @api.depends('salario')
     def compute_costExtra_bono(self):
         for rec in self:
-            r4 = (rec.salary + rec.bono) / 6
+            r4 = (rec.salario + rec.bono) / 6
             r5 = r4 / 8
             r6 = r5 * 2
             rec.cost_extra_bono = r6
+
 
    

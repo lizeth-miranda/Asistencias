@@ -73,7 +73,7 @@ class Nomina(models.Model):
         string="# empleado",
     )
     sueldo_semanal = fields.Monetary(
-        related="employee_id.salary",
+        related="employee_id.salario",
         string="Sueldo Semanal",
         readonly=True,
     )

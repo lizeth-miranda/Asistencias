@@ -447,7 +447,7 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
-            elif record.reg_sem in ['week', 'semanal'] and record.nuevo_ing == True:
+            elif record.reg_sem in ['week', 'semanal'] and record.cant_asis < 5 and record.cant_ausen == 0:
                 record.sum_perc_notCarga = (record.suel_nuevo_ingreso + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)

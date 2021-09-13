@@ -1,33 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <record id="hr_employee_view_form" model="ir.ui.view">
-        <field name="name">hr.empoyee.view.form.inherited</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_form" />
-        <field name="arch" type="xml">
-
-            <field name="mobile_phone" position="before">
-                <field name="fecha_nacimiento" />
-            </field>
-            <field name="work_location" position="after">
-                <field name="empresa" />
-            </field>
-            <field name="parent_id" position="after">
-                <field name="cod_emp" invisible='1' />
-                <field name="pin" string="Código Empleado" />
-                <field name="fecha_ingreso" />
-                <field name="afiliacion_imss" />
-            </field>
-            <notebook>
-                <page string=" Horas Laborales y Costos">
-                    <group>
-                        <group string="Costos">
-                            <field name="salario" widget="monetary" />
-                            <field name="cost_day" widget="monetary" />
-                            <field name="timesheet_cost" />
-                            <field name="cost_extra" />
-                            <field name="cost_extra_bono" />
-                            <field name=<?xml version="1.0" encoding="utf-8"?>
+?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="hr_employee_view_form" model="ir.ui.view">
         <field name="name">hr.empoyee.view.form.inherited</field>

@@ -22,7 +22,7 @@
                 <page string=" Horas Laborales y Costos">
                     <group>
                         <group string="Costos">
-                            <field name="salary" widget="monetary" />
+                            <field name="salario" widget="monetary" />
                             <field name="cost_day" widget="monetary" />
                             <field name="timesheet_cost" />
                             <field name="cost_extra" />

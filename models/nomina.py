@@ -150,7 +150,7 @@ class Nomina(models.Model):
     leavee = fields.Boolean(string="Falta",)
     fecha_ing = fields.Date(related="employee_id.fecha_ingreso",)
     nuevo_ing = fields.Boolean(
-        string="Nuevo Ingreso",)
+        string="Nuevo Ingreso,Descuentos",)
     # cuentas bancarias
     account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)
@@ -447,7 +447,7 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
-            elif record.reg_sem in ['week', 'semanal'] and record.cant_asis < 5 and record.cant_ausen == 0:
+            elif record.reg_sem in ['week', 'semanal'] and record.nuevo_ing == True:
                 record.sum_perc_notCarga = (record.suel_nuevo_ingreso + record.viat + record.pasa + record.bono +
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)

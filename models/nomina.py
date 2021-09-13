@@ -405,13 +405,14 @@ class Nomina(models.Model):
     @api.depends('cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
         for rec in self:
-            m1 = rec.cant_asis + rec.cant_ausen
-            if m1 < 6:
-                rec.suel_Sem_faltas = (
-                    rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
-            else:
-                rec.suel_Sem_faltas = (
+            rec.suel_Sem_faltas = (
                     rec.cost_day * rec.cant_asis) - (rec.extra_cost * rec.cant_ausen)
+            #m1 = rec.cant_asis + rec.cant_ausen
+            #if m1 < 6:
+                #rec.suel_Sem_faltas = (
+                    #rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
+            #else:
+                
 
             # if rec.cant_asis >= 4 and rec.cant_ausen > 0 or rec.cant_asis == 5 and rec.cant_ausen == 0:
             #     r1 = rec.extra_cost * rec.cant_ausen

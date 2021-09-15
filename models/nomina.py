@@ -377,6 +377,10 @@ class Nomina(models.Model):
                              string="Cantidad de Asistencias",)
     cant_reg_Sem = fields.Float(compute="compute_cant_reg_Sem",
                                 string="Cantidad de rgistri",)
+    suel_nuevo_ingreso = fields.Monetary(
+        compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
+    suel_Sem_faltas = fields.Monetary(
+        compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
 
     @api.depends('start_date', 'end_date')
     def compute_cant_ausen(self):
@@ -399,34 +403,17 @@ class Nomina(models.Model):
                 ('asis', '=', True),
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ])
-    suel_Sem_faltas = fields.Monetary(
-        compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
+    
 
     @api.depends('cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
         for rec in self:
-            rec.suel_Sem_faltas = (
+            if rec.inci == "INCAPACIDAD" or rec.cant_asis >= 5:
+                rec.suel_Sem_faltas = (
                     rec.cost_day * rec.cant_asis) - (rec.extra_cost * rec.cant_ausen)
-            #m1 = rec.cant_asis + rec.cant_ausen
-            #if m1 < 6:
-                #rec.suel_Sem_faltas = (
-                    #rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
-            #else:
-                
-
-            # if rec.cant_asis >= 4 and rec.cant_ausen > 0 or rec.cant_asis == 5 and rec.cant_ausen == 0:
-            #     r1 = rec.extra_cost * rec.cant_ausen
-            #     rec.suel_Sem_faltas = (
-            #         rec.cost_day * rec.cant_asis) - r1
-            # else:
-            #     r1 = rec.extra_cost * rec.cant_ausen
-            #     rec.suel_Sem_faltas = (
-            #         rec.cost_day * rec.cant_asis + rec.cost_day) - r1
-
-   
-
-    suel_nuevo_ingreso = fields.Monetary(
-        compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
+            else:
+                rec.suel_Sem_faltas = (
+                    rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
 
     @api.depends('cost_day', 'cant_asis')
     def compute_suel_nuevo_ingreso(self):

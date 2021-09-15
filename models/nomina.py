@@ -408,13 +408,20 @@ class Nomina(models.Model):
     @api.depends('cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
         for rec in self:
-            if rec.inci == "INCAPACIDAD" or rec.cant_asis >= 5:
+            busqueda = self.env['nomina.line'].search_count([
+                ('fechaA', '>=', rec.start_date),
+                ('fechaA', '<=', rec.end_date),
+                ('employee_id', '=', rec.employee_id.id),
+                ('inci', '=', "INCAPACIDAD"),
+            ])
+
+            if busqueda > 1 or rec.cant_asis >= 5:
                 rec.suel_Sem_faltas = (
                     rec.cost_day * rec.cant_asis) - (rec.extra_cost * rec.cant_ausen)
             else:
                 rec.suel_Sem_faltas = (
                     rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
-
+                
     @api.depends('cost_day', 'cant_asis')
     def compute_suel_nuevo_ingreso(self):
         for rec in self:

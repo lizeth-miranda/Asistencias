@@ -18,9 +18,10 @@ class hr_atten(models.Model):
     #     related="employee_id.department_id",
     #     string="Puesto",
     # )
-    #check_out = fields.Datetime(string="Check Out", default=fields.Datetime.now,)
+    check_out = fields.Datetime(string="Check Out", default=fields.Datetime.now,)
     fecha = fields.Date(string="Fecha",
-                        required=True, readonly=False, default=fields.Date.today)
+                        required=True, readonly=False,)
+    #default=fields.Date.today
     hora_in = fields.Float(string="Entrada",)
     hora_out = fields.Float(string="Salida",)
 

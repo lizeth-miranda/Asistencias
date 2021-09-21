@@ -30,8 +30,8 @@ class Nomina(models.Model):
     fechaA = fields.Date(string="Fecha Asistencia",
                          required=True, default=fields.Date.today, readonly=True,)
 
-    check_in = fields.Float(string="Entrada",)
-    check_out = fields.Float(string="Salida",)
+    check_in = fields.Datetime(string="Entrada",)
+    check_out = fields.Datetime(string="Salida",)
 
     worked_hours = fields.Float(
         help="Horales laborales + horas extras",
@@ -258,6 +258,7 @@ class Nomina(models.Model):
     asis = fields.Boolean(string="Asistencia",)
     active_CEXB2 = fields.Boolean(
         string="Costo Extra + Bono Activo", related="employee_id.active_CEXB",)
+    test_date = fields.Date(string="Date test",)
 
     @api.depends('start_date', 'end_date')
     def compute_sumHE(self):
@@ -298,7 +299,8 @@ class Nomina(models.Model):
     def _compute_worked_hours(self):
         for rec in self:
             if rec.check_out:
-                rec.worked_hours = rec.check_out-rec.check_in
+                delta = rec.check_out-rec.check_in
+                rec.worked_hours = delta.total_seconds() / 3600.0
             else:
                 rec.worked_hours = False
 
@@ -377,10 +379,6 @@ class Nomina(models.Model):
                              string="Cantidad de Asistencias",)
     cant_reg_Sem = fields.Float(compute="compute_cant_reg_Sem",
                                 string="Cantidad de rgistri",)
-    suel_nuevo_ingreso = fields.Monetary(
-        compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
-    suel_Sem_faltas = fields.Monetary(
-        compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
 
     @api.depends('start_date', 'end_date')
     def compute_cant_ausen(self):
@@ -403,7 +401,8 @@ class Nomina(models.Model):
                 ('asis', '=', True),
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ])
-    
+    suel_Sem_faltas = fields.Monetary(
+        compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
 
     @api.depends('cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
@@ -421,7 +420,11 @@ class Nomina(models.Model):
             else:
                 rec.suel_Sem_faltas = (
                     rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
-                
+
+
+    suel_nuevo_ingreso = fields.Monetary(
+        compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
+
     @api.depends('cost_day', 'cant_asis')
     def compute_suel_nuevo_ingreso(self):
         for rec in self:
@@ -489,6 +492,11 @@ class Nomina(models.Model):
                 })
         return {
             'effect': {
+                'fadeout': 'slow',
+                'message': 'Registro Exitoso',
+                'type': 'rainbow_man',
+            }
+        }
                 'fadeout': 'slow',
                 'message': 'Registro Exitoso',
                 'type': 'rainbow_man',

@@ -497,8 +497,33 @@ class Nomina(models.Model):
                 'type': 'rainbow_man',
             }
         }
-                'fadeout': 'slow',
-                'message': 'Registro Exitoso',
-                'type': 'rainbow_man',
-            }
-        }
+    
+    @api.depends('empĺoyee_id')
+    def cron_check_employees(self):
+
+        for record in self:
+            employeecount = record.env['nomina.line'].search([
+                # ('employee_id', '=', record.employee_id.id),
+                ('fechaA', '>=', record.start_date),
+                ('fechaA', '<=', record.end_date),
+                ('reg_sem', 'in', ['week', 'semanal']),
+            ]).mapped('employee_id.name')
+        print(employeecount)
+
+        for record in self:
+            employeecount2 = self.env['hr.employee'].search([
+                ('empresa', 'in', ['enterprise2', 'DEMSA']),
+                ('active', '=', True),
+            ]).mapped('name')
+            print(employeecount2)
+
+        resta = set(employeecount2) - set(employeecount)
+        print(resta)
+
+        if resta:
+            raise ValidationError(_("Registros de nómina faltantes para: %(resta)s") % {
+                'resta': resta,
+            })
+        else:
+            raise ValidationError(_("Todo esta correcto"))
+               

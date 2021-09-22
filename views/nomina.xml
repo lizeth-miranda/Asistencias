@@ -103,7 +103,7 @@
                         <page string=" Resumen Costo MO">
                             <group>
                                 <group string="Datos de Asistencia">
-                                    <field name="fechaA" />
+                                    <!--<field name="fechaA" />-->
                                     <!-- <field name="Date_nom" /> -->
                                     <field name="check_in" />
                                     <field name="check_out" />

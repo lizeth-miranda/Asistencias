@@ -10,7 +10,6 @@ class empl(models.Model):
         ('pin_uniq', 'unique (pin)', "ahhhhh !"),
     ]
 
-    cod_emp = fields.Char(string="Código",)
     fecha_ingreso = fields.Date(string="Fecha de Ingreso",)
     afiliacion_imss = fields.Char(string="Afiliación IMSS",)
 

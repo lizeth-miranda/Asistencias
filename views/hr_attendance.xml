@@ -13,12 +13,7 @@
             </field>
             <field name="check_out" position="after">
                 <field name="fecha" readonly="1" />
-                <!-- <field name="hora_in" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}" invisible="1" />
-                <field name="hora_out" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}" invisible="1" /> -->
             </field>
-            <!-- <field name="hours" position="after">
-                <field name="horas_traba" widget="float_time" />
-            </field> -->
             <field name="worked_hours" position="after">
                 <!-- <field name="total" /> -->
                 <!-- <field name="mitad" /> -->

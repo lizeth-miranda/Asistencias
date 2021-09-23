@@ -16,7 +16,7 @@ class hr_atten(models.Model):
                         required=True, readonly=False, default=fields.Date.today)
 
     codigo_empleado = fields.Char(
-        related="employee_id.cod_emp",
+        related="employee_id.pin",
         string="Código empleado",
     )
 

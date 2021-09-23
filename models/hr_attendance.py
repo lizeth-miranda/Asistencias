@@ -4,6 +4,7 @@ from odoo import api, fields, models, exceptions, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError, UserError
 
+
 class hr_atten(models.Model):
     _inherit = 'hr.attendance'
 
@@ -19,16 +20,16 @@ class hr_atten(models.Model):
     #     default=fields.Datetime.now,)
     # check_out = fields.Datetime(
     #     string="Check Out", default=fields.Datetime.now,)
-    fecha = fields.Date(string="Fecha",
+    fecha = fields.Date(string="Fecha Registro",
                         required=True, readonly=False, default=fields.Date.today)
-    hora_in = fields.Float(string="Entrada",)
-    hora_out = fields.Float(string="Salida",)
+    # hora_in = fields.Float(string="Entrada",)
+    # hora_out = fields.Float(string="Salida",)
 
     codigo_empleado = fields.Char(
         related="employee_id.cod_emp",
         string="Código empleado",
     )
-    
+
     currency_id = fields.Many2one(
         related='employee_id.currency_id',
     )
@@ -43,9 +44,9 @@ class hr_atten(models.Model):
         store=True,
     )
 
-    dia = fields.Selection(
-        related="employee_id.resource_calendar_id.attendance_ids.dayofweek",
-    )
+    # dia = fields.Selection(
+    #     related="employee_id.resource_calendar_id.attendance_ids.dayofweek",
+    # )
     hours = fields.Float(
         related="employee_id.horas_lab",
         string="Horas Laborales",
@@ -64,13 +65,17 @@ class hr_atten(models.Model):
     normal = fields.Boolean(
         related="employee_id.normal"
     )
-    
+    # mitad = fields.Float(
+    #     compute="_mitad"
+    # )
     total_hours = fields.Float(
         compute='_total_hours',
         # store=True,
         string="Horas Totales"
     )
 
+    # horas_trab = fields.Float(
+    #     string="Horas Trabajadas", compute="horas_traba",)
 
     comen = fields.Char(string="Comentarios",)
 
@@ -82,12 +87,28 @@ class hr_atten(models.Model):
 
     block_lines = fields.Selection([('done', 'Registrado')], string='Estado', )
 
-  
+    # @ api.depends('hours')
+    # def _mitad(self):
+    #     for record in self:
+    #         if record.day == 5:
+    #             record.mitad = record.hours_sat/2
+    #         else:
+    #             record.mitad = record.hours / 2
+
     @ api.depends('fecha')
     def _day(self):
         for record in self:
             record.day = record.fecha.weekday()
 
+    # suma los valores de un campo de todos sus registros
+
+    # @api.depends('hora_in', 'hora_out')
+    # def horas_traba(self):
+    #     for rec in self:
+    #         if rec.hora_out:
+    #             rec.horas_trab = (rec.hora_out-rec.hora_in) // 1
+    #         else:
+    #             rec.horas_trab = False
 
     @ api.depends('fecha')
     def _total_hours(self):
@@ -146,6 +167,10 @@ class hr_atten(models.Model):
                     'us_id': record.user_id.name,
                     'type_resi': record.tipo_resid,
                     'asis': record.asistencia,
+                    # 'total_extra': record.total_extra,
+                    # 'cost_total': record.cost_total,
+                    # 'total_inci': record.total_inci,
+
                 })
             record.block_lines = 'done'
         return {

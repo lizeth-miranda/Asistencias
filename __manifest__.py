@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.2',
+    'version': '13.3',
     'author': 'Demsa',
     'website': '',
     'depends': [
         'hr',
+        'hr_expense',
         'account',
         'account_accountant',
         'hr_attendance',
@@ -13,7 +14,6 @@
         'hr_holidays',
         'sale_management',
         'purchase',
-        # 'nomina.line'
     ],
     'data': [
         # security

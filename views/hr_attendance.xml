@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-
     <record id="hr_attendance_view_tree" model="ir.ui.view">
         <field name="name">hr.attendance.view.tree.inherited</field>
         <field name="model">hr.attendance</field>
@@ -14,9 +12,9 @@
                 <field name="currency_id" invisible="1" />
             </field>
             <field name="check_out" position="after">
-                <field name="fecha" attrs="{'readonly':[('block_lines', '=', 'done')]}" />
-                <field name="hora_in" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}" invisible="1" />
-                <field name="hora_out" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}" invisible="1" />
+                <field name="fecha" readonly="1" />
+                <!-- <field name="hora_in" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}" invisible="1" />
+                <field name="hora_out" widget="float_time" attrs="{'readonly':[('block_lines', '=', 'done')]}" invisible="1" /> -->
             </field>
             <!-- <field name="hours" position="after">
                 <field name="horas_traba" widget="float_time" />

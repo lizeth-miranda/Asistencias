@@ -12,18 +12,8 @@ class hr_atten(models.Model):
         comodel_name='account.analytic.account',
         string="Proyecto",
     )
-    # puesto_trabajo = fields.Many2one(
-    #     related="employee_id.department_id",
-    #     string="Puesto",
-    # )
-    # check_in = fields.Datetime(
-    #     default=fields.Datetime.now,)
-    # check_out = fields.Datetime(
-    #     string="Check Out", default=fields.Datetime.now,)
     fecha = fields.Date(string="Fecha Registro",
                         required=True, readonly=False, default=fields.Date.today)
-    # hora_in = fields.Float(string="Entrada",)
-    # hora_out = fields.Float(string="Salida",)
 
     codigo_empleado = fields.Char(
         related="employee_id.cod_emp",
@@ -65,18 +55,11 @@ class hr_atten(models.Model):
     normal = fields.Boolean(
         related="employee_id.normal"
     )
-    # mitad = fields.Float(
-    #     compute="_mitad"
-    # )
     total_hours = fields.Float(
         compute='_total_hours',
         # store=True,
         string="Horas Totales"
     )
-
-    # horas_trab = fields.Float(
-    #     string="Horas Trabajadas", compute="horas_traba",)
-
     comen = fields.Char(string="Comentarios",)
 
     user_id = fields.Many2one('res.users', string='Residente',
@@ -87,28 +70,12 @@ class hr_atten(models.Model):
 
     block_lines = fields.Selection([('done', 'Registrado')], string='Estado', )
 
-    # @ api.depends('hours')
-    # def _mitad(self):
-    #     for record in self:
-    #         if record.day == 5:
-    #             record.mitad = record.hours_sat/2
-    #         else:
-    #             record.mitad = record.hours / 2
 
     @ api.depends('fecha')
     def _day(self):
         for record in self:
             record.day = record.fecha.weekday()
 
-    # suma los valores de un campo de todos sus registros
-
-    # @api.depends('hora_in', 'hora_out')
-    # def horas_traba(self):
-    #     for rec in self:
-    #         if rec.hora_out:
-    #             rec.horas_trab = (rec.hora_out-rec.hora_in) // 1
-    #         else:
-    #             rec.horas_trab = False
 
     @ api.depends('fecha')
     def _total_hours(self):

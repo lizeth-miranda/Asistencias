@@ -71,8 +71,6 @@ class hr_atten(models.Model):
         string="Horas Totales"
     )
 
-    horas_trab = fields.Float(
-        string="Horas Trabajadas", compute="horas_traba",)
 
     comen = fields.Char(string="Comentarios",)
 

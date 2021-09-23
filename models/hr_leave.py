@@ -24,7 +24,7 @@ class hr_lea(models.Model):
         related="employee_id.department_id.name",
         string="Puesto de Trabajo",
     )
-    num_emp = fields.Char(related="employee_id.cod_emp",)
+    num_emp = fields.Char(related="employee_id.pin",)
 
     codigo_falta = fields.Char(
         related="holiday_status_id.code", string="Código Falta",)

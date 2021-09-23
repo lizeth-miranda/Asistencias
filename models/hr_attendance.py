@@ -64,9 +64,7 @@ class hr_atten(models.Model):
     normal = fields.Boolean(
         related="employee_id.normal"
     )
-    mitad = fields.Float(
-        compute="_mitad"
-    )
+    
     total_hours = fields.Float(
         compute='_total_hours',
         # store=True,

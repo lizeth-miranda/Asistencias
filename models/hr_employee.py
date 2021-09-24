@@ -65,6 +65,12 @@ class empl(models.Model):
         ('enterprise', 'PCA Grupo Prefabricador'),
         ('enterprise2', 'DEMSA'),
     ], string="Empresa", groups="hr.group_hr_user", tracking=True)
+    
+    tipo_emp = fields.Selection([
+        ('admin', 'Administrativo'),
+        ('planta', 'Planta'),
+        ('obra', 'Obra'),
+    ], string="Tipo Empleado", groups="hr.group_hr_user", tracking=True)
 
     discounts_ids = fields.One2many(comodel_name='discount.employee',
                                     inverse_name='employee', groups="hr.group_hr_user", tracking=True)

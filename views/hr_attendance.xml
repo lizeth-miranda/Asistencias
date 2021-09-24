@@ -23,6 +23,7 @@
                 <field name="total_hours" widget="float_time" invisible="0" />
                 <field name="hours_extra" widget="float_time" sum="hours_extra" />
                 <field name="comen" attrs="{'readonly':[('block_lines', '=', 'done')]}" />
+                <field name="tem" optional="hide" />
                 <field name="user_id" optional="hide" options="{'no_open': True}" />
                 <field name="tipo_resid" optional="hide" />
                 <field name="block_lines" readonly="1" optional="hide" />

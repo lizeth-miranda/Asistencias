@@ -26,6 +26,7 @@
                 <field name="tem" optional="hide" />
                 <field name="user_id" optional="hide" options="{'no_open': True}" />
                 <field name="tipo_resid" optional="hide" />
+                <field name="tipo_empl" optional="hide" />
                 <field name="block_lines" readonly="1" optional="hide" />
             </field>
         </field>

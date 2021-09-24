@@ -11,6 +11,7 @@
             </field>
             <field name="work_location" position="after">
                 <field name="empresa" />
+                <field name="tipo_emp" />
             </field>
             <field name="parent_id" position="after">
                 <field name="pin" string="Código Empleado" />

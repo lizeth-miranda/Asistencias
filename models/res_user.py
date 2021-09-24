@@ -13,6 +13,7 @@ class Users(models.Model):
     )
 
     tipo_resi = fields.Selection([
+        ('admin', 'Administrativo'),
         ('planta', 'Planta'),
         ('obra', 'Obra'),
     ], string='Tipo Residente',)

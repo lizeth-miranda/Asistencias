@@ -69,6 +69,7 @@ class hr_atten(models.Model):
     asistencia = fields.Boolean(default=True, string="asistencia",)
 
     block_lines = fields.Selection([('done', 'Registrado')], string='Estado', )
+    tem = fields.Float(string="Temperatura",)
 
 
     @ api.depends('fecha')
@@ -86,7 +87,7 @@ class hr_atten(models.Model):
                 ('fecha', '=', attendance.fecha),
             ]).mapped('worked_hours'))
 
-    @ api.depends('total_hours')
+    @ api.depends('check_out')
     def _hours_extra(self):
         for attendance in self:
             if attendance.day != 5 and attendance.total_hours >= attendance.hours:

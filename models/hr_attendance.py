@@ -65,7 +65,7 @@ class hr_atten(models.Model):
     user_id = fields.Many2one('res.users', string='Residente',
                               required=False, readonly=True, default=lambda self: self.env.user.id)
     tipo_resid = fields.Selection(related="user_id.tipo_resi")
-
+    tipo_empl = fields.Selection(related="employee_id.tipo_emp",)
     asistencia = fields.Boolean(default=True, string="asistencia",)
 
     block_lines = fields.Selection([('done', 'Registrado')], string='Estado', )
@@ -90,18 +90,18 @@ class hr_atten(models.Model):
     @ api.depends('check_out')
     def _hours_extra(self):
         for attendance in self:
-            if attendance.day != 5 and attendance.total_hours >= attendance.hours:
+            if attendance.day != 5 and attendance.total_hours >= attendance.hours and attendance.tipo_empl != 'admin':
                 attendance.hours_extra = (
                     attendance.total_hours-attendance.hours)//1
 
-            elif attendance.day == 5 and attendance.tipo_resid == 'planta':
+            elif attendance.day == 5 and attendance.tipo_resid == 'planta' and attendance.tipo_empl != 'admin':
                 attendance.hours_extra = attendance.total_hours
 
-            elif attendance.day == 5 and attendance.tipo_resid == 'obra':
+            elif attendance.day == 5 and attendance.tipo_resid == 'obra' and attendance.tipo_empl != 'admin':
                 attendance.hours_extra = (
                     attendance.total_hours-attendance.hours_sat) // 1
 
-            elif attendance.day == 6:
+            elif attendance.day == 6 and attendance.tipo_empl != 'admin':
                 attendance.hours_extra = attendance.total_hours
 
 

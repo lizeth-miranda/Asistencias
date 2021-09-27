@@ -118,13 +118,13 @@ class hr_atten(models.Model):
 
     # create a new line, as none existed before
 
-    @ api.constrains('fechaA')
+    @ api.constrains('Date')
     def nomina_line(self):
         for record in self:
             nomina_line = self.env['nomina.line'].search_count([
                 ('employee_id.id', '=', record.employee_id.id),
                 ('project', '=', record.account_ids.id),
-                ('fechaA', '=', record.fecha),
+                ('fechaA', '=', record.Date),
                 ('check_in', '=', record.check_in),
                 ('check_out', '=', record.check_out),
             ])
@@ -138,7 +138,7 @@ class hr_atten(models.Model):
                     'employee_id': record.employee_id.id,
                     'department': record.department,
                     'project': record.account_ids.id,
-                    'fechaA': record.fecha,
+                    'fechaA': record.Date,
                     'check_in': record.check_in,
                     'check_out': record.check_out,
                     'worked_hours': record.worked_hours,

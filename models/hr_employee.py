@@ -7,37 +7,37 @@ class empl(models.Model):
     _inherit = 'hr.employee'
 
     _sql_constraints = [
-        ('pin_uniq', 'unique (pin)', "ahhhhh !"),
+        ('pin_uniq', 'unique (pin)', "EL CÓDIGO DE EMPLEADO QUE SE INTENTA ASIGNAR YA EXISTE !"),
     ]
 
     fecha_ingreso = fields.Date(
-        string="Fecha de Ingreso", groups="hr.group_hr_user", tracking=True)
+        string="Fecha de Ingreso", groups="hr.group_hr_user", tracking=True,)
     afiliacion_imss = fields.Char(
-        string="Afiliación IMSS", groups="hr.group_hr_user", tracking=True)
+        string="Afiliación IMSS", groups="hr.group_hr_user", tracking=True,)
 
     salario = fields.Monetary(
-        string="Salario", groups="hr.group_hr_user", tracking=True)
+        string="Salario", groups="hr.group_hr_user", tracking=True,)
     cost_day = fields.Monetary(
-        help="sueldo semanal/6", string="Costo/Día", compute="compute_costday", groups="hr.group_hr_user", tracking=True)
+        help="sueldo semanal/6", string="Costo/Día", compute="compute_costday", groups="hr.group_hr_user", tracking=True,)
 
     costo_dayCS = fields.Monetary(
-        string="Carga Social por Día", groups="hr.group_hr_user", tracking=True
+        string="Carga Social por Día", groups="hr.group_hr_user", tracking=True,
     )
 
     timesheet_cost = fields.Monetary(
-        'Costo por Hora', compute="compute_timecost", help="(sueldo/ 6) /8", groups="hr.group_hr_user", tracking=True)
+        'Costo por Hora', compute="compute_timecost", help="(sueldo/ 6) /8", groups="hr.group_hr_user", tracking=True,)
     cost_extra = fields.Monetary(help="(sueldo/6) /8 *2", string="Costo Extra",
-                                 compute="compute_costExtra", groups="hr.group_hr_user", tracking=True)
+                                 compute="compute_costExtra", groups="hr.group_hr_user", tracking=True,)
     cost_extra_bono = fields.Monetary(help="(sueldo + bono fijo/6) /8 *2)", string="Costo Extra + Bono",
-                                      compute="compute_costExtra_bono", groups="hr.group_hr_user", tracking=True)
+                                      compute="compute_costExtra_bono", groups="hr.group_hr_user", tracking=True,)
     cost_default = fields.Monetary(
-        help="cost per absence", string="Costo/Falta", groups="hr.group_hr_user", tracking=True)
+        help="cost per absence", string="Costo/Falta", groups="hr.group_hr_user", tracking=True,)
     cuenta = fields.Char('Cuenta De Depósito',
-                         groups="hr.group_hr_user", tracking=True)
+                         groups="hr.group_hr_user", tracking=True,)
     clabe = fields.Char('CLABE Interbancaria',
-                        groups="hr.group_hr_user", tracking=True)
+                        groups="hr.group_hr_user", tracking=True,)
     banco = fields.Many2one(comodel_name="res.bank", string="Banco",
-                            groups="hr.group_hr_user", tracking=True)
+                            groups="hr.group_hr_user", tracking=True,)
     currency_id = fields.Many2one(
         comodel_name='res.currency',
     )
@@ -46,34 +46,34 @@ class empl(models.Model):
     #     related="last_attendance_id.total_hours"
     # )
     horas_lab = fields.Float(string="Horas laborales",
-                             help="Horales Laborales Control Obra", groups="hr.group_hr_user", tracking=True)
+                             help="Horales Laborales Control Obra", groups="hr.group_hr_user", tracking=True,)
     horas_lab_in = fields.Float(
-        string="Horas Laborales CI", help="Horales Laborales Control Nómina", groups="hr.group_hr_user", tracking=True)
+        string="Horas Laborales CI", help="Horales Laborales Control Nómina", groups="hr.group_hr_user", tracking=True,)
     hours = fields.Float(string="Horas Sábado",
-                         groups="hr.group_hr_user", tracking=True)
+                         groups="hr.group_hr_user", tracking=True,)
     normal = fields.Boolean(String="Horario normal",
-                            groups="hr.group_hr_user", tracking=True)
+                            groups="hr.group_hr_user", tracking=True,)
 
     credito_info = fields.Monetary(
-        string="Crédito Infonavit", groups="hr.group_hr_user", tracking=True)
+        string="Crédito Infonavit", groups="hr.group_hr_user", tracking=True,)
     credito_fona = fields.Monetary(
-        string="Crédito Fonacot", groups="hr.group_hr_user", tracking=True)
+        string="Crédito Fonacot", groups="hr.group_hr_user", tracking=True,)
     bono = fields.Monetary(
-        string="Bono Fijo", groups="hr.group_hr_user", tracking=True)
+        string="Bono Fijo", groups="hr.group_hr_user", tracking=True,)
 
     empresa = fields.Selection([
         ('enterprise', 'PCA Grupo Prefabricador'),
         ('enterprise2', 'DEMSA'),
-    ], string="Empresa", groups="hr.group_hr_user", tracking=True)
+    ], string="Empresa", groups="hr.group_hr_user", tracking=True,)
     
     tipo_emp = fields.Selection([
         ('admin', 'Administrativo'),
         ('planta', 'Planta'),
         ('obra', 'Obra'),
-    ], string="Tipo Empleado", groups="hr.group_hr_user", tracking=True)
+    ], string="Tipo Empleado", groups="hr.group_hr_user", tracking=True,)
 
     discounts_ids = fields.One2many(comodel_name='discount.employee',
-                                    inverse_name='employee', groups="hr.group_hr_user", tracking=True)
+                                    inverse_name='employee', groups="hr.group_hr_user", tracking=True,)
 
     pres_perso = fields.Monetary(
         string="Préstamo Personal", related="discounts_ids.sum_abono", )
@@ -87,12 +87,12 @@ class empl(models.Model):
     depo = fields.Monetary(related="discounts_ids.deposito",)
 
     fecha_nacimiento = fields.Date(
-        string="Fecha de Nacimiento", groups="hr.group_hr_user", tracking=True)
+        string="Fecha de Nacimiento", groups="hr.group_hr_user", tracking=True,)
 
     active_CEXB = fields.Boolean(
-        string="Activar Costo Extra + Bono", groups="hr.group_hr_user", tracking=True)
+        string="Activar Costo Extra + Bono", groups="hr.group_hr_user", tracking=True,)
     
-    user_resp = fields.Many2many('res.users', string='Usuario Responsable',)
+    user_resp = fields.Many2many('res.users', string='Usuario Responsable', groups="hr.group_hr_user", tracking=True,)
 
     @api.depends('salario')
     def compute_timecost(self):

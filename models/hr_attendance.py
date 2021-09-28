@@ -118,7 +118,7 @@ class hr_atten(models.Model):
 
     # create a new line, as none existed before
 
-    @ api.constrains('Date')
+    #@ api.constrains('Date')
     def nomina_line(self):
         for record in self:
             nomina_line = self.env['nomina.line'].search_count([

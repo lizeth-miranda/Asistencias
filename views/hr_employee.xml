@@ -18,6 +18,9 @@
                 <field name="fecha_ingreso" />
                 <field name="afiliacion_imss" />
             </field>
+            <field name="address_id" position="after">
+                <field name="user_resp" />
+            </field>
             <notebook>
                 <page string=" Horas Laborales y Costos">
                     <group>
@@ -53,6 +56,16 @@
                     </group>
                 </page>
             </notebook>
+        </field>
+    </record>
+    <record id="hr_employee_view_tree" model="ir.ui.view">
+        <field name="name">hr.empoyee.view.tree.inherited</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree" />
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="user_resp" optional="hide" />
+            </field>
         </field>
     </record>
 </odoo>

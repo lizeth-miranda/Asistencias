@@ -31,6 +31,15 @@
                 <field name="tipo_empl" optional="hide" />
                 <field name="block_lines" readonly="1" optional="hide" />
             </field>
+            <field name="employee_id" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="check_in" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="check_out" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
         </field>
     </record>
 

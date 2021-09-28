@@ -91,6 +91,8 @@ class empl(models.Model):
 
     active_CEXB = fields.Boolean(
         string="Activar Costo Extra + Bono", groups="hr.group_hr_user", tracking=True)
+    
+    user_resp = fields.Many2many('res.users', string='Usuario Responsable',)
 
     @api.depends('salario')
     def compute_timecost(self):

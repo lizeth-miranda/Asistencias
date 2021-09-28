@@ -42,8 +42,8 @@
         'views/discounts_loans.xml',
         'views/purchase_requisition.xml',
         'views/group_acuerdoCompra.xml',
-        'views/group_asistecias_planta.xml',
         'views/view_asistencias.xml',
+        'views/group_asistecias_planta.xml',
         # 'views/account_move.xml',
 
 

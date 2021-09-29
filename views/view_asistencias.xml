@@ -8,13 +8,13 @@
         <field name="groups_id" eval="[(6,0,[ref('Asistencias.asistencias_planta_group')])]" />
         <field name="arch" type="xml">
             <field name="employee_id" position="attributes">
-                <attribute name="readonly">True</attribute>
+                <attribute name="readonly">1</attribute>
             </field>
             <field name="check_in" position="attributes">
-                <attribute name="readonly">True</attribute>
+                <attribute name="readonly">1</attribute>
             </field>
             <field name="check_out" position="attributes">
-                <attribute name="readonly">True</attribute>
+                <attribute name="readonly">1</attribute>
             </field>
         </field>
     </record>

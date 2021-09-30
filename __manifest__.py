@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.4',
+    'version': '13.5',
     'author': 'Demsa',
     'website': '',
     'depends': [
@@ -44,6 +44,7 @@
         'views/group_acuerdoCompra.xml',
         'views/group_asistecias_planta.xml',
         'views/view_asistencias.xml',
+        'views/group_registrarPrenomina.xml',
         # 'views/account_move.xml',
 
 

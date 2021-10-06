@@ -105,8 +105,8 @@
                                 <group string="Datos de Asistencia">
                                     <!--<field name="fechaA" />-->
                                     <!-- <field name="Date_nom" /> -->
-                                    <field name="check_in" />
-                                    <field name="check_out" />
+                                    <field name="check_in" readonly="1"/>
+                                    <field name="check_out" readonly="1"/>
                                     <field name="inci" readonly="1" />
                                     <field name="worked_hours" widget="float_time" />
                                     <field name="hours_extra" widget="float_time" />

@@ -45,6 +45,7 @@
                 <field name="sum_horas_extras" widget="float_time" optional="show" sum="Hrs Extras Semanal" />
                 <!-- <field name="sum_horas_extras_kiosko" widget="float_time" optional="show" sum="Hrs Extras Semanal" /> -->
                 <field name="total_extra" sum="Total extra" optional="hide" />
+                <field name="suma_costoMO" optional="hide" />
                 <!-- <field name="total_ext_sem" optional="show" sum="Total Extra" /> -->
                 <field name="cost_total" sum="Costo Total" optional="hide" />
                 <field name="sueldo_semanal" optional="hide" />
@@ -181,11 +182,11 @@
                                     <field name="horas_extras_sem" />
                                     <field name="sum_perc_notCarga" />
                                     <field name="suma_dedu" />
+                                    <field name="suma_costoMO" />
                                     <field name="cant_asis" />
                                     <field name="cant_ausen" />
                                     <field name="sueldo_pagar" />
                                 </group>
-                                <!-- <field name="suma_costoMO" /> -->
                             </group>
                         </page>
                     </notebook>

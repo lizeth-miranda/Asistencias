@@ -252,8 +252,8 @@ class Nomina(models.Model):
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)
 
-    # suma_costoMO = fields.Monetary(
-    #     compute="compute_sumaMO", string="Costo MO Semanal", store=True,)
+    suma_costoMO = fields.Monetary(
+        compute="compute_sumaMO", string="Costo MO Semanal", store=True,)
 
     nomina = fields.Boolean(default=True, string="nomina",)
     asis = fields.Boolean(string="Asistencia",)
@@ -271,15 +271,15 @@ class Nomina(models.Model):
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('hours_extra'))
 
-    # @api.depends('start_date', 'end_date')
-    # def compute_sumaMO(self):
-    #     for record in self:
-    #         record.suma_costoMO = sum(self.env['nomina.line'].search([
-    #             ('fechaA', '>=', record.start_date),
-    #             ('fechaA', '<=', record.end_date),
-    #             #('employee_id', '=', record.employee_id.id),
-    #             ('project', '=', record.project.id),
-    #         ]).mapped('suma_percep'))
+    @api.depends('start_date', 'end_date')
+    def compute_sumaMO(self):
+        for record in self:
+            record.suma_costoMO = sum(self.env['nomina.line'].search([
+                ('fechaA', '>=', record.start_date),
+                ('fechaA', '<=', record.end_date),
+                ('employee_id', '=', record.employee_id.id),
+                ('project', '=', record.project.id),
+            ]).mapped('suma_percep'))
 
     @api.depends('start_date', 'end_date')
     def hrs_ex_sem(self):
@@ -487,9 +487,11 @@ class Nomina(models.Model):
                     'date': record.fechaA,
                     'name': record.employee_id.name,
                     'nom': record.nomina,
+                    'fecha_ini': record.start_date,
+                    'fecha_fin': record.end_date,
                     'job_pos': record.department,
                     'account_id': record.project.id,
-                    'amount': record.suma_percep,
+                    'amount': record.suma_costoMO,
                 })
         return {
             'effect': {

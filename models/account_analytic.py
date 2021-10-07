@@ -20,7 +20,5 @@ class Cuenta(models.Model):
     )
     nom = fields.Boolean(string="nomina",)
     
-    fecha_ini = fields.Date(string="Fecha Inicial",)
-    fecha_fin = fields.Date(string="Fecha Final",)
-
+  
 

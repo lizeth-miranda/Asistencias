@@ -93,7 +93,7 @@ class empl(models.Model):
         string="Activar Costo Extra + Bono", groups="hr.group_hr_user", tracking=True,)
     
     user_resp = fields.Many2many('res.users', string='Usuario Responsable', groups="hr.group_hr_user", tracking=True,)
-    codigo = fields.Char(string="Codigo Nuevo",)
+    codigo = fields.Char(string="Codigo Nuevo", groups="hr.group_hr_user", tracking=True)
 
     @api.depends('salario')
     def compute_timecost(self):

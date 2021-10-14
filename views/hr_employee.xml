@@ -14,6 +14,7 @@
                 <field name="tipo_emp" />
             </field>
             <field name="parent_id" position="after">
+                <field name="codigo" />
                 <field name="pin" string="Código Empleado" />
                 <field name="fecha_ingreso" />
                 <field name="afiliacion_imss" />

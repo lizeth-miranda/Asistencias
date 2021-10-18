@@ -91,14 +91,14 @@ class hr_atten(models.Model):
             # date = fields.Datetime.to_string(fields.Datetime.context_timestamp(
             #     self, fields.Datetime.from_string(dt)))[:10]
             # record.Date = date
-            dt = fields.Date.from_string(self.check_in)
+            dt = fields.Date.from_string(record.check_in)
             record.Date = dt
 
     @ api.depends('check_out')
     def compute_Date_out(self):
         for record in self:
             # if record.check_out:
-            dtt = fields.Date.from_string(self.check_out)
+            dtt = fields.Date.from_string(record.check_out)
             record.Date_out = dtt
 
     @ api.depends('Date')

@@ -17,8 +17,10 @@ class hr_atten(models.Model):
     fecha = fields.Date(string="Fecha Registro",
                         required=True, readonly=False, default=fields.Date.today)
     Date = fields.Date(
-        compute='_Date',
+        compute='compute_Date',
         store=True,)
+    Date_out = fields.Date(
+        compute='compute_Date_out',)
 
     codigo_empleado = fields.Char(
         related="employee_id.pin",
@@ -82,13 +84,22 @@ class hr_atten(models.Model):
     # fecha para agrupar las horas totales de los empleados con la fecha de la
     # asitencia y no la de la fecha registro
 
-    @api.depends('check_in')
-    def _Date(self):
+    @ api.depends('check_in')
+    def compute_Date(self):
         for record in self:
-            dt = record.check_in
-            date = fields.Datetime.to_string(fields.Datetime.context_timestamp(
-                self, fields.Datetime.from_string(dt)))[:10]
-            record.Date = date
+            # dt = record.check_in
+            # date = fields.Datetime.to_string(fields.Datetime.context_timestamp(
+            #     self, fields.Datetime.from_string(dt)))[:10]
+            # record.Date = date
+            dt = fields.Date.from_string(self.check_in)
+            record.Date = dt
+
+    @ api.depends('check_out')
+    def compute_Date_out(self):
+        for record in self:
+            # if record.check_out:
+            dtt = fields.Date.from_string(self.check_out)
+            record.Date_out = dtt
 
     @ api.depends('Date')
     def _total_hours(self):
@@ -115,7 +126,17 @@ class hr_atten(models.Model):
 
             elif attendance.day == 6 and attendance.tipo_empl != 'admin':
                 attendance.hours_extra = attendance.total_hours
-
+              
+    @ api.constrains('check_out')
+    def checks_out(self):
+        for record in self:
+            buscar = self.env['hr.attendance'].search_count([
+                ('employee_id.id', '=', record.employee_id.id),
+                ('Date', '<', record.Date_out),
+            ])
+            if buscar > 0:
+                raise exceptions.ValidationError(
+                    _("LA FECHA DE LA SALIDA DEBE SER IGUAL A LA FECHA DE ENTRADA, FAVOR DE REVISAR SUS DATOS"))
     # create a new line, as none existed before
 
     #@ api.constrains('Date')

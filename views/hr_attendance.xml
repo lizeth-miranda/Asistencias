@@ -13,7 +13,8 @@
             </field>
             <field name="check_out" position="after">
                 <field name="day" invisible="1" />
-                <field name="Date" invisible="1" />
+                <field name="Date" invisible="0" />
+                <field name="Date_out" invisible="0" />
                 <field name="fecha" readonly="1" />
             </field>
             <field name="worked_hours" position="after">

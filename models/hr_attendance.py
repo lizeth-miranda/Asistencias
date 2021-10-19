@@ -118,7 +118,7 @@ class hr_atten(models.Model):
             elif attendance.day == 6 and attendance.tipo_empl != 'admin':
                 attendance.hours_extra = attendance.total_hours
               
-     @api.constrains('check_out')
+    @api.constrains('check_out')
     def checks_out(self):
         for record in self:
             buscar = self.env['hr.attendance'].search_count([

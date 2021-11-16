@@ -27,7 +27,7 @@ class Nomina(models.Model):
         string="Obra",
         readonly=True,
     )
-    fechaA = fields.Date(string="Fecha Asistencia",
+    fechaA = fields.Date(string="Fecha de Registro",
                          required=True, default=fields.Date.today, readonly=True,)
 
     check_in = fields.Datetime(string="Entrada",)

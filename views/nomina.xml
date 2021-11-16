@@ -12,9 +12,9 @@
                 <field name="bank" optional="hide" />
                 <!-- <field name="normal" optional="hide" /> -->
                 <field name="department" />
-                <field name="fechaA" optional="show" />
-                <field name="check_in" optional="hide" />
-                <field name="check_out" optional="hide" />
+                <field name="fechaA" optional="hide" />
+                <field name="check_in" optional="show" />
+                <field name="check_out" optional="show" />
                 <field name="inci" />
                 <field name="project" optional="hide" />
                 <!-- <field name="suel_semanal" optional="show" sum="Sueldo semanal * sem" /> -->

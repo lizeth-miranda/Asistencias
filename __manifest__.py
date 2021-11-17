@@ -46,6 +46,7 @@
         'views/view_asistencias.xml',
         'views/group_registrarPrenomina.xml',
         'views/group_control_obra.xml',
+        'views/group_empleado_usuario.xml',
         # 'views/account_move.xml',
 
 

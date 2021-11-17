@@ -101,7 +101,7 @@ class hr_atten(models.Model):
                 ('Date', '=', attendance.Date),
             ]).mapped('worked_hours'))
 
-    @ api.depends('check_out')
+    @ api.depends('worked_hours')
     def _hours_extra(self):
         for attendance in self:
             if attendance.day != 5 and attendance.total_hours >= attendance.hours and attendance.tipo_empl != 'admin':

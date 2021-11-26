@@ -10,18 +10,14 @@
                 <field name="account" optional="hide" />
                 <field name="cla" optional="hide" />
                 <field name="bank" optional="hide" />
-                <!-- <field name="normal" optional="hide" /> -->
                 <field name="department" />
-                <field name="fechaA" optional="hide" />
-                <field name="check_in" optional="show" />
-                <field name="check_out" optional="show" />
+                <field name="fechaA" optional="show" />
+                <field name="semana" optional="show" />
+                <field name="check_in" optional="hide" />
+                <field name="check_out" optional="hide" />
                 <field name="inci" />
                 <field name="project" optional="hide" />
-                <!-- <field name="suel_semanal" optional="show" sum="Sueldo semanal * sem" /> -->
-                <field name="start_date" optional="show" />
-                <field name="end_date" optional="show" />
                 <field name="worked_hours" widget="float_time" optional="hide" />
-                <!-- <field name="hrs_traba_sem" widget="float_time" sum="Hrs trabajadas semanal" optional="show" /> -->
                 <field name="hours" widget="float_time" optional="hide" />
                 <field name="cost_day" widget="Monetary" optional="hide" />
                 <field name="cost_hour" optional="hide" />
@@ -37,27 +33,20 @@
                 <field name="aguin" optional="hide" />
                 <field name="cre_info" optional="hide" />
                 <field name="fona" optional="hide" />
-                <!-- <field name="abono" optional="hide" /> -->
                 <field name="des_epp" optional="hide" />
                 <field name="otros_desc" optional="hide" />
                 <field name="horas_extras_sem" optional="hide" sum="total Extras Semanal" />
-                <!-- <field name="horas_extras_sem_kiosko" optional="hide" sum="total Extras Semanal" /> -->
-                <field name="sum_horas_extras" widget="float_time" optional="show" sum="Hrs Extras Semanal" />
-                <!-- <field name="sum_horas_extras_kiosko" widget="float_time" optional="show" sum="Hrs Extras Semanal" /> -->
+                <field name="sum_horas_extras" widget="float_time" optional="hide" sum="Hrs Extras Semanal" />
                 <field name="total_extra" sum="Total extra" optional="hide" />
-                <!-- <field name="suma_costoMO" optional="hide" /> -->
-                <!-- <field name="total_ext_sem" optional="show" sum="Total Extra" /> -->
                 <field name="cost_total" sum="Costo Total" optional="hide" />
                 <field name="sueldo_semanal" optional="hide" />
                 <field name="sum_perc_notCarga" sum="Suma Percepciones" optional="show" />
                 <field name="suma_dedu" sum="Suma Deducciones" optional="show" />
                 <field name="sueldo_pagar" sum="sueldo_pagar" optional="show" />
-                <!-- <field name="sueldo_final_sem" optional="show" sum="Sueldo Fin * sem" /> -->
                 <field name="currency_id" invisible="1" />
                 <field name="state" optional="show" />
                 <field name="us_id" optional="hide" />
                 <field name="type_resi" optional="hide" />
-                <!-- <field name="employeecount" optional="show" /> -->
 
             </tree>
         </field>
@@ -83,10 +72,8 @@
                             <field name="empre" invisible="0" />
                             <field name="project" options="{'no_open': True}" />
                             <field name="hrs_lab_in" widget="float_time" />
-                            <!-- <field name="normal" /> -->
                             <field name="hours" widget="float_time" />
                             <field name="hours_sat" widget="float_time" />
-                            <!-- <field name="department" /> -->
                         </group>
                         <group string="costos laborales por día">
                             <field name="costo_daycs" />
@@ -97,22 +84,19 @@
                             <field name="cost_default" />
                             <field name="sueldo_pagar" />
                             <field name="nomina" invisible="0" />
-                            <!-- <field name="sueldo_pagar_kiosko" /> -->
                         </group>
                     </group>
                     <notebook>
                         <page string=" Resumen Costo MO">
                             <group>
                                 <group string="Datos de Asistencia">
-                                    <!--<field name="fechaA" />-->
-                                    <!-- <field name="Date_nom" /> -->
-                                    <field name="check_in" readonly="1"/>
-                                    <field name="check_out" readonly="1"/>
+                                    <field name="fechaA" />
+                                    <field name="check_in" readonly="1" />
+                                    <field name="check_out" readonly="1" />
+                                    <field name="fecha_inci" readonly="1" />
                                     <field name="inci" readonly="1" />
                                     <field name="worked_hours" widget="float_time" />
                                     <field name="hours_extra" widget="float_time" />
-
-
                                 </group>
                                 <group string="Costos por día">
                                     <field name="total_extra" />
@@ -163,31 +147,22 @@
                         </page>
                         <page string="Costos Semanales">
                             <group>
-                                <group>
-                                    <label for="date_begin" string="Rango de Fechas" />
-                                    <div class="ow_row">
-                                        <field name="start_date" widget="daterange" nolabel="1" class="oe_inline" options="{'related_end_date': 'end_date'}" />
-                                        <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow" />
-                                        <field name="end_date" widget="daterange" nolabel="1" class="oe_inline" options="{'related_start_date': 'start_date'}" />
-                                    </div>
-                                    <field name="reg_sem" widget='radio' />
-                                </group>
-                                <group>
-                                    <field name="leavee" invisible="0" />
-                                    <field name="asis" />
-                                    <field name="nuevo_ing" />
-                                    <field name="active_CEXB2" />
-                                </group>
-                                <group>
-                                    <field name="horas_extras_sem" />
-                                    <field name="sum_perc_notCarga" />
-                                    <field name="suma_dedu" />
-                                    <!-- <field name="suma_costoMO" /> -->
-                                    <field name="cant_asis" />
-                                    <field name="cant_ausen" />
-                                    <field name="sueldo_pagar" />
-                                </group>
+                                <field name="reg_sem" />
+                                <field name="semana" />
+                                <field name="leavee" invisible="0" />
+                                <field name="asis" />
+                                <field name="nuevo_ing" />
+                                <field name="active_CEXB2" />
                             </group>
+                            <group>
+                                <field name="horas_extras_sem" />
+                                <field name="sum_perc_notCarga" />
+                                <field name="suma_dedu" />
+                                <field name="cant_asis" />
+                                <field name="cant_ausen" />
+                                <field name="sueldo_pagar" />
+                            </group>
+
                         </page>
                     </notebook>
                 </sheet>

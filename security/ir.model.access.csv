@@ -5,3 +5,4 @@ Employee_manager,employee manager,model_discount_employee,discounts_group,1,1,1,
 loans_manager,loans manager,model_discounts_loans,discounts_group,1,1,1,1
 employee_read_all,employee all,model_discount_employee,,1,0,0,0
 loans_read_all,loans all,model_discounts_loans,,1,0,0,0
+semana_manager,semana manager,model_semanas_nomina,semanas_group,1,1,1,1

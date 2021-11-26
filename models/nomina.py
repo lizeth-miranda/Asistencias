@@ -12,6 +12,10 @@ class Nomina(models.Model):
     active = fields.Boolean(string="Archivado", default=True,)
     us_id = fields.Char(string="Residente",)
     type_resi = fields.Char(string="Tipo",)
+    semana = fields.Char("Numero de Semana",
+                         compute="compute_num_semana", store=True,)
+    semanas_line = fields.One2many(
+        'semanas.nomina', 'semanas_ids', string="Semanas de la Nómina")
     employee_id = fields.Many2one(
         comodel_name='hr.employee',
         string="Trabajador",
@@ -27,8 +31,9 @@ class Nomina(models.Model):
         string="Obra",
         readonly=True,
     )
-    fechaA = fields.Date(string="Fecha de Registro",
+    fechaA = fields.Date(string="Fecha  Asistencia",
                          required=True, default=fields.Date.today, readonly=True,)
+    fecha_inci = fields.Date(string="Fecha de Incidencia",)
 
     check_in = fields.Datetime(string="Entrada",)
     check_out = fields.Datetime(string="Salida",)
@@ -117,6 +122,9 @@ class Nomina(models.Model):
         related="employee_id.normal",
         string="Horario Normal",
     )
+    # mitad = fields.Float(
+    #     compute="_mitad"
+    # )
     hours_sat = fields.Float(
         related="employee_id.hours",
         string="Horas laborales sábados",
@@ -151,7 +159,7 @@ class Nomina(models.Model):
     fecha_ing = fields.Date(related="employee_id.fecha_ingreso",)
     nuevo_ing = fields.Boolean(
         string="Nuevo Ingreso, Descuentos",
-        help="la casilla se marca cuando el sueldo a pagar es por nuevo ingreso u otros casos similares",)
+        help="la casilla se marcacuando el sueldo a pagar es por nuevo ingreso u otros casos similares")
     # cuentas bancarias
     account = fields.Char(related="employee_id.cuenta",
                           string="Cuenta de depósito",)
@@ -236,18 +244,11 @@ class Nomina(models.Model):
     otros = fields.Monetary(string="Otros",)
     # Costo semanal
     reg_sem = fields.Selection([('week', 'Semanal')], string='Tipo Registro', )
-    start_date = fields.Date(string="Fecha Inicial",
-                             )
-    end_date = fields.Date(string="Fecha Final",
-                           )
-    # sueldo_final_sem = fields.Monetary(
-    #     compute='sueldo_pagar_sem', string='Sueldo final', store=True,)
-    # suel_semanal = fields.Monetary(
-    #     compute='sueldo_sem', string='Sueldo Semanal', store=True,)
+
     horas_extras_sem = fields.Monetary(
-        compute='hrs_ex_sem', string='Suma Hrs Extras', store=True,)
+        compute='hrs_ex_sem', string='Suma Costo Hrs Extras', store=True,)
     sum_horas_extras = fields.Float(
-        compute='compute_sumHE', string="total Horas Extras", store=True)
+        compute='compute_sumHE', string="Suma Horas Extras", store=True)
 
     # calcular costo/dia en una falta
     costo_falta = fields.Monetary(compute="compute_costo_falta", store=True,)
@@ -258,44 +259,48 @@ class Nomina(models.Model):
     nomina = fields.Boolean(default=True, string="nomina",)
     asis = fields.Boolean(string="Asistencia",)
     active_CEXB2 = fields.Boolean(
-        string="Costo Extra + Bono Activo", related="employee_id.active_CEXB",)
+        string="Costo Extra + Bono Fijo", related="employee_id.active_CEXB",)
     test_date = fields.Date(string="Date test",)
 
-    @api.depends('start_date', 'end_date')
+    # metodo que suma las horas extras semanales
+    @api.depends('reg_sem')
     def compute_sumHE(self):
         for record in self:
             record.sum_horas_extras = sum(self.env['nomina.line'].search([
-                ('fechaA', '>=', record.start_date),
-                ('fechaA', '<=', record.end_date),
+                ('semana', '=', record.semana),
                 ('employee_id', '=', record.employee_id.id),
-                # ('reg_sem', 'in', ['week', 'semanal'])
+                ('hours_extra', '>', 0),
             ]).mapped('hours_extra'))
 
-   # @api.depends('start_date', 'end_date')
-    # def compute_sumaMO(self):
-    #     for record in self:
-    #         record.suma_costoMO = sum(self.env['nomina.line'].search([
-    #             ('fechaA', '>=', record.start_date),
-    #             ('fechaA', '<=', record.end_date),
-    #             ('employee_id', '=', record.employee_id.id),
-    #             ('project', '=', record.project.id),
-    #         ]).mapped('suma_percep'))
+    # metodo que obtiene el numero de semana
+    @api.depends('fechaA')
+    def compute_num_semana(self):
+        for record in self:
+            cadena = self.env['semanas.nomina'].search([
+                ('rango1', '<=', record.fechaA),
+                ('rango2', '>=', record.fechaA),
+            ]).mapped('nombre_semana')
 
-    @api.depends('start_date', 'end_date')
+            record.semana = ''.join(map(str, (cadena)))
+
+    # suma el costo extra semanal
+
+    @ api.depends('reg_sem')
     def hrs_ex_sem(self):
         for record in self:
             record.horas_extras_sem = sum(self.env['nomina.line'].search([
-                ('fechaA', '>=', record.start_date),
-                ('fechaA', '<=', record.end_date),
+                ('semana', '=', record.semana),
                 ('employee_id', '=', record.employee_id.id),
                 # ('reg_sem', 'in', ['week', 'semanal'])
             ]).mapped('total_extra'))
 
+    # obtiene el numero de dia de la fecha de asistencia
     @ api.depends('fechaA')
     def _day(self):
         for record in self:
             record.day = record.fechaA.weekday()
 
+    # calcula las horas trabajas
     @ api.depends('check_in', 'check_out')
     def _compute_worked_hours(self):
         for rec in self:
@@ -304,7 +309,14 @@ class Nomina(models.Model):
                 rec.worked_hours = delta.total_seconds() / 3600.0
             else:
                 rec.worked_hours = False
+    # metodo que permite volver un campo calculado editable
 
+    @ api.depends('worked_hours')
+    def _inverse_hours_extra(self):
+        for record in self:
+            record.hours_extra = record.hours_extra + 0
+
+    # obtiene las horas extras, dependiendo del tipo de empleado y el dia laborado
     @ api.depends('worked_hours')
     def _hours_extra(self):
         for record in self:
@@ -321,12 +333,9 @@ class Nomina(models.Model):
             elif record.day == 6:
                 record.hours_extra = record.worked_hours
 
-    @ api.depends('worked_hours')
-    def _inverse_hours_extra(self):
-        for record in self:
-            record.hours_extra = record.hours_extra + 0
+    # metodo para añadirle un bono extra en el calculo de la nomina
 
-    @api.depends('active_CEXB2')
+    @ api.depends('active_CEXB2')
     def compute_total_extra(self):
         for record in self:
             if record.active_CEXB2 == True:
@@ -335,6 +344,7 @@ class Nomina(models.Model):
             elif record.active_CEXB2 == False:
                 record.total_extra = (record.hours_extra * record.extra_cost)
 
+    # metodo que obtiene el costo por dia, donde se incluyte el costo extra
     @ api.depends('hrs_lab_in', 'hours_extra')
     def compute_cost_total(self):
         for record in self:
@@ -353,7 +363,7 @@ class Nomina(models.Model):
             elif record.day == 6:
                 record.cost_total = record.total_extra
 
-    @api.depends('leavee')
+    @ api.depends('leavee')
     def compute_costo_falta(self):
         for rec in self:
             if rec.leavee == True:
@@ -362,7 +372,7 @@ class Nomina(models.Model):
      # calculo sueldo a pagar
     # calculo del costo de obra con la carga social
 
-    @api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @ api.depends('cost_total', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
     def sum_perc(self):
         for record in self:
             if record.inci != False:
@@ -381,36 +391,46 @@ class Nomina(models.Model):
     cant_reg_Sem = fields.Float(compute="compute_cant_reg_Sem",
                                 string="Cantidad de rgistri",)
 
-    @api.depends('start_date', 'end_date')
+    # obtiene la cantidad de ausencias
+    @ api.depends('reg_sem')
     def compute_cant_ausen(self):
         for record in self:
             record.cant_ausen = self.env['nomina.line'].search_count([
-                ('fechaA', '>=', record.start_date),
-                ('fechaA', '<=', record.end_date),
+                ('semana', '=', record.semana),
                 ('employee_id', '=', record.employee_id.id),
-                ('leavee', '=', True),
                 # ('reg_sem', 'in', ['week', 'semanal'])
+                ('leavee', '=', True),
             ])
 
-    @api.depends('start_date', 'end_date')
+    # obtiene la cantidad de asistencias
+    @ api.depends('reg_sem')
     def compute_cant_asis(self):
         for record in self:
             record.cant_asis = self.env['nomina.line'].search_count([
-                ('fechaA', '>=', record.start_date),
-                ('fechaA', '<=', record.end_date),
+                ('semana', '=', record.semana),
+                # ('reg_sem', 'in', ['week', 'semanal'])
                 ('employee_id', '=', record.employee_id.id),
                 ('asis', '=', True),
-                # ('reg_sem', 'in', ['week', 'semanal'])
             ])
     suel_Sem_faltas = fields.Monetary(
         compute="compute_suel_sem_faltas", string="Sueldo semanal con faltas",)
 
-    @api.depends('cant_asis', 'cant_ausen')
+    # obtiene el costo por falta
+    @ api.depends('cant_asis', 'cant_ausen')
     def compute_suel_sem_faltas(self):
+        # for rec in self:
+        #     m1 = rec.cant_asis + rec.cant_ausen
+        #     if m1 < 6:
+        #         rec.suel_Sem_faltas = (
+        #             rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
+        #     else:
+        #         rec.suel_Sem_faltas = (
+        #             rec.cost_day * rec.cant_asis) - (rec.extra_cost * rec.cant_ausen)
+
         for rec in self:
             busqueda = self.env['nomina.line'].search_count([
-                ('fechaA', '>=', rec.start_date),
-                ('fechaA', '<=', rec.end_date),
+                ('semana', '=', rec.semana),
+                # ('reg_sem', 'in', ['week', 'semanal'])
                 ('employee_id', '=', rec.employee_id.id),
                 ('inci', '=', "INCAPACIDAD"),
             ])
@@ -422,18 +442,17 @@ class Nomina(models.Model):
                 rec.suel_Sem_faltas = (
                     rec.cost_day * rec.cant_asis + rec.cost_day) - (rec.extra_cost * rec.cant_ausen)
 
-
     suel_nuevo_ingreso = fields.Monetary(
         compute="compute_suel_nuevo_ingreso", string="Sueldo Nuevo Ingreso",)
 
-    @api.depends('cost_day', 'cant_asis')
+    @ api.depends('cost_day', 'cant_asis')
     def compute_suel_nuevo_ingreso(self):
         for rec in self:
             rec.suel_nuevo_ingreso = rec.cost_day * rec.cant_asis
 
     # calculo costo de percepciones sin carga social para la nómina
 
-    @api.depends('reg_sem', 'suel_nuevo_ingreso', 'suel_Sem_faltas', 'sueldo_semanal', 'viat', 'bono', 'pasa', 'bono_even', 'gasolina', 'vacaciones', 'aguin')
+    @ api.depends('reg_sem')
     def compute_sum_perc_noCS(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal'] and record.cant_asis >= 5 and record.cant_ausen == 0 and record.nuevo_ing == False:
@@ -451,19 +470,21 @@ class Nomina(models.Model):
                                             record.bono_even + record.gasolina +
                                             record.vacaciones + record.prima_vaca + record.aguin + record.semana_fondo + record.pres_personal + record.others)
 
-    @api.depends('reg_sem', 'cre_info', 'fona', 'pres_per', 'des_epp', 'otros_desc', 'otros')
+    @ api.depends('reg_sem')
     def sum_dedu(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
                 record.suma_dedu = record.cre_info + record.fona + \
                     record.pres_per + record.des_epp + record.otros_desc + record.otros
 
-    @ api.depends('reg_sem', 'start_date', 'end_date')
+    @ api.depends('reg_sem')
     def suel_pagar(self):
         for record in self:
             if record.reg_sem in ['week', 'semanal']:
                 record.sueldo_pagar = (
                     record.sum_perc_notCarga + record.horas_extras_sem) - record.suma_dedu
+            elif record.reg_sem not in ['week', 'semanal']:
+                record.sueldo_pagar = False
 
     # create a new line, as none existed before
 
@@ -498,33 +519,3 @@ class Nomina(models.Model):
                 'type': 'rainbow_man',
             }
         }
-    
-    @api.depends('empĺoyee_id')
-    def cron_check_employees(self):
-
-        for record in self:
-            employeecount = record.env['nomina.line'].search([
-                # ('employee_id', '=', record.employee_id.id),
-                ('fechaA', '>=', record.start_date),
-                ('fechaA', '<=', record.end_date),
-                ('reg_sem', 'in', ['week', 'semanal']),
-            ]).mapped('employee_id.name')
-        print(employeecount)
-
-        for record in self:
-            employeecount2 = self.env['hr.employee'].search([
-                ('empresa', 'in', ['enterprise2', 'DEMSA']),
-                ('active', '=', True),
-            ]).mapped('name')
-            print(employeecount2)
-
-        resta = set(employeecount2) - set(employeecount)
-        print(resta)
-
-        if resta:
-            raise ValidationError(_("Registros de nómina faltantes para: %(resta)s") % {
-                'resta': resta,
-            })
-        else:
-            raise ValidationError(_("Todo esta correcto"))
-               

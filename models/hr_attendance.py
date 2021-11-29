@@ -21,7 +21,7 @@ class hr_atten(models.Model):
         store=True,)
     
     codigo_empleado = fields.Char(
-        related="employee_id.pin",
+        related="employee_id.codigo",
         string="Código empleado",
     )
 

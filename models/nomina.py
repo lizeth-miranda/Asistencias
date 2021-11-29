@@ -267,7 +267,8 @@ class Nomina(models.Model):
     def compute_sumHE(self):
         for record in self:
             record.sum_horas_extras = sum(self.env['nomina.line'].search([
-                ('semana', '=', record.semana),
+                ('rango1', '<=', record.fechaA),
+                ('rango2', '>=', record.fechaA),
                 ('employee_id', '=', record.employee_id.id),
                 ('hours_extra', '>', 0),
             ]).mapped('hours_extra'))

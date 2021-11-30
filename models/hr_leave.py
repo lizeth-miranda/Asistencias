@@ -25,15 +25,33 @@ class hr_lea(models.Model):
         related="employee_id.department_id.name",
         string="Puesto de Trabajo",
     )
-    num_emp = fields.Char(string="Numero Empleado", related="employee_id.codigo",)
+    num_emp = fields.Char(string="Numero Empleado",
+                          related="employee_id.codigo",)
 
     codigo_falta = fields.Char(
         related="holiday_status_id.code", string="Código Falta",)
 
     leavee = fields.Boolean(
-        string="Falta",
+        string="Falta", readonly=True,
     )
-    asist = fields.Boolean(string="asistencia",)
+    asist = fields.Boolean(string="asistencia", readonly=True,)
+    residente = fields.Many2one('res.users', string='Residente',
+                                required=False, readonly=True, default=lambda self: self.env.user.id)
+   
+    semana_nom = fields.Char("Semana",
+                             compute="compute_semana", store=True,)
+
+
+    # metodo que obtiene el numero de semana
+    @api.depends('request_date_from')
+    def compute_semana(self):
+        for record in self:
+            cadena = self.env['semanas.nomina'].search([
+                ('rango1', '<=', record.request_date_from),
+                ('rango2', '>=', record.request_date_from),
+            ]).mapped('nombre_semana')
+
+            record.semana_nom = ''.join(map(str, (cadena)))
 
     @api.onchange('holiday_status_id')
     def falta(self):
@@ -53,9 +71,9 @@ class hr_lea(models.Model):
         else:
             self.asist = False
 
-    # def action_approve(self):
-    def enviar_falta(self):
-        #res = super(hr_lea, self).action_approve()
+    def action_approve(self):
+        # def enviar_falta(self):
+        res = super(hr_lea, self).action_approve()
         for record in self:
             registros_faltas = self.env['nomina.line'].search_count([
                 ('employee_id', '=', record.employee_id.id,),
@@ -81,6 +99,8 @@ class hr_lea(models.Model):
                     'asis': self.asist,
                     'cost_day': self.cost_day,
                     'extra_cost': self.costo_extra,
+                    'us_id': self.residente.name,
+                    'semana': self.semana_nom,
                     # 'total_inci': self.cost_default,
                 })
                 return {
@@ -90,4 +110,4 @@ class hr_lea(models.Model):
                         'type': 'rainbow_man',
                     }
                 }
-        # return res
+        return res

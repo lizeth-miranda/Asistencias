@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # instruccion para hacer importaciones desde odoo
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class hr_lea(models.Model):

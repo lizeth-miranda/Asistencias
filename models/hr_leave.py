@@ -93,14 +93,15 @@ class hr_lea(models.Model):
                     'codigo_empleado': self.num_emp,
                     'project': self.account_ids.id,
                     'department': self.pues_tra,
+                    'fechaA': self.request_date_from,
                     'fecha_inci': self.request_date_from,
                     'inci': self.holiday_status_id.name,
                     'leavee': self.leavee,
                     'asis': self.asist,
                     'cost_day': self.cost_day,
                     'extra_cost': self.costo_extra,
-                    'us_id': self.residente.name,
-                    'semana': self.semana_nom,
+                    'us_id': record.residente.name,
+                    'semana': record.semana_nom,
                     # 'total_inci': self.cost_default,
                 })
                 return {

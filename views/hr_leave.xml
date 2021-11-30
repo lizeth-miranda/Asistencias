@@ -5,9 +5,11 @@
         <field name="model">hr.leave</field>
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager_approve" />
         <field name="arch" type="xml">
-            <header>
+
+            <!-- <header>
                 <button name="enviar_falta" type="object" class="oe_highlight" string="Enviar a Nómina" />
-            </header>
+
+            </header> -->
             <field name="name" position="after">
                 <field name="employee_id" options="{'no_open': True}" />
                 <field name="account_ids" options="{'no_open': True}" domain="[('userss', '=', uid)]" />
@@ -20,6 +22,9 @@
                 <field name="leavee" invisible="1" />
                 <field name="asist" invisible="1" />
                 <field name="codigo_falta" />
+                <field name="residente" readonly="1" />
+                <!-- <field name="fecha" /> -->
+                <field name="semana_nom" readonly="1" />
             </field>
         </field>
     </record>

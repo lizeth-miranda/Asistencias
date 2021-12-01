@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_type_view_form" model="ir.ui.view">
+        <field name="name">hr.leave.type.view.form.inherited</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+        <field name="arch" type="xml">
+
+            <!-- <header>
+                <button name="enviar_falta" type="object" class="oe_highlight" string="Enviar a Nómina" />
+
+            </header> -->
+            <field name="code" position="after">
+                <field name="tipo_inci" />
+            </field>
+        </field>
+    </record>
+</odoo>

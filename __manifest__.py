@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Costo Empleado',
-    'version': '13.2',
+    'version': '13.3',
     'author': 'Demsa',
     'website': '',
     'depends': [
@@ -34,6 +34,7 @@
         'views/hr_attendance.xml',
         'views/hr_employee.xml',
         'views/hr_leave.xml',
+        'views/hr_leave_type.xml',
         'views/account_analytic.xml',
         'views/account_analytic_account.xml',
         'views/res_user.xml',

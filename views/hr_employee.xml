@@ -10,13 +10,13 @@
                 <field name="fecha_nacimiento" />
             </field>
             <field name="work_location" position="after">
-                <field name="empresa" />
-                <field name="tipo_emp" />
+                <field name="empresa" required="1" />
+                <field name="tipo_emp" required="1" />
             </field>
             <field name="parent_id" position="after">
-                <field name="codigo" string="Código Empleado"/>
-                <field name="fecha_ingreso" />
-                <field name="afiliacion_imss" />
+                <field name="codigo" string="Código Empleado" required="1"/>
+                <field name="fecha_ingreso" required="1" />
+                <field name="afiliacion_imss" required="1" />
             </field>
             <field name="address_id" position="after">
                 <field name="user_resp" />
@@ -25,7 +25,7 @@
                 <page string=" Horas Laborales y Costos">
                     <group>
                         <group string="Costos">
-                            <field name="salario" widget="monetary" />
+                            <field name="salario" widget="monetary" required="1" />
                             <field name="cost_day" widget="monetary" />
                             <field name="timesheet_cost" />
                             <field name="cost_extra" />
@@ -37,8 +37,8 @@
                             <field name="bono" />
                         </group>
                         <group string="Horas Laborales">
-                            <field name="horas_lab" widget="float_time" />
-                            <field name="horas_lab_in" widget="float_time" />
+                            <field name="horas_lab" widget="float_time" required="1" />
+                            <field name="horas_lab_in" widget="float_time" required="1" />
                             <field name="hours" widget="float_time" required="1" />
                             <field name="active_CEXB" />
                         </group>

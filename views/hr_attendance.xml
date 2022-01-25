@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="hr_attendance.view_attendance_tree" />
         <field name="arch" type="xml">
             <field name="employee_id" position="after">
-                <field name="employee_id" attrs="{'readonly':[('block_lines', '=', 'done')]}" options="{'no_open': True}" />
+                <!-- <field name="employee_id" attrs="{'readonly':[('block_lines', '=', 'done')]}" options="{'no_open': True}" /> -->
                 <field name="department" />
                 <field name="account_ids" attrs="{'readonly':[('block_lines', '=', 'done')]}" options="{'no_open': True}" domain="[('userss', '=', uid)]" />
                 <field name="currency_id" invisible="1" />

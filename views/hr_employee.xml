@@ -35,6 +35,7 @@
                             <field name="credito_info" />
                             <field name="credito_fona" />
                             <field name="bono" />
+                            <field name="viati" />
                         </group>
                         <group string="Horas Laborales">
                             <field name="horas_lab" widget="float_time" required="1" />

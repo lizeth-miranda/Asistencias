@@ -169,6 +169,7 @@ class Nomina(models.Model):
     # PERCEPCIONES
 
     viat = fields.Monetary(
+        related="employee_id.viati",
         string="Viáticos"
     )
     pasa = fields.Monetary(

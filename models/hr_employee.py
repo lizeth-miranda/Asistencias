@@ -94,6 +94,8 @@ class empl(models.Model):
     
     user_resp = fields.Many2many('res.users', string='Usuario Responsable', groups="hr.group_hr_user", tracking=True,)
     codigo = fields.Char(string="Codigo Nuevo", groups="hr.group_hr_user", tracking=True)
+    viati = fields.Monetary(
+        string="Viáticos", groups="hr.group_hr_user", tracking=True)
 
     @api.depends('salario')
     def compute_timecost(self):

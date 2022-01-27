@@ -116,11 +116,11 @@ class hr_lea(models.Model):
             'semana': self.semana_nom,
             # 'total_inci': self.cost_default,
         })
-        # return {
-        #     'effect': {
-        #         'fadeout': 'slow',
-        #         'message': 'Registro Exitoso',
-        #         'type': 'rainbow_man',
-        #     }
-        # }
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Registro Exitoso',
+                'type': 'rainbow_man',
+            }
+        }
         return res

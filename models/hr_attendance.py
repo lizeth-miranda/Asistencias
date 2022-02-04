@@ -15,7 +15,7 @@ class hr_atten(models.Model):
         string="Proyecto",
     )
     fecha = fields.Date(string="Fecha Registro",
-                        required=True, readonly=False, default=fields.Date.today)
+                        required=True, readonly=False, default=fields.Date.context_today)
     Date = fields.Date(
         compute='compute_Date',
         store=True,)

@@ -118,16 +118,17 @@ class hr_atten(models.Model):
             elif attendance.day == 6 and attendance.tipo_empl != 'admin':
                 attendance.hours_extra = attendance.total_hours
               
-    @api.constrains('check_out')
-    def checks_out(self):
-        for record in self:
-            buscar = self.env['hr.attendance'].search_count([
-                ('employee_id.id', '=', record.employee_id.id),
-                ('worked_hours', '>', 24),
-            ])
-            if buscar > 0:
-                raise exceptions.ValidationError(
-                    _("UN EMPLEADO NO PUEDE TRAJAR MAS DE 24 HRS, FAVOR DE REVISAR SUS DATOS"))
+    # @api.constrains('check_out')
+    # def checks_out(self):
+    #     for record in self:
+    #         buscar = self.env['hr.attendance'].search_count([
+    #             ('employee_id.id', '=', record.employee_id.id),
+    #             ('worked_hours', '>', 24),
+    #         ])
+    #         if buscar > 0:
+    #             raise exceptions.ValidationError(
+    #                 # _("LA FECHA DE LA SALIDA DEBE SER IGUAL A LA FECHA DE ENTRADA, FAVOR DE REVISAR SUS DATOS"))
+    #                 _("UN EMPLEADO NO PUEDE TRAJAR MAS DE 24 HRS, FAVOR DE REVISAR SUS DATOS"))
     # create a new line, as none existed before
 
     #@ api.constrains('Date')

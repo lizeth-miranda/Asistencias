@@ -47,6 +47,8 @@ class hr_atten(models.Model):
         related="employee_id.department_id.name",
         string="Departamento",
     )
+    manager = fields.Char(
+        related="employee_id.parent_id.name", string="Responsable", store=True,)
 
     day = fields.Integer(
         compute='_day',

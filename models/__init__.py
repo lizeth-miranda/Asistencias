@@ -10,6 +10,6 @@ from . import res_user
 #from . import sale_order
 #from . import discounts_employee
 #from . import discounts_loans
-#from . import quality
+from . import quality
 #from . import semanas
 

@@ -72,19 +72,19 @@ class empl(models.Model):
         ('obra', 'Obra'),
     ], string="Tipo Empleado", groups="hr.group_hr_user", tracking=True,)
 
-    discounts_ids = fields.One2many(comodel_name='discount.employee',
-                                    inverse_name='employee', groups="hr.group_hr_user", tracking=True,)
+    #discounts_ids = fields.One2many(comodel_name='discount.employee',
+                                   # inverse_name='employee', groups="hr.group_hr_user", tracking=True,)
 
-    pres_perso = fields.Monetary(
-        string="Préstamo Personal", related="discounts_ids.sum_abono", )
+    #pres_perso = fields.Monetary(
+       # string="Préstamo Personal", related="discounts_ids.sum_abono", )
 
-    desc_HPP = fields.Monetary(
-        string="Desc.EPP", related="discounts_ids.sum_descEPP",)
+    #desc_HPP = fields.Monetary(
+        #string="Desc.EPP", related="discounts_ids.sum_descEPP",)
 
-    otros_desc = fields.Monetary(
-        string="Otros Descuentos", related="discounts_ids.sum_otros_desc",)
+  #  otros_desc = fields.Monetary(
+       # string="Otros Descuentos", related="discounts_ids.sum_otros_desc",)
 
-    depo = fields.Monetary(related="discounts_ids.deposito",)
+    #depo = fields.Monetary(related="discounts_ids.deposito",)
 
     fecha_nacimiento = fields.Date(
         string="Fecha de Nacimiento", groups="hr.group_hr_user", tracking=True,)

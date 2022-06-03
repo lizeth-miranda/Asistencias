@@ -41,20 +41,20 @@ class hr_lea(models.Model):
     residente = fields.Many2one('res.users', string='Residente',
                                 required=False, readonly=True, default=lambda self: self.env.user.id)
 
-    semana_nom = fields.Char("Semana",
-                             compute="compute_semana", store=True,)
+    #semana_nom = fields.Char("Semana",
+                             #compute="compute_semana", store=True,)
 
     # metodo que obtiene el numero de semana
 
-    @api.depends('request_date_from')
-    def compute_semana(self):
-        for record in self:
-            cadena = self.env['semanas.nomina'].search([
-                ('rango1', '<=', record.request_date_from),
-                ('rango2', '>=', record.request_date_from),
-            ]).mapped('nombre_semana')
+    #@api.depends('request_date_from')
+    #def compute_semana(self):
+        #for record in self:
+           # cadena = self.env['semanas.nomina'].search([
+            #    ('rango1', '<=', record.request_date_from),
+            #    ('rango2', '>=', record.request_date_from),
+           # ]).mapped('nombre_semana')
 
-            record.semana_nom = ''.join(map(str, (cadena)))
+         #   record.semana_nom = ''.join(map(str, (cadena)))
 
     @api.depends('holiday_status_id')
     def compute_leave(self):

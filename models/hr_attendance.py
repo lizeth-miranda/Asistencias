@@ -134,40 +134,45 @@ class hr_atten(models.Model):
     # create a new line, as none existed before
 
     #@ api.constrains('Date')
-    def nomina_line(self):
-        for record in self:
-            nomina_line = self.env['nomina.line'].search_count([
-                ('employee_id.id', '=', record.employee_id.id),
-                ('project', '=', record.account_ids.id),
-                ('fechaA', '=', record.Date),
-                ('check_in', '=', record.check_in),
-                ('check_out', '=', record.check_out),
-            ])
-            print(nomina_line)
-            if nomina_line > 0:
-                raise ValidationError(
-                    _("Una o varias asistencias ya existen registradas "))
+    # def nomina_line(self):
+    #     for record in self:
+    #         nomina_line = self.env['nomina.line'].search_count([
+    #             ('employee_id.id', '=', record.employee_id.id),
+    #             ('project', '=', record.account_ids.id),
+    #             ('fechaA', '=', record.Date),
+    #             ('check_in', '=', record.check_in),
+    #             ('check_out', '=', record.check_out),
+    #         ])
+    #         print(nomina_line)
+    #         if nomina_line > 0:
+    #             raise ValidationError(
+    #                 _("Una o varias asistencias ya existen registradas "))
 
-            elif not nomina_line:
-                record.env['nomina.line'].create({
-                    'employee_id': record.employee_id.id,
-                    'department': record.department,
-                    'project': record.account_ids.id,
-                    'fechaA': record.Date,
-                    'check_in': record.check_in,
-                    'check_out': record.check_out,
-                    'worked_hours': record.worked_hours,
-                    'notas': record.comen,
-                    'us_id': record.user_id.name,
-                    'type_resi': record.tipo_resid,
-                    'asis': record.asistencia,
-                    
-                })
-            record.block_lines = 'done'
-        return {
-            'effect': {
-                'fadeout': 'slow',
-                'message': 'Registro Exitoso',
-                'type': 'rainbow_man',
-            }
-        }
+    #         elif not nomina_line:
+    #             record.env['nomina.line'].create({
+    #                 'employee_id': record.employee_id.id,
+    #                 'department': record.department,
+    #                 'project': record.account_ids.id,
+    #                 'fechaA': record.Date,
+    #                 'check_in': record.check_in,
+    #                 'check_out': record.check_out,
+    #                 'worked_hours': record.worked_hours,
+    #                 'notas': record.comen,
+    #                 'us_id': record.user_id.name,
+    #                 'type_resi': record.tipo_resid,
+    #                 'asis': record.asistencia,
+    #                 # 'total_extra': record.total_extra,
+    #                 # 'cost_total': record.cost_total,
+    #                 # 'total_inci': record.total_inci,
+
+    #             })
+    #             record.block_lines = 'done'
+    #     return {
+    #         'effect': {
+    #             'fadeout': 'slow',
+    #             'message': 'Registro Exitoso',
+    #             'type': 'rainbow_man',
+    #         }
+    #     }
+
+     #   }

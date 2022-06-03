@@ -28,11 +28,11 @@ class hr_atten(models.Model):
     currency_id = fields.Many2one(
         related='employee_id.currency_id',
     )
-    cost_total = fields.Monetary(
-        compute='compute_cost_total',
-        store=True,
-        string="Costo Total"
-    )
+   # cost_total = fields.Monetary(
+    #     compute='compute_cost_total',
+    #     store=True,
+    #     string="Costo Total"
+    # )
     hours_extra = fields.Float(
         compute='_hours_extra',
         string="Horas Extras",

@@ -31,7 +31,7 @@
         # 'reports/formato_papel.xml',
         # demo
         # views
-        #'views/hr_attendance.xml',
+        'views/hr_attendance.xml',
         'views/hr_employee.xml',
        # 'views/hr_leave.xml',
        # 'views/hr_leave_type.xml',

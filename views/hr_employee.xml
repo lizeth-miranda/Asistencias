@@ -43,12 +43,12 @@
                             <field name="hours" widget="float_time" required="1" />
                             <field name="active_CEXB" />
                         </group>
-                        <group string="Préstamos y Descuentos personales">
+                         <!-- <group string="Préstamos y Descuentos personales">
                             <field name="pres_perso" />
                             <field name="desc_HPP" />
                             <field name="otros_desc" />
                             <field name="depo" />
-                        </group>
+                        </group> -->
                         <group string="Cuenta Bancaria">
                             <field name="cuenta" />
                             <field name="clabe" />

@@ -8,17 +8,17 @@ class Cuenta(models.Model):
 
     cate = fields.Char(
         related='product_id.categ_id.name',
-        store=True,
     )
-    job_pos = fields.Char(
-        store=True,
-    )
+     # job_pos = fields.Char(
+    #     store=True,
+    #     string="Puesto de Trabajo",
+    # )
 
-    motivo = fields.Char(
-        String="Motivo",
-        store=True,
-    )
-    nom = fields.Boolean(string="nomina",)
+    # motivo = fields.Char(
+    #     String="Motivo",
+    #     store=True,
+    # )
+    # nom = fields.Boolean(string="nomina",)
     
   
 

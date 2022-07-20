@@ -8,6 +8,8 @@ class Cuenta(models.Model):
 
     cate = fields.Char(
         related='product_id.categ_id.name',
+        store=True,
+        string="Categoria",
     )
      # job_pos = fields.Char(
     #     store=True,

@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="analytic.view_account_analytic_line_tree" />
         <field name="arch" type="xml">
             <field name="name" position="after">
-                <field name="cate" string="Categoria" optional="hide" />
+                <field name="categ_padre" optional="hide" />
                 <!-- <field name="motivo" />
                 <field name="job_pos" string="Puesto de Trabajo" optional="show" /> 
                 <field name="nom" optional="hide" /> -->
@@ -20,7 +20,7 @@
         <field name="inherit_id" ref="analytic.view_account_analytic_line_form" />
         <field name="arch" type="xml">
             <field name="product_uom_id" position="after">
-                <field name="cate" />
+                <field name="categ_padre" />
             </field>
         </field>
     </record>
@@ -32,7 +32,7 @@
         <field name="arch" type="xml">
             <group position="inside">
                 <!--<filter string="Descripción" name="name" context="{'group_by': 'name'}" />-->
-                <filter name="by_cate" string="categoria" context="{'group_by': 'cate'}" />
+                <filter name="by_cate" string="Categoria de Producto" context="{'group_by': 'categ_padre'}" />
                 <!-- <filter string="Puesto de Trabajo" name="job_pos" context="{'group_by': 'job_pos'}" /> -->
             </group>
         </field>

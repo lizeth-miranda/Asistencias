@@ -6,10 +6,10 @@ from odoo import api, fields, models
 class Cuenta(models.Model):
     _inherit = 'account.analytic.line'
 
-    cate = fields.Char(
-        related='product_id.categ_id.name',
+    categ_padre = fields.Char(
+        related='product_id.categ_id.display_name',
         store=True,
-        string="Categoria",
+        string="Categoria de Producto",
     )
      # job_pos = fields.Char(
     #     store=True,

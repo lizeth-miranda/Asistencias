@@ -14,6 +14,10 @@ class hr_atten(models.Model):
         comodel_name='account.analytic.account',
         string="Proyecto",
     )
+    account_ids_extras = fields.Many2one(
+        comodel_name='account.analytic.account',
+        string="Proyecto Tiempo Extra",
+    )
     fecha = fields.Date(string="Fecha Registro",
                         required=True, readonly=False, default=fields.Date.context_today)
     Date = fields.Date(

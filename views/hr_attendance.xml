@@ -24,6 +24,7 @@
                 <!-- <field name="horas_trab" widget="float_time" /> -->
                 <field name="total_hours" widget="float_time" invisible="0" />
                 <field name="hours_extra" widget="float_time" sum="hours_extra" />
+                <field name="account_ids_extras" options="{'no_open': True}" domain="[('userss', '=', uid)]" />
                 <field name="comen" attrs="{'readonly':[('block_lines', '=', 'done')]}" />
                 <field name="tem" optional="hide" />
                 <field name="user_id" optional="hide" options="{'no_open': True}" />

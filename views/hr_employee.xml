@@ -16,13 +16,13 @@
             <field name="parent_id" position="after">
                 <field name="codigo" string="Código Empleado" required="1"/>
                 <field name="fecha_ingreso" required="1" />
-                <field name="afiliacion_imss" required="1" />
+                <field name="afiliacion_imss" required="1" groups="hr.group_hr_manager"/>
             </field>
             <field name="address_id" position="after">
-                <field name="user_resp" />
+                <field name="user_resp" groups="hr.group_hr_manager"/>
             </field>
             <notebook>
-                <page string=" Horas Laborales y Costos">
+                <page string=" Horas Laborales y Costos" groups="hr.group_hr_manager">
                     <group>
                         <group string="Costos">
                             <field name="salario" widget="monetary" required="1" />

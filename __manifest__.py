@@ -4,7 +4,6 @@
     'version': '13.5',
     'author': 'Demsa',
     'website': '',
-    'license': 'LGPL-3',
     'depends': [
         'hr',
         'hr_expense',
@@ -56,4 +55,5 @@
 
 
     ],
+    'license': 'LGPL-3',
 }
